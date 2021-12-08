@@ -39,14 +39,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$border-radius: 8px;
+$border-radius: 12px;
 $input: (
   font-family: $font-family-base,
   font-style: normal,
   font-weight: normal,
   font-size: 18px,
   padding: (
-    4px,
+    8px,
     24px
   ),
   height: 40px

@@ -12,3 +12,25 @@ body {
   min-height: 100vh;
   background-color: #1f2128;
 }
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.container {
+  @include container-initialization();
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@include media-breakpoint-down(xxs) {
+  .row {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}

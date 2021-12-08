@@ -1,8 +1,17 @@
 <template>
-  <div class="home" style="width: 320px; padding: 32px">
-    <h2>Впервые на Wild Hunt?</h2>
-    <BaseInput :placeholder="'Ваш почтовый адрес'" />
-    <BaseInput :placeholder="'Ваш никнейм'" />
+  <div class="container">
+    <div class="row">
+      <BaseInput
+        :class="$style['form-item']"
+        type="text"
+        placeholder="Ваш почтовый адрес"
+      />
+      <BaseInput
+        :class="$style['form-item']"
+        type="text"
+        placeholder="Ваш никнейм"
+      />
+    </div>
   </div>
 </template>
 
@@ -15,3 +24,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" module>
+.form-item {
+  margin-bottom: 24px;
+}
+</style>
