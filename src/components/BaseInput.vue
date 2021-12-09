@@ -39,17 +39,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$border-radius: 12px;
 $input: (
-  font-family: $font-family-base,
-  font-weight: $font-weight-base,
-  font-size: 16px,
-  font-style: normal,
   padding: (
     4px,
     24px
   ),
-  height: 40px
+  height: 40px,
+  border-radius: 12px,
+  font-family: $font-family-base,
+  font-weight: $font-weight-base,
+  font-size: $font-size-base,
+  font-style: normal
 );
 
 .base-input {
@@ -57,7 +57,7 @@ $input: (
   position: relative;
   width: 100%;
   background-color: #2f323b;
-  border-radius: $border-radius;
+  border-radius: map-get($input, border-radius);
 
   .label {
     display: flex;
@@ -83,11 +83,16 @@ $input: (
       color: $font-color-secondary;
       font-family: inherit;
       font-size: inherit;
+      transition: 0.2s;
     }
 
     &:focus {
       box-shadow: none;
       outline: none;
+    }
+
+    &:focus::-webkit-input-placeholder {
+      color: $gray-700;
     }
   }
 }
