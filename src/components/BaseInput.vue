@@ -42,11 +42,11 @@ export default {
 $border-radius: 12px;
 $input: (
   font-family: $font-family-base,
+  font-weight: $font-weight-base,
+  font-size: 16px,
   font-style: normal,
-  font-weight: normal,
-  font-size: 18px,
   padding: (
-    8px,
+    4px,
     24px
   ),
   height: 40px
