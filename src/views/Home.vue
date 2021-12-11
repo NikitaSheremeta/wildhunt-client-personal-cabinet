@@ -6,16 +6,16 @@
           <BaseInput
             :class="$style['form-item']"
             type="text"
-            placeholder="Ваш почтовый адрес"
+            placeholder="Никнейм или email"
           />
           <BaseInput
             :class="$style['form-item']"
             type="password"
-            placeholder="Ваш никнейм"
+            placeholder="Пароль"
           />
-          <BaseButton>Войти</BaseButton>
-          <Link :class="$style['form-link']" color="secondary"
-            >Забыли пароль?
+          <BaseButton> Войти </BaseButton>
+          <Link :class="$style['form-link']" color="secondary">
+            Забыли пароль?
           </Link>
         </div>
       </div>

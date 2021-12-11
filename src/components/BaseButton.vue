@@ -53,7 +53,7 @@ export default {
       return this.fullWidth ? 'full-width' : '';
     },
     colorModifier() {
-      return this.color !== '' ? `-${this.color}` : '';
+      return this.color !== '' ? this.color : '';
     }
   }
 };
@@ -62,11 +62,14 @@ export default {
 <style lang="scss" scoped>
 $border-radius: 12px;
 $padding: 24px 56px;
+$height: 32px;
 
-$colors-default: (
-  background-color: $primary,
-  hover-background: darken($primary, 5%),
-  color: $font-color-base
+$colors: (
+  primary: (
+    background-color: $primary,
+    hover-background: darken($primary, 5%),
+    color: $font-color-base
+  )
 );
 
 .base-button {
@@ -75,25 +78,25 @@ $colors-default: (
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  height: 32px;
-  background-color: $primary;
-  border: 0;
   padding: $padding;
+  height: $height;
+  border: 0;
   border-radius: $border-radius;
-  color: $white;
+  background-color: map-get($colors, primary, background-color);
   line-height: $line-height-base;
+  color: map-get($colors, primary, color);
   font-family: $font-family-base;
   font-weight: $font-weight-base;
   font-size: $font-size-base;
-  outline: none;
   cursor: pointer;
+  outline: none;
   text-decoration: none;
   user-select: none;
   transition: 0.2s;
 
   &:hover,
   &:focus {
-    background-color: map-get($colors-default, hover-background);
+    background-color: map-get($colors, primary, hover-background);
   }
 
   &.full-width {
