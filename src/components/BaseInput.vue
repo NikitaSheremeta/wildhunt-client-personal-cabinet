@@ -159,6 +159,11 @@ $colors: (
     &:focus::-webkit-input-placeholder {
       color: map-get($colors, primary, hover-placeholder-color);
     }
+
+    // This is necessary to reduce the interval between password dots
+    &[type='password']:not(:placeholder-shown) {
+      letter-spacing: -3px;
+    }
   }
 
   .field-icon {
