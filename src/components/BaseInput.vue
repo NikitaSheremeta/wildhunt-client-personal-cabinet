@@ -2,19 +2,40 @@
   <div :class="computedClasses">
     <label class="label">
       <input v-bind="attrs" />
+
       <a
         v-if="type === 'password'"
         href="#"
+        class="field-icon"
         @click.stop.prevent="changePasswordType"
-        >#</a
       >
+        <BaseIcon
+          :icon="localType === 'password' ? 'eye' : 'eye-slash'"
+          color="secondary"
+        />
+      </a>
+
+      <span
+        v-if="iconName"
+        class="field-icon"
+      >
+        <BaseIcon
+          :icon="iconName"
+          color="secondary"
+        />
+      </span>
     </label>
   </div>
 </template>
 
 <script>
+import BaseIcon from '@/components/BaseIcon';
+
 export default {
   name: 'BaseInput',
+  components: {
+    BaseIcon
+  },
   props: {
     tagName: {
       type: String,
@@ -32,6 +53,10 @@ export default {
     required: {
       type: Boolean,
       default: false
+    },
+    iconName: {
+      type: String,
+      default: null
     }
   },
   data: () => ({
@@ -117,7 +142,6 @@ $colors: (
     font-family: inherit;
     font-size: map-get($input, font-size);
     font-style: inherit;
-    text-overflow: ellipsis;
 
     @include placeholder() {
       line-height: 1;
@@ -134,6 +158,25 @@ $colors: (
 
     &:focus::-webkit-input-placeholder {
       color: map-get($colors, primary, hover-placeholder-color);
+    }
+  }
+
+  .field-icon {
+    z-index: 2;
+    display: flex;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    right: nth(map-get($input, padding), 2);
+    width: map-get($input, height);
+    height: 100%;
+    border: none;
+    color: $gray-600;
+    text-decoration: none;
+
+    &:hover {
+      color: $gray-900;
     }
   }
 }
