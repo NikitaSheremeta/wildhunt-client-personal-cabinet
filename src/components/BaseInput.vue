@@ -15,14 +15,8 @@
         />
       </a>
 
-      <span
-        v-if="iconName"
-        class="field-icon"
-      >
-        <BaseIcon
-          :icon="iconName"
-          color="secondary"
-        />
+      <span v-if="iconName" class="field-icon">
+        <BaseIcon :icon="iconName" color="secondary" />
       </span>
     </label>
   </div>
