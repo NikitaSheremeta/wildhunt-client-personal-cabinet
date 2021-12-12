@@ -167,7 +167,7 @@ $colors: (
     align-items: center;
     justify-content: center;
     top: 0;
-    right: nth(map-get($input, padding), 2);
+    right: 20px;
     width: map-get($input, height);
     height: 100%;
     border: none;

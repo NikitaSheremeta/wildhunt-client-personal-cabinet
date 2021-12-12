@@ -61,14 +61,18 @@ export default {
 
 <style lang="scss" scoped>
 $border-radius: 12px;
-$padding: 24px 56px;
+$padding: 24px 48px;
 $height: 32px;
 
 $colors: (
   primary: (
     background-color: $primary,
-    hover-background: darken($primary, 5%),
+    hover-background: darken($primary, 4%),
     color: $font-color-base
+  ),
+  dark: (
+    background-color: $black,
+    hover-background: darken($black, 4%)
   )
 );
 
@@ -101,6 +105,14 @@ $colors: (
 
   &.full-width {
     width: 100%;
+  }
+
+  &.dark {
+    background-color: map-get($colors, dark, background-color);
+
+    &:hover {
+      background-color: map-get($colors, dark, hover-background);
+    }
   }
 }
 </style>
