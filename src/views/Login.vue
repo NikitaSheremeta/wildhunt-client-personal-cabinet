@@ -29,9 +29,9 @@
 </template>
 
 <script>
-import BaseInput from '@/components/BaseInput';
-import BaseButton from '@/components/BaseButton';
-import Link from '@/components/BaseLink';
+import BaseInput from '@/components/framework/BaseInput';
+import BaseButton from '@/components/framework/BaseButton';
+import Link from '@/components/framework/BaseLink';
 
 export default {
   components: {

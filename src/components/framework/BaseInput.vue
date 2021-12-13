@@ -4,7 +4,7 @@
       <input v-bind="attrs" />
 
       <a
-        v-if="type === 'password'"
+        v-if="type === 'password' && !repeatPassword"
         href="#"
         class="field-icon"
         @click.stop.prevent="changePasswordType"
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import BaseIcon from '@/components/BaseIcon';
+import BaseIcon from '@/components/framework/BaseIcon';
 
 export default {
   name: 'BaseInput',
@@ -51,6 +51,10 @@ export default {
     iconName: {
       type: String,
       default: null
+    },
+    repeatPassword: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
@@ -81,6 +85,9 @@ export default {
     changePasswordType() {
       this.localType = this.localType === 'password' ? 'text' : 'password';
     }
+  },
+  created() {
+    console.log(this.repeatPassword);
   }
 };
 </script>

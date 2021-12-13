@@ -35,4 +35,4 @@ build/*
 dist
 
 # SVG icons
-src/components/BaseIcon.vue
+src/components/framework/BaseIcon.vue
