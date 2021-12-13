@@ -7,7 +7,7 @@
         <BaseInput
           :class="$style['form-item']"
           type="text"
-          placeholder="Никнейм"
+          placeholder="Логин"
         />
 
         <BaseInput
@@ -19,21 +19,20 @@
         <BaseInput
           :class="$style['form-item']"
           type="password"
-          placeholder="Пароль"
+          strength-checker
+          placeholder="Придумайте пароль"
         />
 
         <BaseInput
           :class="$style['form-item']"
           type="password"
           repeat-password
-          placeholder="Подтвердите пароль"
+          placeholder="Повторите пароль"
         />
-        <BaseCheckbox>
-          Я принимаю правила игры на сервере <br />и политику
-          конфиденциальности.
-        </BaseCheckbox>
-        <br />
-        <BaseButton full-width> Зарегистрироваться </BaseButton>
+
+        <div :class="$style['form-controls']">
+          <BaseButton full-width> Зарегистрироваться </BaseButton>
+        </div>
       </div>
     </div>
   </div>
@@ -41,14 +40,12 @@
 
 <script>
 import BaseInput from '@/components/framework/BaseInput';
-import BaseCheckbox from '@/components/framework/BaseCheckbox';
 import BaseButton from '@/components/framework/BaseButton';
 
 export default {
   components: {
     BaseInput,
-    BaseButton,
-    BaseCheckbox
+    BaseButton
   }
 };
 </script>
@@ -78,6 +75,13 @@ export default {
     &:last-child {
       margin-bottom: 0;
     }
+  }
+
+  &-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 24px;
   }
 }
 </style>

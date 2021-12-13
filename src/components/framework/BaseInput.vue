@@ -19,6 +19,17 @@
         <BaseIcon :icon="iconName" color="secondary" />
       </span>
     </label>
+
+    <template v-if="strengthChecker">
+      <div class="strength-meter">
+        <span class="strength-meter__item"></span>
+        <span class="strength-meter__item"></span>
+        <span class="strength-meter__item"></span>
+      </div>
+      <span class="strength-info">
+        Пароль должен быть не менее 8 символов
+      </span>
+    </template>
   </div>
 </template>
 
@@ -51,6 +62,10 @@ export default {
     iconName: {
       type: String,
       default: null
+    },
+    strengthChecker: {
+      type: Boolean,
+      default: false
     },
     repeatPassword: {
       type: Boolean,
@@ -85,9 +100,6 @@ export default {
     changePasswordType() {
       this.localType = this.localType === 'password' ? 'text' : 'password';
     }
-  },
-  created() {
-    console.log(this.repeatPassword);
   }
 };
 </script>
@@ -183,6 +195,43 @@ $colors: (
 
     &:hover {
       color: $gray-900;
+    }
+  }
+
+  .strength {
+    &-meter {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+      width: 100%;
+
+      &__item {
+        width: 100%;
+        height: 8px;
+        background-color: map-get($colors, primary, background-color);
+        border-radius: 4px;
+
+        &.active {
+          &:first-child {
+            background-color: $danger;
+          }
+
+          &:nth-child(2) {
+            background-color: $warning;
+          }
+
+          &:last-child {
+            background-color: $success;
+          }
+        }
+      }
+    }
+
+    &-info {
+      margin-top: 12px;
+      color: $font-color-secondary;
+      font-size: $font-size-xs;
     }
   }
 }

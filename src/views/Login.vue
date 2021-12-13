@@ -7,7 +7,7 @@
         <BaseInput
           :class="$style['form-item']"
           type="text"
-          placeholder="Никнейм или email"
+          placeholder="Логин или email"
         />
 
         <BaseInput

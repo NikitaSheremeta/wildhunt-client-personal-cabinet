@@ -14,20 +14,20 @@ $white: #fff;
 $blue: #2057D9;
 $indigo: #101A2B;
 $purple: #6c5dd3;
-$pink: #d63384;
+$pink: #ffa2c0;
 $red: #f82c1a;
-$orange: #F5A623;
-$yellow: #FEE394;
+$orange: #ff764c;
+$yellow: #ffcf74;
 $green: #28a745;
-$teal: #20c997;
+$teal: #7fba7a;
 $cyan: #4A90E2;
 $black: #101113;
 
 // Color assignments
-$primary: $purple;
 $secondary: $gray-600;
 $disabled: $gray-400;
-$success: $green;
+$primary: $purple;
 $info: $cyan;
+$success: $teal;
 $warning: $yellow;
-$danger: $red;
+$danger: $orange;
