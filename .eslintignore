@@ -36,3 +36,6 @@ dist
 
 # SVG icons
 src/components/framework/BaseIcon.vue
+
+# Strength password checker
+src/components/use/strength-password-checker.js

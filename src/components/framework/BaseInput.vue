@@ -1,7 +1,7 @@
 <template>
   <div :class="computedClasses">
     <label class="label">
-      <input v-bind="attrs" />
+      <input v-bind="attrs" v-on="listeners" />
 
       <a
         v-if="type === 'password' && !repeatPassword"
@@ -10,7 +10,7 @@
         @click.stop.prevent="changePasswordType"
       >
         <BaseIcon
-          :icon="localType === 'password' ? 'eye' : 'eye-slash'"
+          :icon="local.type === 'password' ? 'eye' : 'eye-slash'"
           color="secondary"
         />
       </a>
@@ -18,23 +18,33 @@
       <span v-if="iconName" class="field-icon">
         <BaseIcon :icon="iconName" color="secondary" />
       </span>
+
+      <span v-if="icon.success" class="field-icon">
+        <BaseIcon icon="check" color="success" width="18" height="18" />
+      </span>
     </label>
 
-    <template v-if="strengthChecker">
-      <div class="strength-meter">
-        <span class="strength-meter__item"></span>
-        <span class="strength-meter__item"></span>
-        <span class="strength-meter__item"></span>
+    <div
+      v-if="strengthPasswordChecker()"
+      class="strength-password-checker"
+      :class="strength.status"
+    >
+      <div class="meter">
+        <span class="meter__item"></span>
+        <span class="meter__item"></span>
+        <span class="meter__item"></span>
       </div>
-      <span class="strength-info">
-        Пароль должен быть не менее 8 символов
+
+      <span class="notice">
+        {{ strength.notice }}
       </span>
-    </template>
+    </div>
   </div>
 </template>
 
-<script>
-import BaseIcon from '@/components/framework/BaseIcon';
+<script scoped>
+import BaseIcon from './BaseIcon';
+import { useStrengthPasswordChecker } from '../use/strength-password-checker';
 
 export default {
   name: 'BaseInput',
@@ -46,6 +56,10 @@ export default {
       type: String,
       default: 'input',
       validator: (value) => ['input', 'textarea'].includes(value)
+    },
+    value: {
+      type: String,
+      default: ''
     },
     type: {
       type: String,
@@ -63,7 +77,7 @@ export default {
       type: String,
       default: null
     },
-    strengthChecker: {
+    createPassword: {
       type: Boolean,
       default: false
     },
@@ -73,32 +87,62 @@ export default {
     }
   },
   data: () => ({
-    localType: ''
+    local: {
+      value: '',
+      type: ''
+    },
+    icon: {
+      success: false,
+      error: false
+    },
+    strength: {}
   }),
   computed: {
     computedClasses() {
       return [this.baseClassName];
     },
+    listeners() {
+      return {
+        ...this.$listeners,
+        input: (event) => {
+          this.local.value = event.target.value;
+
+          this.$emit('input', this.local.value);
+        }
+      };
+    },
     attrs() {
       return {
         ...this.$attrs,
-        type: this.tagName !== 'textarea' ? this.localType : null,
-        ref: 'field',
+        value: this.local.value,
+        type: this.tagName !== 'textarea' ? this.local.type : null,
+        ref: this.createPassword ? 'createPassword' : 'field',
         class: 'field'
       };
     }
   },
   watch: {
+    value: {
+      immediate: true,
+      handler(val) {
+        this.local.value = val;
+      }
+    },
     type: {
       immediate: true,
       handler(val) {
-        this.localType = val;
+        this.local.type = val;
       }
     }
   },
   methods: {
     changePasswordType() {
-      this.localType = this.localType === 'password' ? 'text' : 'password';
+      this.local.type = this.local.type === 'password' ? 'text' : 'password';
+    },
+    strengthPasswordChecker() {
+      return this.createPassword
+        ? (this.strength = useStrengthPasswordChecker(this.local.value))
+        : false;
     }
   }
 };
@@ -198,12 +242,12 @@ $colors: (
     }
   }
 
-  .strength {
-    &-meter {
+  .strength-password-checker {
+    .meter {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
-      margin-top: 8px;
+      margin-top: 12px;
       width: 100%;
 
       &__item {
@@ -211,27 +255,53 @@ $colors: (
         height: 8px;
         background-color: map-get($colors, primary, background-color);
         border-radius: 4px;
+      }
+    }
 
-        &.active {
+    .notice {
+      margin-top: 8px;
+      color: $font-color-secondary;
+      font-size: $font-size-xs;
+    }
+
+    &.danger {
+      .notice {
+        color: $danger;
+      }
+
+      .meter {
+        &__item {
           &:first-child {
             background-color: $danger;
-          }
-
-          &:nth-child(2) {
-            background-color: $warning;
-          }
-
-          &:last-child {
-            background-color: $success;
           }
         }
       }
     }
 
-    &-info {
-      margin-top: 12px;
-      color: $font-color-secondary;
-      font-size: $font-size-xs;
+    &.warning {
+      .notice {
+        color: $warning;
+      }
+
+      .meter {
+        &__item {
+          &:nth-child(-n + 2) {
+            background-color: $warning;
+          }
+        }
+      }
+    }
+
+    &.success {
+      .notice {
+        color: $success;
+      }
+
+      .meter {
+        &__item {
+          background-color: $success;
+        }
+      }
     }
   }
 }

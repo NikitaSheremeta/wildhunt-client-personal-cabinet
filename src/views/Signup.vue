@@ -19,7 +19,7 @@
         <BaseInput
           :class="$style['form-item']"
           type="password"
-          strength-checker
+          create-password
           placeholder="Придумайте пароль"
         />
 
