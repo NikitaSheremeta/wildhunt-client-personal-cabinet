@@ -39,31 +39,38 @@ function createStrengthPasswordScore(password) {
 }
 
 function createStrengthPasswordChecker(password, score) {
+  if (password.length === 0) {
+    return {
+      status: null,
+      notice: null
+    };
+  }
+
   if (password.length <= 7) {
     return {
       status: null,
-      notice: 'Пароль должен быть не менее 8 символов'
+      notice: 'Слишком короткий, но многим и так нравится'
     };
   }
 
   if (score <= 50 && password.length >= 8) {
     return {
       status: 'danger',
-      notice: 'Выбранный пароль легко подобрать'
+      notice: 'Пароль легко подобрать'
     };
   }
 
   if (score > 50 && score <= 85 && password.length !== 0) {
     return {
       status: 'warning',
-      notice: 'Выбранный пароль может быть более надежным'
+      notice: 'Пароль может быть более надежным'
     };
   }
 
   if (score > 85 && password.length !== 0) {
     return {
       status: 'success',
-      notice: 'Надежный пароль, только не забудьте его'
+      notice: 'Пароль - надежен, только не забудьте его'
     };
   }
 }

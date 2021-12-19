@@ -25,7 +25,7 @@
     </label>
 
     <div
-      v-if="strengthPasswordChecker()"
+      v-if="createPassword"
       class="strength-password-checker"
       :class="strength.status"
     >
@@ -36,7 +36,7 @@
       </div>
 
       <span class="notice">
-        {{ strength.notice }}
+        {{ strength.notice || 'Пароль должен быть не менее 8 символов' }}
       </span>
     </div>
   </div>
@@ -55,7 +55,6 @@ export default {
     tagName: {
       type: String,
       default: 'input',
-      validator: (value) => ['input', 'textarea'].includes(value)
     },
     value: {
       type: String,
@@ -105,9 +104,15 @@ export default {
       return {
         ...this.$listeners,
         input: (event) => {
-          this.local.value = event.target.value;
+          const value = event.target.value;
 
-          this.$emit('input', this.local.value);
+          this.local.value = value;
+
+          this.$emit('input', value);
+
+          if (this.createPassword) {
+            this.strength = useStrengthPasswordChecker(value);
+          }
         }
       };
     },
@@ -138,11 +143,6 @@ export default {
   methods: {
     changePasswordType() {
       this.local.type = this.local.type === 'password' ? 'text' : 'password';
-    },
-    strengthPasswordChecker() {
-      return this.createPassword
-        ? (this.strength = useStrengthPasswordChecker(this.local.value))
-        : false;
     }
   }
 };

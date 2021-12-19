@@ -18,6 +18,7 @@
 
         <BaseInput
           :class="$style['form-item']"
+          v-model="createPassword"
           type="password"
           create-password
           placeholder="Придумайте пароль"
@@ -46,6 +47,11 @@ export default {
   components: {
     BaseInput,
     BaseButton
+  },
+  data() {
+    return {
+      createPassword: ''
+    };
   }
 };
 </script>
