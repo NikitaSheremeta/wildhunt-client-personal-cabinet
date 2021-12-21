@@ -1,7 +1,7 @@
 <template>
   <div :class="computedClasses">
     <label class="label">
-      <input v-bind="attrs" v-on="listeners" />
+      <input v-bind="attrs" @input="onInput" />
 
       <a
         v-if="type === 'password' && !repeatPassword"
@@ -54,7 +54,7 @@ export default {
   props: {
     tagName: {
       type: String,
-      default: 'input',
+      default: 'input'
     },
     value: {
       type: String,
@@ -100,22 +100,6 @@ export default {
     computedClasses() {
       return [this.baseClassName];
     },
-    listeners() {
-      return {
-        ...this.$listeners,
-        input: (event) => {
-          const value = event.target.value;
-
-          this.local.value = value;
-
-          this.$emit('input', value);
-
-          if (this.createPassword) {
-            this.strength = useStrengthPasswordChecker(value);
-          }
-        }
-      };
-    },
     attrs() {
       return {
         ...this.$attrs,
@@ -141,6 +125,15 @@ export default {
     }
   },
   methods: {
+    onInput(event) {
+      const value = event.target.value;
+
+      this.local.value = value;
+
+      if (this.createPassword) {
+        this.strength = useStrengthPasswordChecker(value);
+      }
+    },
     changePasswordType() {
       this.local.type = this.local.type === 'password' ? 'text' : 'password';
     }

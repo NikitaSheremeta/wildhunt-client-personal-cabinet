@@ -49,7 +49,7 @@ function createStrengthPasswordChecker(password, score) {
   if (password.length <= 7) {
     return {
       status: null,
-      notice: 'Слишком короткий, но многим и так нравится'
+      notice: 'Пароль короткий, но многим и так нравится'
     };
   }
 
