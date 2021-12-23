@@ -18,21 +18,22 @@
 
         <BaseInput
           :class="$style['form-item']"
-          v-model="createPassword"
-          type="password"
+          v-model:value="password"
           create-password
+          type="password"
           placeholder="Придумайте пароль"
         />
 
         <BaseInput
           :class="$style['form-item']"
+          v-model="repeatPassword"
+          :repeat-password="password"
           type="password"
-          repeat-password
           placeholder="Повторите пароль"
         />
 
         <div :class="$style['form-controls']">
-          <BaseButton full-width> Зарегистрироваться </BaseButton>
+          <BaseButton full-width @click="some"> Зарегистрироваться </BaseButton>
         </div>
       </div>
     </div>
@@ -50,8 +51,14 @@ export default {
   },
   data() {
     return {
-      createPassword: ''
+      password: '',
+      repeatPassword: false
     };
+  },
+  methods: {
+    some() {
+      alert(this.password);
+    }
   }
 };
 </script>

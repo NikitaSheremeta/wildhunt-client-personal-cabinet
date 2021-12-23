@@ -4,7 +4,7 @@
       <input v-bind="attrs" @input="onInput" />
 
       <a
-        v-if="type === 'password' && !repeatPassword"
+        v-if="type === 'password' && createPassword"
         href="#"
         class="field-icon"
         @click.stop.prevent="changePasswordType"
@@ -81,21 +81,23 @@ export default {
       default: false
     },
     repeatPassword: {
-      type: Boolean,
-      default: false
+      type: String,
+      default: null
     }
   },
-  data: () => ({
-    local: {
-      value: '',
-      type: ''
-    },
-    icon: {
-      success: false,
-      error: false
-    },
-    strength: {}
-  }),
+  data() {
+    return {
+      local: {
+        value: '',
+        type: ''
+      },
+      icon: {
+        success: false,
+        error: false
+      },
+      strength: {}
+    };
+  },
   computed: {
     computedClasses() {
       return [this.baseClassName];
@@ -129,6 +131,8 @@ export default {
       const value = event.target.value;
 
       this.local.value = value;
+
+      this.$emit('update:value', value);
 
       if (this.createPassword) {
         this.strength = useStrengthPasswordChecker(value);
