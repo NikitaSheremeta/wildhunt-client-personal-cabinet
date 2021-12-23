@@ -19,9 +19,11 @@
         <BaseIcon :icon="iconName" color="secondary" />
       </span>
 
-      <span v-if="icon.success || isPasswordEqual" class="field-icon">
-        <BaseIcon icon="check" color="success" width="18" height="18" />
-      </span>
+      <transition name="fade">
+        <span v-if="icon.success" class="field-icon">
+          <BaseIcon icon="check" color="success" width="18" height="18" />
+        </span>
+      </transition>
     </label>
 
     <div
@@ -45,6 +47,7 @@
 <script scoped>
 import BaseIcon from './BaseIcon';
 import { useStrengthPasswordChecker } from '../use/strength-password-checker';
+import { useDebounce } from '../use/debounce';
 
 export default {
   name: 'BaseInput',
@@ -124,7 +127,10 @@ export default {
       handler(val) {
         this.local.type = val;
       }
-    }
+    },
+    isPasswordEqual: useDebounce(function (val) {
+      this.icon.success = val;
+    })
   },
   methods: {
     onInput(event) {
@@ -300,6 +306,16 @@ $colors: (
         }
       }
     }
+  }
+
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.3s ease;
+  }
+
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
   }
 }
 </style>
