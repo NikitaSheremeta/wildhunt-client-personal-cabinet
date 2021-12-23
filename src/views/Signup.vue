@@ -6,19 +6,21 @@
 
         <BaseInput
           :class="$style['form-item']"
+          v-model:value="form.username"
           type="text"
           placeholder="Логин"
         />
 
         <BaseInput
           :class="$style['form-item']"
+          v-model:value="form.email"
           type="text"
           placeholder="Email"
         />
 
         <BaseInput
           :class="$style['form-item']"
-          v-model:value="password"
+          v-model:value="form.password"
           create-password
           type="password"
           placeholder="Придумайте пароль"
@@ -27,7 +29,7 @@
         <BaseInput
           :class="$style['form-item']"
           v-model="repeatPassword"
-          :repeat-password="password"
+          repeat-password
           type="password"
           placeholder="Повторите пароль"
         />
@@ -41,8 +43,8 @@
 </template>
 
 <script>
-import BaseInput from '@/components/framework/BaseInput';
-import BaseButton from '@/components/framework/BaseButton';
+import BaseInput from '../components/framework/BaseInput';
+import BaseButton from '../components/framework/BaseButton';
 
 export default {
   components: {
@@ -51,13 +53,18 @@ export default {
   },
   data() {
     return {
-      password: '',
-      repeatPassword: false
+      form: {
+        username: '',
+        email: '',
+        password: ''
+      },
+      repeatPassword: '',
+      isPasswordEqual: false
     };
   },
   methods: {
     some() {
-      alert(this.password);
+      alert(this.form.password);
     }
   }
 };

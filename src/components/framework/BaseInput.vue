@@ -81,8 +81,8 @@ export default {
       default: false
     },
     repeatPassword: {
-      type: String,
-      default: null
+      type: Boolean,
+      default: false
     }
   },
   data() {
