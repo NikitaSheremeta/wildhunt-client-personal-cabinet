@@ -6,21 +6,21 @@
 
         <BaseInput
           :class="$style['form-item']"
-          v-model:value="form.username"
+          v-model:value="username"
           type="text"
           placeholder="Логин"
         />
 
         <BaseInput
           :class="$style['form-item']"
-          v-model:value="form.email"
+          v-model:value="email"
           type="text"
           placeholder="Email"
         />
 
         <BaseInput
           :class="$style['form-item']"
-          v-model:value="form.password"
+          v-model:value="password"
           create-password
           type="password"
           placeholder="Придумайте пароль"
@@ -28,14 +28,14 @@
 
         <BaseInput
           :class="$style['form-item']"
-          v-model="repeatPassword"
-          repeat-password
+          v-model:value="repeatPassword"
+          :is-password-equal="isPasswordEqual"
           type="password"
           placeholder="Повторите пароль"
         />
 
         <div :class="$style['form-controls']">
-          <BaseButton full-width @click="some"> Зарегистрироваться </BaseButton>
+          <BaseButton full-width> Зарегистрироваться </BaseButton>
         </div>
       </div>
     </div>
@@ -53,18 +53,31 @@ export default {
   },
   data() {
     return {
-      form: {
-        username: '',
-        email: '',
-        password: ''
-      },
+      username: '',
+      email: '',
+      password: '',
       repeatPassword: '',
       isPasswordEqual: false
     };
   },
-  methods: {
-    some() {
-      alert(this.form.password);
+  watch: {
+    password: {
+      handler(value) {
+        if (value.length !== 0) {
+          this.isPasswordEqual = value === this.repeatPassword;
+        } else {
+          this.isPasswordEqual = false;
+        }
+      }
+    },
+    repeatPassword: {
+      handler(value) {
+        if (value.length !== 0) {
+          this.isPasswordEqual = value === this.password;
+        } else {
+          this.isPasswordEqual = false;
+        }
+      }
     }
   }
 };

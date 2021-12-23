@@ -4,7 +4,7 @@
       <input v-bind="attrs" @input="onInput" />
 
       <a
-        v-if="type === 'password' && createPassword"
+        v-if="type === 'password' && isPasswordEqual === null"
         href="#"
         class="field-icon"
         @click.stop.prevent="changePasswordType"
@@ -19,7 +19,7 @@
         <BaseIcon :icon="iconName" color="secondary" />
       </span>
 
-      <span v-if="icon.success" class="field-icon">
+      <span v-if="icon.success || isPasswordEqual" class="field-icon">
         <BaseIcon icon="check" color="success" width="18" height="18" />
       </span>
     </label>
@@ -80,9 +80,9 @@ export default {
       type: Boolean,
       default: false
     },
-    repeatPassword: {
+    isPasswordEqual: {
       type: Boolean,
-      default: false
+      default: null
     }
   },
   data() {
