@@ -41,13 +41,24 @@
         {{ strength.notice || 'Пароль должен быть не менее 8 символов' }}
       </span>
     </div>
+
+    <div v-if="hasNoteSlot" class="note">
+      <slot name="note" />
+    </div>
+
+    <div v-if="hasErrorSlot" class="error">
+      <slot name="error" />
+    </div>
+
+    <div v-if="hasSuccessSlot" class="note -success-text">
+      <slot name="success" />
+    </div>
   </div>
 </template>
 
 <script scoped>
 import BaseIcon from './BaseIcon';
 import { useStrengthPasswordChecker } from '../use/strength-password-checker';
-import { useDebounce } from '../use/debounce';
 
 export default {
   name: 'BaseInput',
@@ -105,6 +116,15 @@ export default {
     computedClasses() {
       return [this.baseClassName];
     },
+    hasNoteSlot() {
+      return Boolean(this.$slots.note);
+    },
+    hasErrorSlot() {
+      return Boolean(this.$slots.error);
+    },
+    hasSuccessSlot() {
+      return Boolean(this.$slots.success);
+    },
     attrs() {
       return {
         ...this.$attrs,
@@ -124,13 +144,15 @@ export default {
     },
     type: {
       immediate: true,
-      handler(val) {
-        this.local.type = val;
+      handler(value) {
+        this.local.type = value;
       }
     },
-    isPasswordEqual: useDebounce(function (val) {
-      this.icon.success = val;
-    })
+    isPasswordEqual: {
+      handler(value) {
+        this.icon.success = value;
+      }
+    }
   },
   methods: {
     onInput(event) {
@@ -306,6 +328,13 @@ $colors: (
         }
       }
     }
+  }
+
+  .note,
+  .error {
+    margin-top: 8px;
+    color: $font-color-secondary;
+    font-size: $font-size-xs;
   }
 
   .fade-enter-active,

@@ -32,7 +32,9 @@
           :is-password-equal="isPasswordEqual"
           type="password"
           placeholder="Повторите пароль"
-        />
+        >
+          <template #note> Подтверждение не совпадает с паролем </template>
+        </BaseInput>
 
         <div :class="$style['form-controls']">
           <BaseButton full-width> Зарегистрироваться </BaseButton>
@@ -45,6 +47,7 @@
 <script>
 import BaseInput from '../components/framework/BaseInput';
 import BaseButton from '../components/framework/BaseButton';
+import { useDebounce } from '../components/use/debounce';
 
 export default {
   components: {
@@ -70,15 +73,13 @@ export default {
         }
       }
     },
-    repeatPassword: {
-      handler(value) {
-        if (value.length !== 0) {
-          this.isPasswordEqual = value === this.password;
-        } else {
-          this.isPasswordEqual = false;
-        }
+    repeatPassword: useDebounce(function (value) {
+      if (value.length !== 0) {
+        this.isPasswordEqual = value === this.password;
+      } else {
+        this.isPasswordEqual = false;
       }
-    }
+    })
   }
 };
 </script>
