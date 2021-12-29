@@ -1,6 +1,6 @@
-const THREE_HUNDRED_MILLISECONDS = 300;
+const SIX_HUNDRED_MILLISECONDS = 600;
 
-export function useDebounce(callback, delay = THREE_HUNDRED_MILLISECONDS) {
+export function useDebounce(callback, delay = SIX_HUNDRED_MILLISECONDS) {
   let timeout = null;
 
   return function () {

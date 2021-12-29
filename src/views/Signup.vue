@@ -32,8 +32,13 @@
           :is-password-equal="isPasswordEqual"
           type="password"
           placeholder="Повторите пароль"
+          @blur="checkPasswordIsEqual"
         >
-          <template #note> Подтверждение не совпадает с паролем </template>
+          <template #error>
+            <span v-if="isPasswordEqualError">
+              Подтверждение не совпадает с паролем
+            </span>
+          </template>
         </BaseInput>
 
         <div :class="$style['form-controls']">
@@ -60,26 +65,29 @@ export default {
       email: '',
       password: '',
       repeatPassword: '',
-      isPasswordEqual: false
+      isPasswordEqual: false,
+      isPasswordEqualError: false
     };
   },
   watch: {
-    password: {
-      handler(value) {
-        if (value.length !== 0) {
-          this.isPasswordEqual = value === this.repeatPassword;
-        } else {
-          this.isPasswordEqual = false;
-        }
-      }
-    },
+    password: useDebounce(function (value) {
+      this.isPasswordEqual =
+        value.length !== 0 && value === this.repeatPassword;
+
+      this.isPasswordEqualError =
+        this.repeatPassword.length !== 0 && !this.isPasswordEqual;
+    }),
     repeatPassword: useDebounce(function (value) {
-      if (value.length !== 0) {
-        this.isPasswordEqual = value === this.password;
-      } else {
-        this.isPasswordEqual = false;
-      }
-    })
+      this.isPasswordEqual = value.length !== 0 && value === this.password;
+
+      this.isPasswordEqualError = false;
+    }, 0)
+  },
+  methods: {
+    checkPasswordIsEqual(event) {
+      this.isPasswordEqualError =
+        event.target.value.length !== 0 && !this.isPasswordEqual;
+    }
   }
 };
 </script>

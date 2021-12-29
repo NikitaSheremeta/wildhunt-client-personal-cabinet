@@ -37,20 +37,20 @@
         <span class="meter__item"></span>
       </div>
 
-      <span class="notice">
+      <span class="notice info">
         {{ strength.notice || 'Пароль должен быть не менее 8 символов' }}
       </span>
     </div>
 
-    <div v-if="hasNoteSlot" class="note">
-      <slot name="note" />
+    <div v-if="hasInfoSlot" class="notice info">
+      <slot name="info" />
     </div>
 
-    <div v-if="hasErrorSlot" class="error">
+    <div v-if="hasErrorSlot" class="notice error">
       <slot name="error" />
     </div>
 
-    <div v-if="hasSuccessSlot" class="note -success-text">
+    <div v-if="hasSuccessSlot" class="notice success">
       <slot name="success" />
     </div>
   </div>
@@ -116,8 +116,8 @@ export default {
     computedClasses() {
       return [this.baseClassName];
     },
-    hasNoteSlot() {
-      return Boolean(this.$slots.note);
+    hasInfoSlot() {
+      return Boolean(this.$slots.info);
     },
     hasErrorSlot() {
       return Boolean(this.$slots.error);
@@ -283,12 +283,6 @@ $colors: (
       }
     }
 
-    .notice {
-      margin-top: 8px;
-      color: $font-color-secondary;
-      font-size: $font-size-xs;
-    }
-
     &.danger {
       .notice {
         color: $danger;
@@ -330,16 +324,19 @@ $colors: (
     }
   }
 
-  .note,
-  .error {
+  .notice {
     margin-top: 8px;
     color: $font-color-secondary;
     font-size: $font-size-xs;
+
+    &.error {
+      color: $danger;
+    }
   }
 
   .fade-enter-active,
   .fade-leave-active {
-    transition: opacity 0.3s ease;
+    transition: opacity 0.6s ease;
   }
 
   .fade-enter-from,
