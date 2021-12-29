@@ -27,6 +27,13 @@
         <path d="M18.5 36L43.0416 11" stroke-width="6" stroke-linecap="round"/>
       </g>
     </template>
+
+    <template v-if="icon === 'exclamation'">
+      <g>
+        <line x1="24" y1="6" x2="24" y2="30" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="24" cy="42" r="3"/>
+      </g>
+    </template>
   </svg>
 </template>
 
@@ -84,6 +91,11 @@ svg {
   &.success {
     fill: $success;
     stroke: $success;
+  }
+
+  &.danger {
+    fill: $danger;
+    stroke: $danger;
   }
 }
 </style>

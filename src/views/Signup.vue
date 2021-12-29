@@ -9,7 +9,11 @@
           v-model:value="username"
           type="text"
           placeholder="Логин"
-        />
+        >
+          <template #error>
+            <span v-if="isUserNameError"> К сожалению, логин занят </span>
+          </template>
+        </BaseInput>
 
         <BaseInput
           :class="$style['form-item']"
@@ -29,7 +33,8 @@
         <BaseInput
           :class="$style['form-item']"
           v-model:value="repeatPassword"
-          :is-password-equal="isPasswordEqual"
+          repeat-password
+          :success-status="isPasswordEqual"
           type="password"
           placeholder="Повторите пароль"
           @blur="checkPasswordIsEqual"
@@ -62,31 +67,38 @@ export default {
   data() {
     return {
       username: '',
+      isUserNameError: false,
       email: '',
       password: '',
       repeatPassword: '',
-      isPasswordEqual: false,
+      isPasswordEqual: null,
       isPasswordEqualError: false
     };
   },
   watch: {
     password: useDebounce(function (value) {
-      this.isPasswordEqual =
-        value.length !== 0 && value === this.repeatPassword;
+      if (this.repeatPassword.length !== 0) {
+        this.isPasswordEqual =
+          value.length !== 0 && value === this.repeatPassword;
 
-      this.isPasswordEqualError =
-        this.repeatPassword.length !== 0 && !this.isPasswordEqual;
+        this.isPasswordEqualError =
+          this.repeatPassword.length !== 0 && !this.isPasswordEqual;
+      }
     }),
     repeatPassword: useDebounce(function (value) {
-      this.isPasswordEqual = value.length !== 0 && value === this.password;
+      this.isPasswordEqual =
+        value.length !== 0 && value === this.password ? true : null;
 
       this.isPasswordEqualError = false;
     }, 0)
   },
   methods: {
     checkPasswordIsEqual(event) {
-      this.isPasswordEqualError =
-        event.target.value.length !== 0 && !this.isPasswordEqual;
+      const value = event.target.value;
+
+      this.isPasswordEqual = value === this.password;
+
+      this.isPasswordEqualError = value.length !== 0 && !this.isPasswordEqual;
     }
   }
 };

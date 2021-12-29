@@ -4,7 +4,7 @@
       <input v-bind="attrs" @input="onInput" />
 
       <a
-        v-if="type === 'password' && isPasswordEqual === null"
+        v-if="type === 'password' && !repeatPassword"
         href="#"
         class="field-icon"
         @click.stop.prevent="changePasswordType"
@@ -20,8 +20,17 @@
       </span>
 
       <transition name="fade">
-        <span v-if="icon.success" class="field-icon">
+        <span v-if="successStatus" class="field-icon">
           <BaseIcon icon="check" color="success" width="18" height="18" />
+        </span>
+      </transition>
+
+      <transition name="fade">
+        <span
+          v-if="!successStatus && successStatus !== null"
+          class="field-icon"
+        >
+          <BaseIcon icon="exclamation" color="danger" width="18" height="18" />
         </span>
       </transition>
     </label>
@@ -37,9 +46,11 @@
         <span class="meter__item"></span>
       </div>
 
-      <span class="notice info">
-        {{ strength.notice || 'Пароль должен быть не менее 8 символов' }}
-      </span>
+      <div class="notice info">
+        <span>
+          {{ strength.notice || 'Пароль должен быть не менее 8 символов' }}
+        </span>
+      </div>
     </div>
 
     <div v-if="hasInfoSlot" class="notice info">
@@ -90,13 +101,17 @@ export default {
       type: String,
       default: null
     },
+    successStatus: {
+      type: Boolean,
+      default: null
+    },
     createPassword: {
       type: Boolean,
       default: false
     },
-    isPasswordEqual: {
+    repeatPassword: {
       type: Boolean,
-      default: null
+      default: false
     }
   },
   data() {
@@ -107,7 +122,7 @@ export default {
       },
       icon: {
         success: false,
-        error: false
+        danger: false
       },
       strength: {}
     };

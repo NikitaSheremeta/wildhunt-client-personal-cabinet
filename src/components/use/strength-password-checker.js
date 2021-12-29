@@ -46,17 +46,10 @@ function createStrengthPasswordChecker(password, score) {
     };
   }
 
-  if (password.length <= 7) {
-    return {
-      status: null,
-      notice: 'Пароль короткий, но многим и так нравится'
-    };
-  }
-
   if (score <= 50 && password.length >= 8) {
     return {
       status: 'danger',
-      notice: 'Пароль легко подобрать'
+      notice: 'Слабый пароль, его легко подобрать'
     };
   }
 
