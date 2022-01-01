@@ -11,7 +11,9 @@
           placeholder="Логин"
         >
           <template #error>
-            <span v-if="isUserNameError"> К сожалению, логин занят </span>
+            <span v-if="isUserNameError">
+              К сожалению, данный логин уже занят
+            </span>
           </template>
         </BaseInput>
 
@@ -57,7 +59,6 @@
 <script>
 import BaseInput from '../components/framework/BaseInput';
 import BaseButton from '../components/framework/BaseButton';
-import { useDebounce } from '../components/use/debounce';
 
 export default {
   components: {
@@ -76,29 +77,34 @@ export default {
     };
   },
   watch: {
-    password: useDebounce(function (value) {
-      if (this.repeatPassword.length !== 0) {
-        this.isPasswordEqual =
-          value.length !== 0 && value === this.repeatPassword;
+    password: {
+      handler(value) {
+        if (this.repeatPassword.length !== 0) {
+          this.isPasswordEqual =
+            value.length !== 0 && value === this.repeatPassword;
 
-        this.isPasswordEqualError =
-          this.repeatPassword.length !== 0 && !this.isPasswordEqual;
+          this.isPasswordEqualError = !this.isPasswordEqual;
+        }
       }
-    }),
-    repeatPassword: useDebounce(function (value) {
-      this.isPasswordEqual =
-        value.length !== 0 && value === this.password ? true : null;
+    },
+    repeatPassword: {
+      handler(value) {
+        this.isPasswordEqual =
+          value.length !== 0 && value === this.password ? true : null;
 
-      this.isPasswordEqualError = false;
-    }, 0)
+        this.isPasswordEqualError = false;
+      }
+    }
   },
   methods: {
     checkPasswordIsEqual(event) {
       const value = event.target.value;
 
-      this.isPasswordEqual = value === this.password;
+      if (value.length !== 0) {
+        this.isPasswordEqual = value === this.password;
 
-      this.isPasswordEqualError = value.length !== 0 && !this.isPasswordEqual;
+        this.isPasswordEqualError = !this.isPasswordEqual;
+      }
     }
   }
 };
@@ -112,11 +118,11 @@ export default {
 
 .row {
   display: flex;
-  align-items: center;
   justify-content: center;
 }
 
 .form {
+  margin-top: 128px;
   width: 320px;
 
   &-title {

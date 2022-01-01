@@ -11,6 +11,8 @@
       >
         <BaseIcon
           :icon="local.type === 'password' ? 'eye' : 'eye-slash'"
+          width="20"
+          height="20"
           color="secondary"
         />
       </a>
@@ -19,20 +21,13 @@
         <BaseIcon :icon="iconName" color="secondary" />
       </span>
 
-      <transition name="fade">
-        <span v-if="successStatus" class="field-icon">
-          <BaseIcon icon="check" color="success" width="18" height="18" />
-        </span>
-      </transition>
+      <span v-if="successStatusModifier" class="field-icon">
+        <BaseIcon icon="check" color="success" />
+      </span>
 
-      <transition name="fade">
-        <span
-          v-if="!successStatus && successStatus !== null"
-          class="field-icon"
-        >
-          <BaseIcon icon="exclamation" color="danger" width="18" height="18" />
-        </span>
-      </transition>
+      <span v-if="errorStatusModifier" class="field-icon">
+        <BaseIcon icon="exclamation" color="danger" />
+      </span>
     </label>
 
     <div
@@ -120,16 +115,18 @@ export default {
         value: '',
         type: ''
       },
-      icon: {
-        success: false,
-        danger: false
-      },
       strength: {}
     };
   },
   computed: {
     computedClasses() {
       return [this.baseClassName];
+    },
+    successStatusModifier() {
+      return this.successStatus;
+    },
+    errorStatusModifier() {
+      return !this.successStatus && this.successStatus !== null;
     },
     hasInfoSlot() {
       return Boolean(this.$slots.info);
@@ -161,11 +158,6 @@ export default {
       immediate: true,
       handler(value) {
         this.local.type = value;
-      }
-    },
-    isPasswordEqual: {
-      handler(value) {
-        this.icon.success = value;
       }
     }
   },
@@ -347,16 +339,6 @@ $colors: (
     &.error {
       color: $danger;
     }
-  }
-
-  .fade-enter-active,
-  .fade-leave-active {
-    transition: opacity 0.6s ease;
-  }
-
-  .fade-enter-from,
-  .fade-leave-to {
-    opacity: 0;
   }
 }
 </style>
