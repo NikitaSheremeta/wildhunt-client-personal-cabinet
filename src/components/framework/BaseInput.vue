@@ -88,6 +88,10 @@ export default {
       type: String,
       default: 'base-input'
     },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     required: {
       type: Boolean,
       default: false
@@ -120,7 +124,10 @@ export default {
   },
   computed: {
     computedClasses() {
-      return [this.baseClassName];
+      return [this.baseClassName, this.disabledModifier];
+    },
+    disabledModifier() {
+      return this.disabled ? 'disabled' : '';
     },
     successStatusModifier() {
       return this.successStatus;
@@ -142,6 +149,7 @@ export default {
         ...this.$attrs,
         value: this.local.value,
         type: this.tagName !== 'textarea' ? this.local.type : null,
+        disabled: this.disabled,
         ref: this.createPassword ? 'createPassword' : 'field',
         class: 'field'
       };
@@ -200,6 +208,10 @@ $colors: (
     color: $font-color-base,
     placeholder-color: $font-color-secondary,
     hover-placeholder-color: $gray-700
+  ),
+  disabled: (
+    background-color: darken($gray-800, 5%),
+    placeholder-color: $font-color-disabled
   )
 );
 
@@ -252,6 +264,21 @@ $colors: (
     // This is necessary to reduce the interval between password dots
     &[type='password']:not(:placeholder-shown) {
       letter-spacing: -3px;
+    }
+  }
+
+  &.disabled {
+    .field {
+      background-color: map-get($colors, disabled, background-color);
+
+      @include placeholder() {
+        color: map-get($colors, disabled, placeholder-color);
+      }
+
+      &,
+      &:focus {
+        cursor: default;
+      }
     }
   }
 

@@ -115,9 +115,12 @@ export default {
   },
   watch: {
     password: {
-      handler() {
+      handler(value) {
         if (this.confirmPassword.length !== 0) {
-          this.confirmPassword = '';
+          this.isPasswordEqual =
+            value.length !== 0 && value === this.confirmPassword;
+
+          this.isPasswordEqualError = !this.isPasswordEqual;
         }
       }
     },
@@ -166,11 +169,7 @@ export default {
       }
     },
     async submitHandler() {
-      const result = await this.v$.$validate();
-
-      if (!result) {
-        return false;
-      }
+      return false;
     }
   }
 };
