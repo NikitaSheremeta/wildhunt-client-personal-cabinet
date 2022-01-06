@@ -23,7 +23,7 @@
           type="text"
           placeholder="Электронная почта"
           @input="onInput"
-          @blur="v$.$touch()"
+          @blur="onBlur"
         >
           <template #error>
             <span v-if="isEmailValid()">
@@ -89,7 +89,6 @@ export default {
       isPasswordEqual: null,
       isUserNameError: false,
       isPasswordEqualError: false,
-
       emailErrorMessage: ''
     };
   },
@@ -135,6 +134,9 @@ export default {
     onInput(event) {
       event.target.value.length !== 0 ? this.v$.$reset() : this.v$.$touch();
     },
+    onBlur() {
+      this.v$.$touch();
+    },
     isEmailValid() {
       const email = this.v$.email;
 
@@ -154,13 +156,6 @@ export default {
 
       return false;
     },
-    async submitHandler() {
-      const result = await this.v$.$validate();
-
-      if (!result) {
-        return false;
-      }
-    },
     checkPasswordIsEqual(event) {
       const value = event.target.value;
 
@@ -168,6 +163,13 @@ export default {
         this.isPasswordEqual = value === this.password;
 
         this.isPasswordEqualError = !this.isPasswordEqual;
+      }
+    },
+    async submitHandler() {
+      const result = await this.v$.$validate();
+
+      if (!result) {
+        return false;
       }
     }
   }
