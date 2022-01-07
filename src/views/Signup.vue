@@ -9,13 +9,11 @@
           v-model:value="username"
           type="text"
           placeholder="Никнейм"
-          @input="onInput($event, 'username')"
+          @input="v$.username.$reset()"
           @blur="v$.username.$touch()"
         >
-          <template #error>
-            <span v-if="isUsernameValid()">
-              {{ usernameErrorMessage }}
-            </span>
+          <template v-if="isUsernameInvalid()" #error>
+            {{ usernameErrorMessage }}
           </template>
         </BaseInput>
 
@@ -24,13 +22,11 @@
           v-model:value="email"
           type="email"
           placeholder="Электронная почта"
-          @input="onInput($event, 'email')"
+          @input="v$.email.$reset()"
           @blur="v$.email.$touch()"
         >
-          <template #error>
-            <span v-if="isEmailValid()">
-              {{ emailErrorMessage }}
-            </span>
+          <template v-if="isEmailInvalid()" #error>
+            {{ emailErrorMessage }}
           </template>
         </BaseInput>
 
@@ -40,9 +36,10 @@
           create-password
           type="password"
           placeholder="Пароль"
+          @input="v$.password.$touch()"
         >
-          <template #error>
-            <span v-if="false"> </span>
+          <template v-if="isPasswordInvalid()" #error>
+            {{ passwordErrorMessage }}
           </template>
         </BaseInput>
 
@@ -50,15 +47,13 @@
           :class="$style['form-item']"
           v-model:value="confirmPassword"
           repeat-password
-          :success-status="isPasswordEqual"
           type="password"
           placeholder="Повторите пароль"
-          @blur="checkPasswordIsEqual"
+          @input="v$.confirmPassword.$reset()"
+          @blur="v$.confirmPassword.$touch()"
         >
-          <template #error>
-            <span v-if="isConfirmPassword()">
-              {{ confirmPasswordErrorMessage }}
-            </span>
+          <template v-if="isConfirmPasswordInvalid()" #error>
+            {{ confirmPasswordErrorMessage }}
           </template>
         </BaseInput>
 
@@ -77,18 +72,19 @@ import {
   required,
   email,
   minLength,
-  maxLength
+  maxLength,
+  sameAs
 } from '@vuelidate/validators';
 import BaseInput from '../components/framework/BaseInput';
 import BaseButton from '../components/framework/BaseButton';
 
-const latinCharacters = helpers.regex(/[a-z]/i);
+const onlyLatinCharacters = helpers.regex(
+  /^[a-zA-Z0-9~!@#$%^&*()_+-={}\\|;',./<>?":]+$/
+);
 
 const MAGIC_NUMBERS = {
-  PASSWORD_MIN_LENGTH: 8,
-  PASSWORD_MAX_LENGTH: 24,
-  USERNAME_MIN_LENGTH: 4,
-  USERNAME_MAX_LENGTH: 32
+  MIN_LENGTH: 4,
+  MAX_LENGTH: 24
 };
 
 export default {
@@ -102,10 +98,9 @@ export default {
       email: '',
       password: '',
       confirmPassword: '',
-      isPasswordEqual: null,
-      isPasswordEqualError: false,
       usernameErrorMessage: '',
       emailErrorMessage: '',
+      passwordErrorMessage: '',
       confirmPasswordErrorMessage: ''
     };
   },
@@ -118,9 +113,9 @@ export default {
     return {
       username: {
         required,
-        latinCharacters,
-        minLength: minLength(MAGIC_NUMBERS.USERNAME_MIN_LENGTH),
-        maxLength: maxLength(MAGIC_NUMBERS.USERNAME_MAX_LENGTH)
+        onlyLatinCharacters,
+        minLength: minLength(MAGIC_NUMBERS.MIN_LENGTH),
+        maxLength: maxLength(MAGIC_NUMBERS.MAX_LENGTH)
       },
       email: {
         required,
@@ -128,64 +123,40 @@ export default {
       },
       password: {
         required,
-        minLength: minLength(MAGIC_NUMBERS.PASSWORD_MIN_LENGTH),
-        maxLength: maxLength(MAGIC_NUMBERS.PASSWORD_MAX_LENGTH)
+        onlyLatinCharacters,
+        minLength: minLength(MAGIC_NUMBERS.MIN_LENGTH),
+        maxLength: maxLength(MAGIC_NUMBERS.MAX_LENGTH)
       },
       confirmPassword: {
-        required
+        required,
+        sameAs: sameAs(this.password)
       }
     };
   },
-  watch: {
-    password: {
-      handler(value) {
-        if (this.confirmPassword.length !== 0) {
-          this.isPasswordEqual =
-            value.length !== 0 && value === this.confirmPassword;
-
-          this.isPasswordEqualError = !this.isPasswordEqual;
-        }
-      }
-    },
-    confirmPassword: {
-      handler(value) {
-        this.isPasswordEqual =
-          value.length !== 0 && value === this.password ? true : null;
-
-        this.isPasswordEqualError = false;
-      }
-    }
-  },
   methods: {
-    onInput(event, field) {
-      event.target.value.length !== 0
-        ? this.v$[field].$reset()
-        : this.v$[field].$touch();
-    },
-    isUsernameValid() {
+    isUsernameInvalid() {
       const username = this.v$.username;
 
       if (username.$dirty) {
         if (username['required'].$invalid) {
-          this.usernameErrorMessage = 'Придумайте никнейм';
+          this.usernameErrorMessage = 'Необходимо придумать никнейм';
 
           return true;
         }
 
         if (username['minLength'].$invalid) {
-          this.usernameErrorMessage = 'Никнейм должен быть не менее 4 символов';
+          this.usernameErrorMessage = `Никнейм должен быть не менее ${MAGIC_NUMBERS.MIN_LENGTH} символов`;
 
           return true;
         }
 
         if (username['maxLength'].$invalid) {
-          this.usernameErrorMessage =
-            'Никнейм должен быть не более 24 символов';
+          this.usernameErrorMessage = `Никнейм должен быть не более ${MAGIC_NUMBERS.MAX_LENGTH} символов`;
 
           return true;
         }
 
-        if (username['latinCharacters'].$invalid) {
+        if (username['onlyLatinCharacters'].$invalid) {
           this.usernameErrorMessage =
             'Никнейм не должен содержать русские буквы';
 
@@ -193,9 +164,9 @@ export default {
         }
       }
 
-      return false;
+      return null;
     },
-    isEmailValid() {
+    isEmailInvalid() {
       const email = this.v$.email;
 
       if (email.$dirty) {
@@ -212,29 +183,59 @@ export default {
         }
       }
 
-      return false;
+      return null;
     },
-    isConfirmPassword() {
-      const confirmPassword = this.v$.confirmPassword;
+    isPasswordInvalid() {
+      const password = this.v$.password;
 
-      if (confirmPassword.$dirty) {
-        if (confirmPassword['required'].$invalid) {
-          this.confirmPasswordErrorMessage = 'Необходимо ввести пароль еще раз';
+      if (password.$dirty) {
+        if (password['required'].$invalid) {
+          this.passwordErrorMessage = 'Необходимо придумать пароль';
+
+          return true;
+        }
+
+        if (password['minLength'].$invalid) {
+          this.passwordErrorMessage = `Пароль должен быть не менее ${MAGIC_NUMBERS.MIN_LENGTH} символов`;
+
+          return true;
+        }
+
+        if (password['maxLength'].$invalid) {
+          this.passwordErrorMessage = `Пароль должен быть не более ${MAGIC_NUMBERS.MAX_LENGTH} символов`;
+
+          return true;
+        }
+
+        if (password['onlyLatinCharacters'].$invalid) {
+          this.passwordErrorMessage =
+            'Пароль не должен содержать русские буквы';
 
           return true;
         }
       }
+
+      return null;
     },
-    checkPasswordIsEqual(event) {
-      this.v$.confirmPassword.$touch();
+    isConfirmPasswordInvalid() {
+      const confirmPassword = this.v$.confirmPassword;
 
-      const value = event.target.value;
+      if (confirmPassword.$dirty) {
+        if (confirmPassword['required'].$invalid) {
+          this.confirmPasswordErrorMessage = 'Введите пароль еще раз';
 
-      if (value.length !== 0) {
-        this.isPasswordEqual = value === this.password;
+          return true;
+        }
 
-        this.isPasswordEqualError = !this.isPasswordEqual;
+        if (confirmPassword['sameAs'].$invalid) {
+          this.confirmPasswordErrorMessage =
+            'Подтверждение не совпадает с паролем';
+
+          return true;
+        }
       }
+
+      return null;
     },
     async submitHandler() {
       return false;

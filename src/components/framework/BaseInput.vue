@@ -25,7 +25,7 @@
         <BaseIcon icon="check" color="success" />
       </span>
 
-      <span v-if="errorStatusModifier" class="field-icon">
+      <span v-if="!!$slots.error && !createPassword" class="field-icon">
         <BaseIcon icon="exclamation" color="danger" />
       </span>
     </label>
@@ -33,7 +33,7 @@
     <div
       v-if="createPassword"
       class="strength-password-checker"
-      :class="strength.status"
+      :class="!!$slots.error ? 'error' : strength.status"
     >
       <div class="meter">
         <span class="meter__item"></span>
@@ -41,23 +41,29 @@
         <span class="meter__item"></span>
       </div>
 
-      <div class="notice info">
+      <div v-if="!!strength.notice && !$slots.error" class="notice">
         <span>
-          {{ strength.notice || 'Пароль должен быть не менее 8 символов' }}
+          {{ strength.notice }}
         </span>
       </div>
     </div>
 
-    <div v-if="hasInfoSlot" class="notice info">
-      <slot name="info" />
+    <div v-if="!!$slots.info" class="notice info">
+      <span>
+        <slot name="info" />
+      </span>
     </div>
 
-    <div v-if="hasErrorSlot" class="notice error">
-      <slot name="error" />
+    <div v-if="!!$slots.error" class="notice error">
+      <span>
+        <slot name="error" />
+      </span>
     </div>
 
-    <div v-if="hasSuccessSlot" class="notice success">
-      <slot name="success" />
+    <div v-if="!!$slots.success" class="notice success">
+      <span>
+        <slot name="success" />
+      </span>
     </div>
   </div>
 </template>
@@ -131,18 +137,6 @@ export default {
     },
     successStatusModifier() {
       return this.successStatus;
-    },
-    errorStatusModifier() {
-      return !this.successStatus && this.successStatus !== null;
-    },
-    hasInfoSlot() {
-      return Boolean(this.$slots.info);
-    },
-    hasErrorSlot() {
-      return Boolean(this.$slots.error);
-    },
-    hasSuccessSlot() {
-      return Boolean(this.$slots.success);
     },
     attrs() {
       return {

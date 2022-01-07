@@ -46,24 +46,24 @@ function createStrengthPasswordChecker(password, score) {
     };
   }
 
-  if (score <= 50 && password.length >= 8) {
+  if (score <= 30 && password.length >= 4) {
     return {
       status: 'danger',
-      notice: 'Слабый пароль, его легко подобрать'
+      notice: 'Слабый пароль, его легко будет подобрать'
     };
   }
 
-  if (score > 50 && score <= 85 && password.length !== 0) {
+  if (score > 30 && score <= 70 && password.length !== 0) {
     return {
       status: 'warning',
-      notice: 'Пароль может быть более надежным'
+      notice: 'Хороший пароль, но мог бы быть надежнее'
     };
   }
 
-  if (score > 85 && password.length !== 0) {
+  if (score > 70 && password.length !== 0) {
     return {
       status: 'success',
-      notice: 'Пароль - надежен, только не забудьте его'
+      notice: 'Надежный пароль, только не забудьте его'
     };
   }
 }
