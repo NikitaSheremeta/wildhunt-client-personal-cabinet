@@ -6,54 +6,55 @@
 
         <BaseInput
           :class="$style['form-item']"
-          v-model:value="username"
+          v-model:value="form.username"
           type="text"
           placeholder="Никнейм"
-          @input="v$.username.$reset()"
-          @blur="v$.username.$touch()"
+          @input="v$.form['username'].$reset()"
+          @blur="v$.form['username'].$touch()"
         >
           <template v-if="isUsernameInvalid()" #error>
-            {{ usernameErrorMessage }}
+            {{ errorMessage.username }}
           </template>
         </BaseInput>
 
         <BaseInput
           :class="$style['form-item']"
-          v-model:value="email"
+          v-model:value="form.email"
           type="email"
           placeholder="Электронная почта"
-          @input="v$.email.$reset()"
-          @blur="v$.email.$touch()"
+          @input="v$.form['email'].$reset()"
+          @blur="v$.form['email'].$touch()"
         >
           <template v-if="isEmailInvalid()" #error>
-            {{ emailErrorMessage }}
+            {{ errorMessage.email }}
           </template>
         </BaseInput>
 
         <BaseInput
           :class="$style['form-item']"
-          v-model:value="password"
+          v-model:value="form.password"
           create-password
           type="password"
           placeholder="Пароль"
-          @input="v$.password.$touch()"
+          @input="v$.form['password'].$touch()"
+          @blur="v$.form['password'].$touch()"
         >
           <template v-if="isPasswordInvalid()" #error>
-            {{ passwordErrorMessage }}
+            {{ errorMessage.password }}
           </template>
         </BaseInput>
 
         <BaseInput
           :class="$style['form-item']"
-          v-model:value="confirmPassword"
+          v-model:value="form.confirmPassword"
           repeat-password
           type="password"
           placeholder="Повторите пароль"
-          @input="v$.confirmPassword.$reset()"
-          @blur="v$.confirmPassword.$touch()"
+          @input="v$.form['confirmPassword'].$reset()"
+          @blur="v$.form['confirmPassword'].$touch()"
         >
           <template v-if="isConfirmPasswordInvalid()" #error>
-            {{ confirmPasswordErrorMessage }}
+            {{ errorMessage.confirmPassword }}
           </template>
         </BaseInput>
 
@@ -94,14 +95,18 @@ export default {
   },
   data() {
     return {
-      username: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      usernameErrorMessage: '',
-      emailErrorMessage: '',
-      passwordErrorMessage: '',
-      confirmPasswordErrorMessage: ''
+      form: {
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+      },
+      errorMessage: {
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+      }
     };
   },
   setup() {
@@ -111,53 +116,55 @@ export default {
   },
   validations() {
     return {
-      username: {
-        required,
-        onlyLatinCharacters,
-        minLength: minLength(MAGIC_NUMBERS.MIN_LENGTH),
-        maxLength: maxLength(MAGIC_NUMBERS.MAX_LENGTH)
-      },
-      email: {
-        required,
-        email
-      },
-      password: {
-        required,
-        onlyLatinCharacters,
-        minLength: minLength(MAGIC_NUMBERS.MIN_LENGTH),
-        maxLength: maxLength(MAGIC_NUMBERS.MAX_LENGTH)
-      },
-      confirmPassword: {
-        required,
-        sameAs: sameAs(this.password)
+      form: {
+        username: {
+          required,
+          onlyLatinCharacters,
+          minLength: minLength(MAGIC_NUMBERS.MIN_LENGTH),
+          maxLength: maxLength(MAGIC_NUMBERS.MAX_LENGTH)
+        },
+        email: {
+          required,
+          email
+        },
+        password: {
+          required,
+          onlyLatinCharacters,
+          minLength: minLength(MAGIC_NUMBERS.MIN_LENGTH),
+          maxLength: maxLength(MAGIC_NUMBERS.MAX_LENGTH)
+        },
+        confirmPassword: {
+          required,
+          sameAs: sameAs(this.form.password)
+        }
       }
     };
   },
   methods: {
     isUsernameInvalid() {
-      const username = this.v$.username;
+      const username = this.v$.form['username'];
 
       if (username.$dirty) {
-        if (username['required'].$invalid) {
-          this.usernameErrorMessage = 'Необходимо придумать никнейм';
+        if (username.required.$invalid) {
+          this.errorMessage.username = 'Необходимо придумать никнейм';
 
           return true;
         }
 
-        if (username['minLength'].$invalid) {
-          this.usernameErrorMessage = `Никнейм должен быть не менее ${MAGIC_NUMBERS.MIN_LENGTH} символов`;
+        if (username.minLength.$invalid) {
+          this.errorMessage.username = `Никнейм должен быть не менее ${MAGIC_NUMBERS.MIN_LENGTH} символов`;
 
           return true;
         }
 
-        if (username['maxLength'].$invalid) {
-          this.usernameErrorMessage = `Никнейм должен быть не более ${MAGIC_NUMBERS.MAX_LENGTH} символов`;
+        if (username.maxLength.$invalid) {
+          this.errorMessage.username = `Никнейм должен быть не более ${MAGIC_NUMBERS.MAX_LENGTH} символов`;
 
           return true;
         }
 
-        if (username['onlyLatinCharacters'].$invalid) {
-          this.usernameErrorMessage =
+        if (username.onlyLatinCharacters.$invalid) {
+          this.errorMessage.username =
             'Никнейм не должен содержать русские буквы';
 
           return true;
@@ -167,17 +174,17 @@ export default {
       return null;
     },
     isEmailInvalid() {
-      const email = this.v$.email;
+      const email = this.v$.form['email'];
 
       if (email.$dirty) {
-        if (email['required'].$invalid) {
-          this.emailErrorMessage = 'Введите электронную почту';
+        if (email.required.$invalid) {
+          this.errorMessage.email = 'Введите электронную почту';
 
           return true;
         }
 
-        if (email['email'].$invalid) {
-          this.emailErrorMessage = 'Неправильный адрес электронной почты';
+        if (email.email.$invalid) {
+          this.errorMessage.email = 'Неправильный адрес электронной почты';
 
           return true;
         }
@@ -186,29 +193,29 @@ export default {
       return null;
     },
     isPasswordInvalid() {
-      const password = this.v$.password;
+      const password = this.v$.form['password'];
 
       if (password.$dirty) {
-        if (password['required'].$invalid) {
-          this.passwordErrorMessage = 'Необходимо придумать пароль';
+        if (password.required.$invalid) {
+          this.errorMessage.password = 'Необходимо придумать пароль';
 
           return true;
         }
 
-        if (password['minLength'].$invalid) {
-          this.passwordErrorMessage = `Пароль должен быть не менее ${MAGIC_NUMBERS.MIN_LENGTH} символов`;
+        if (password.minLength.$invalid) {
+          this.errorMessage.password = `Пароль должен быть не менее ${MAGIC_NUMBERS.MIN_LENGTH} символов`;
 
           return true;
         }
 
-        if (password['maxLength'].$invalid) {
-          this.passwordErrorMessage = `Пароль должен быть не более ${MAGIC_NUMBERS.MAX_LENGTH} символов`;
+        if (password.maxLength.$invalid) {
+          this.errorMessage.password = `Пароль должен быть не более ${MAGIC_NUMBERS.MAX_LENGTH} символов`;
 
           return true;
         }
 
-        if (password['onlyLatinCharacters'].$invalid) {
-          this.passwordErrorMessage =
+        if (password.onlyLatinCharacters.$invalid) {
+          this.errorMessage.password =
             'Пароль не должен содержать русские буквы';
 
           return true;
@@ -218,17 +225,17 @@ export default {
       return null;
     },
     isConfirmPasswordInvalid() {
-      const confirmPassword = this.v$.confirmPassword;
+      const confirmPassword = this.v$.form['confirmPassword'];
 
       if (confirmPassword.$dirty) {
-        if (confirmPassword['required'].$invalid) {
-          this.confirmPasswordErrorMessage = 'Введите пароль еще раз';
+        if (confirmPassword.required.$invalid) {
+          this.errorMessage.confirmPassword = 'Введите пароль еще раз';
 
           return true;
         }
 
-        if (confirmPassword['sameAs'].$invalid) {
-          this.confirmPasswordErrorMessage =
+        if (confirmPassword.sameAs.$invalid) {
+          this.errorMessage.confirmPassword =
             'Подтверждение не совпадает с паролем';
 
           return true;

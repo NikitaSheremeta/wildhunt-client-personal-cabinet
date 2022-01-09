@@ -39,28 +39,21 @@ function createStrengthPasswordScore(password) {
 }
 
 function createStrengthPasswordChecker(password, score) {
-  if (password.length === 0) {
-    return {
-      status: null,
-      notice: null
-    };
-  }
-
-  if (score <= 30 && password.length >= 4) {
+  if (score <= 25 && password.length >= 4) {
     return {
       status: 'danger',
       notice: 'Слабый пароль, его легко будет подобрать'
     };
   }
 
-  if (score > 30 && score <= 70 && password.length !== 0) {
+  if (score > 20 && score <= 60 && password.length !== 0) {
     return {
       status: 'warning',
       notice: 'Хороший пароль, но мог бы быть надежнее'
     };
   }
 
-  if (score > 70 && password.length !== 0) {
+  if (score > 60 && password.length !== 0) {
     return {
       status: 'success',
       notice: 'Надежный пароль, только не забудьте его'

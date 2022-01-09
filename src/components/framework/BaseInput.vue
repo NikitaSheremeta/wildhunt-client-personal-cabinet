@@ -41,9 +41,9 @@
         <span class="meter__item"></span>
       </div>
 
-      <div v-if="!!strength.notice && !$slots.error" class="notice">
+      <div v-if="!$slots.error" class="notice">
         <span>
-          {{ strength.notice }}
+          {{ strength.notice || 'Используйте латинские буквы, цифры и символы' }}
         </span>
       </div>
     </div>
