@@ -21,7 +21,7 @@
         <BaseIcon :icon="iconName" color="secondary" />
       </span>
 
-      <span v-if="successStatusModifier" class="field-icon">
+      <span v-if="success" class="field-icon">
         <BaseIcon icon="check" color="success" />
       </span>
 
@@ -33,7 +33,7 @@
     <div
       v-if="createPassword"
       class="strength-password-checker"
-      :class="!!$slots.error ? 'error' : strength.status"
+      :class="!$slots.error ? strength.status : ''"
     >
       <div class="meter">
         <span class="meter__item"></span>
@@ -43,7 +43,7 @@
 
       <div v-if="!$slots.error" class="notice">
         <span>
-          {{ strength.notice || 'Используйте латинские буквы, цифры и символы' }}
+          {{ strength.notice || strength.baseNotice }}
         </span>
       </div>
     </div>
@@ -98,6 +98,10 @@ export default {
       type: Boolean,
       default: false
     },
+    autofocus: {
+      type: Boolean,
+      default: false
+    },
     required: {
       type: Boolean,
       default: false
@@ -106,7 +110,7 @@ export default {
       type: String,
       default: null
     },
-    successStatus: {
+    success: {
       type: Boolean,
       default: null
     },
@@ -125,7 +129,9 @@ export default {
         value: '',
         type: ''
       },
-      strength: {}
+      strength: {
+        baseNotice: 'Используйте латинские буквы, цифры и символы'
+      }
     };
   },
   computed: {
@@ -135,15 +141,13 @@ export default {
     disabledModifier() {
       return this.disabled ? 'disabled' : '';
     },
-    successStatusModifier() {
-      return this.successStatus;
-    },
     attrs() {
       return {
         ...this.$attrs,
         value: this.local.value,
         type: this.tagName !== 'textarea' ? this.local.type : null,
         disabled: this.disabled,
+        autofocus: this.autofocus,
         ref: this.createPassword ? 'createPassword' : 'field',
         class: 'field'
       };
