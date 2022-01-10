@@ -144,9 +144,10 @@ export default {
   },
   computed: {
     isConfirmPasswordValid() {
-      const isInvalid = this.isConfirmPasswordInvalid();
-
-      return isInvalid !== undefined && !isInvalid;
+      return (
+        this.confirmPassword.length !== 0 &&
+        this.password === this.confirmPassword
+      );
     }
   },
   watch: {

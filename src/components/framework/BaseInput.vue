@@ -169,8 +169,8 @@ export default {
     },
     type: {
       immediate: true,
-      handler(value) {
-        this.local.type = value;
+      handler(val) {
+        this.local.type = val;
       }
     }
   },
