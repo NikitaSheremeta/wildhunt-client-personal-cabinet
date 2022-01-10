@@ -21,11 +21,14 @@
         <BaseIcon :icon="iconName" color="secondary" />
       </span>
 
-      <span v-if="success" class="field-icon">
+      <span v-if="success || !!$slots.success" class="field-icon">
         <BaseIcon icon="check" color="success" />
       </span>
 
-      <span v-if="!!$slots.error && !createPassword" class="field-icon">
+      <span
+        v-if="error || (!!$slots.error && !createPassword)"
+        class="field-icon"
+      >
         <BaseIcon icon="exclamation" color="danger" />
       </span>
     </label>
@@ -112,7 +115,11 @@ export default {
     },
     success: {
       type: Boolean,
-      default: null
+      default: false
+    },
+    error: {
+      type: Boolean,
+      default: false
     },
     createPassword: {
       type: Boolean,

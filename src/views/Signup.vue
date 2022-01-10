@@ -80,6 +80,7 @@ import {
 import BaseInput from '../components/framework/BaseInput';
 import BaseButton from '../components/framework/BaseButton';
 import { useDebounce } from '../components/use/debounce';
+import { validationMessages } from '../utils/validation-messages';
 
 const onlyLatinCharacters = helpers.regex(
   /^[a-zA-Z0-9~!@#$%^&*()_+-={}\\|;',./<>?":]+$/
@@ -159,26 +160,25 @@ export default {
 
       if (username.$dirty) {
         if (username['required'].$invalid) {
-          this.errorMessage.username = 'Необходимо придумать никнейм';
+          this.errorMessage.username = validationMessages.NICKNAME.REQUIRED;
 
           return true;
         }
 
         if (username['minLength'].$invalid) {
-          this.errorMessage.username = `Никнейм должен быть не менее ${MAGIC_NUMBERS.MIN_USERNAME_LENGTH} символов`;
+          this.errorMessage.username = validationMessages.NICKNAME.MIN_LENGTH;
 
           return true;
         }
 
         if (username['maxLength'].$invalid) {
-          this.errorMessage.username = `Никнейм должен быть не более ${MAGIC_NUMBERS.MAX_USERNAME_LENGTH} символов`;
+          this.errorMessage.username = validationMessages.NICKNAME.MAX_LENGTH;
 
           return true;
         }
 
         if (username['onlyLatinCharacters'].$invalid) {
-          this.errorMessage.username =
-            'Никнейм не должен содержать русские буквы';
+          this.errorMessage.username = validationMessages.NICKNAME.ONLY_LATIN;
 
           return true;
         }
@@ -191,13 +191,13 @@ export default {
 
       if (email.$dirty) {
         if (email['required'].$invalid) {
-          this.errorMessage.email = 'Введите электронную почту';
+          this.errorMessage.email = validationMessages.EMAIL.REQUIRED;
 
           return true;
         }
 
         if (email['email'].$invalid) {
-          this.errorMessage.email = 'Неправильный адрес электронной почты';
+          this.errorMessage.email = validationMessages.EMAIL.INCORRECT;
 
           return true;
         }
@@ -210,26 +210,25 @@ export default {
 
       if (password.$dirty) {
         if (password['required'].$invalid) {
-          this.errorMessage.password = 'Необходимо придумать пароль';
+          this.errorMessage.password = validationMessages.PASSWORD.REQUIRED;
 
           return true;
         }
 
         if (password['minLength'].$invalid) {
-          this.errorMessage.password = `Пароль должен быть не менее ${MAGIC_NUMBERS.MIN_PASSWORD_LENGTH} символов`;
+          this.errorMessage.password = validationMessages.PASSWORD.MIN_LENGTH;
 
           return true;
         }
 
         if (password['maxLength'].$invalid) {
-          this.errorMessage.password = `Пароль должен быть не более ${MAGIC_NUMBERS.MAX_PASSWORD_LENGTH} символов`;
+          this.errorMessage.password = validationMessages.PASSWORD.MAX_LENGTH;
 
           return true;
         }
 
         if (password['onlyLatinCharacters'].$invalid) {
-          this.errorMessage.password =
-            'Пароль не должен содержать русские буквы';
+          this.errorMessage.password = validationMessages.PASSWORD.ONLY_LATIN;
 
           return true;
         }
@@ -242,14 +241,15 @@ export default {
 
       if (confirmPassword.$dirty) {
         if (confirmPassword['required'].$invalid) {
-          this.errorMessage.confirmPassword = 'Введите пароль еще раз';
+          this.errorMessage.confirmPassword =
+            validationMessages.CONFIRM_PASSWORD.REQUIRED;
 
           return true;
         }
 
         if (confirmPassword['sameAs'].$invalid) {
           this.errorMessage.confirmPassword =
-            'Подтверждение не совпадает с паролем';
+            validationMessages.CONFIRM_PASSWORD.SAME_AS;
 
           return true;
         }

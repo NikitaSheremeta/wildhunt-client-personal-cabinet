@@ -46,14 +46,14 @@ function createStrengthPasswordChecker(password, score) {
     };
   }
 
-  if (score > 20 && score <= 60 && password.length !== 0) {
+  if (score > 20 && score <= 50 && password.length !== 0) {
     return {
       status: 'warning',
       notice: 'Хороший пароль, но мог бы быть надежнее'
     };
   }
 
-  if (score > 60 && password.length !== 0) {
+  if (score > 50 && password.length !== 0) {
     return {
       status: 'success',
       notice: 'Надежный пароль, только не забудьте его'
