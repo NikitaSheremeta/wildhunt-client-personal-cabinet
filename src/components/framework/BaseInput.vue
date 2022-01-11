@@ -22,14 +22,14 @@
       </span>
 
       <span v-if="success || !!$slots.success" class="field-icon">
-        <BaseIcon icon="check-circle" color="success" />
+        <BaseIcon icon="check" color="success" />
       </span>
 
       <span
         v-if="error || (!!$slots.error && !createPassword)"
         class="field-icon"
       >
-        <BaseIcon icon="exclamation" color="danger" />
+        <BaseIcon icon="cross" color="danger" width="14" height="14" />
       </span>
     </label>
 
