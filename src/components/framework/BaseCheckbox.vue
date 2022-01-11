@@ -3,7 +3,6 @@
     <input
       v-bind="$attrs"
       :checked="checked"
-      :value="value"
       type="checkbox"
       class="input"
       autocomplete="off"

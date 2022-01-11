@@ -6,7 +6,6 @@
 
         <BaseInput
           :class="$style['form-item']"
-          :autofocus="true"
           v-model:value="username"
           type="text"
           placeholder="Никнейм"
@@ -60,15 +59,18 @@
         </BaseInput>
 
         <div :class="$style['form-controls']">
-          <BaseButton full-width> Зарегистрироваться </BaseButton>
+          <BaseButton :disabled="!eula" full-width>
+            Зарегистрироваться
+          </BaseButton>
         </div>
 
         <div :class="$style['form-eula']">
           <span> Нажимая кнопку «Зарегистрироваться»: </span>
 
           <BaseCheckbox v-model:checked="eula">
-            Я принимаю пользовательское соглашение
-            <br />и политику конфиденциальности.
+            Я принимаю
+            <BaseLink underline>пользовательское соглашение</BaseLink> <br />и
+            политику <BaseLink underline>конфиденциальности</BaseLink>.
           </BaseCheckbox>
         </div>
       </form>
@@ -89,6 +91,7 @@ import {
 import BaseInput from '../components/framework/BaseInput';
 import BaseButton from '../components/framework/BaseButton';
 import BaseCheckbox from '../components/framework/BaseCheckbox';
+import BaseLink from '../components/framework/BaseLink';
 import { useDebounce } from '../components/use/debounce';
 import { validationMessages } from '../utils/validation-messages';
 
@@ -108,7 +111,8 @@ export default {
   components: {
     BaseInput,
     BaseButton,
-    BaseCheckbox
+    BaseCheckbox,
+    BaseLink
   },
   data() {
     return {
@@ -271,7 +275,11 @@ export default {
       }
     },
     async submitHandler() {
-      return false;
+      const isFormValid = await this.v$.$validate();
+
+      if (!isFormValid) {
+        return false;
+      }
     }
   }
 };

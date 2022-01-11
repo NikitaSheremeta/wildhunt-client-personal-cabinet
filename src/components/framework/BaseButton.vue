@@ -44,7 +44,12 @@ export default {
   },
   computed: {
     computedClasses() {
-      return [this.baseClassName, this.fullWidthModifier, this.colorModifier];
+      return [
+        this.baseClassName,
+        this.fullWidthModifier,
+        this.colorModifier,
+        this.disabledModifier
+      ];
     },
     disabledAttribute() {
       return this.tagName === 'button' && this.disabled;
@@ -54,6 +59,9 @@ export default {
     },
     colorModifier() {
       return this.color !== '' ? this.color : '';
+    },
+    disabledModifier() {
+      return this.disabled ? 'disabled' : '';
     }
   }
 };
@@ -77,6 +85,10 @@ $colors: (
   success: (
     background-color: $success,
     hover-background: darken($success, 4%)
+  ),
+  disabled: (
+    background-color: $gray-600,
+    color: $font-color-disabled
   )
 );
 
@@ -125,6 +137,12 @@ $colors: (
     &:hover {
       background-color: map-get($colors, success, hover-background);
     }
+  }
+
+  &.disabled {
+    cursor: default;
+    background-color: map-get($colors, disabled, background-color);
+    color: map-get($colors, disabled, color);
   }
 }
 </style>
