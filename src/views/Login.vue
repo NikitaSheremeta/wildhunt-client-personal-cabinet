@@ -29,9 +29,9 @@
 </template>
 
 <script>
-import BaseInput from '@/components/framework/BaseInput';
-import BaseButton from '@/components/framework/BaseButton';
-import Link from '@/components/framework/BaseLink';
+import BaseInput from '../components/framework/BaseInput';
+import BaseButton from '../components/framework/BaseButton';
+import Link from '../components/framework/BaseLink';
 
 export default {
   components: {
@@ -50,11 +50,11 @@ export default {
 
 .row {
   display: flex;
-  align-items: center;
   justify-content: center;
 }
 
 .form {
+  margin-top: 96px;
   width: 320px;
 
   &-title {

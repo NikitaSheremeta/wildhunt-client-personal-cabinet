@@ -13,6 +13,10 @@ $font-family-base: $font-family-primary;
 $font-weight-base: $font-weight-regular;
 $font-size-base: 1rem;
 
+// Font settings secondary
+$line-height-secondary: 1.5;
+$font-color-secondary: $gray-600;
+
 // Font size
 $font-size-h1: $font-size-base * 2.813;
 $font-size-h2: $font-size-base * 2.5;
@@ -24,5 +28,4 @@ $font-size-sm: $font-size-base * 0.9375;
 $font-size-xs: $font-size-base * 0.875;
 
 // Font color
-$font-color-secondary: $gray-600;
 $font-color-disabled: $gray-700;

@@ -22,7 +22,7 @@
       </span>
 
       <span v-if="success || !!$slots.success" class="field-icon">
-        <BaseIcon icon="check" color="success" />
+        <BaseIcon icon="check-circle" color="success" />
       </span>
 
       <span

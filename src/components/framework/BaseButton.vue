@@ -73,6 +73,10 @@ $colors: (
   dark: (
     background-color: $black,
     hover-background: darken($black, 4%)
+  ),
+  success: (
+    background-color: $success,
+    hover-background: darken($success, 4%)
   )
 );
 
@@ -112,6 +116,14 @@ $colors: (
 
     &:hover {
       background-color: map-get($colors, dark, hover-background);
+    }
+  }
+
+  &.success {
+    background-color: map-get($colors, success, background-color);
+
+    &:hover {
+      background-color: map-get($colors, success, hover-background);
     }
   }
 }

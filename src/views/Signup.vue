@@ -62,6 +62,15 @@
         <div :class="$style['form-controls']">
           <BaseButton full-width> Зарегистрироваться </BaseButton>
         </div>
+
+        <div :class="$style['form-eula']">
+          <span> Нажимая кнопку «Зарегистрироваться»: </span>
+
+          <BaseCheckbox v-model:checked="eula">
+            Я принимаю пользовательское соглашение
+            <br />и политику конфиденциальности.
+          </BaseCheckbox>
+        </div>
       </form>
     </div>
   </div>
@@ -79,6 +88,7 @@ import {
 } from '@vuelidate/validators';
 import BaseInput from '../components/framework/BaseInput';
 import BaseButton from '../components/framework/BaseButton';
+import BaseCheckbox from '../components/framework/BaseCheckbox';
 import { useDebounce } from '../components/use/debounce';
 import { validationMessages } from '../utils/validation-messages';
 
@@ -97,7 +107,8 @@ const MAGIC_NUMBERS = {
 export default {
   components: {
     BaseInput,
-    BaseButton
+    BaseButton,
+    BaseCheckbox
   },
   data() {
     return {
@@ -105,6 +116,7 @@ export default {
       email: '',
       password: '',
       confirmPassword: '',
+      eula: true,
       errorMessage: {
         username: '',
         email: '',
@@ -266,11 +278,6 @@ export default {
 </script>
 
 <style lang="scss" module>
-.container,
-.row {
-  height: 100%;
-}
-
 .row {
   display: flex;
   justify-content: center;
@@ -278,6 +285,7 @@ export default {
 
 .form {
   margin-top: 96px;
+  margin-bottom: 48px;
   width: 320px;
 
   &-title {
@@ -293,10 +301,17 @@ export default {
   }
 
   &-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     margin-top: 24px;
+  }
+
+  &-eula {
+    margin-top: 8px;
+
+    > span {
+      margin-bottom: 12px;
+      color: $font-color-secondary;
+      font-size: $font-size-xs;
+    }
   }
 }
 </style>
