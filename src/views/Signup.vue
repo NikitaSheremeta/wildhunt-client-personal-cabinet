@@ -69,8 +69,13 @@
 
           <BaseCheckbox v-model:checked="eula">
             Я принимаю
-            <BaseLink underline>пользовательское соглашение</BaseLink> <br />и
-            политику <BaseLink underline>конфиденциальности</BaseLink>.
+            <BaseButton tag-name="a" to="/" underline
+              >пользовательское соглашение</BaseButton
+            >
+            <br />и
+            <BaseButton tag-name="a" to="/" underline
+              >политику конфиденциальности</BaseButton
+            >.
           </BaseCheckbox>
         </div>
       </form>
@@ -91,7 +96,6 @@ import {
 import BaseInput from '../components/framework/BaseInput';
 import BaseButton from '../components/framework/BaseButton';
 import BaseCheckbox from '../components/framework/BaseCheckbox';
-import BaseLink from '../components/framework/BaseLink';
 import { useDebounce } from '../components/use/debounce';
 import { validationMessages } from '../utils/validation-messages';
 
@@ -111,8 +115,7 @@ export default {
   components: {
     BaseInput,
     BaseButton,
-    BaseCheckbox,
-    BaseLink
+    BaseCheckbox
   },
   data() {
     return {

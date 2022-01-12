@@ -19,9 +19,9 @@
         <div :class="$style['form-controls']">
           <BaseButton> Войти </BaseButton>
 
-          <Link :class="$style['form-link']" color="secondary">
+          <BaseButton tag-name="a" to="forgot-password" color="secondary">
             Восстановить аккаунт
-          </Link>
+          </BaseButton>
         </div>
       </div>
     </div>
@@ -31,13 +31,11 @@
 <script>
 import BaseInput from '../components/framework/BaseInput';
 import BaseButton from '../components/framework/BaseButton';
-import Link from '../components/framework/BaseLink';
 
 export default {
   components: {
     BaseInput,
-    BaseButton,
-    Link
+    BaseButton
   }
 };
 </script>

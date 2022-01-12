@@ -3,7 +3,10 @@
     :is="tagName"
     :class="computedClasses"
     :type="type"
+    :href="href"
     :disabled="disabledAttribute"
+    :target="targetAttribute"
+    @click="onClick"
   >
     <slot />
   </component>
@@ -17,51 +20,88 @@ export default {
       type: String,
       default: 'button'
     },
+    to: {
+      type: String,
+      default: null
+    },
     href: {
-      type: [String, Object],
+      type: String,
+      default: null
+    },
+    target: {
+      type: String,
       default: null
     },
     type: {
       type: String,
       default: null
     },
-    color: {
-      type: String,
-      default: 'primary'
-    },
     disabled: {
+      type: Boolean,
+      default: null
+    },
+    fullWidth: {
       type: Boolean,
       default: false
     },
-    fullWidth: {
+    loading: {
       type: Boolean,
       default: false
     },
     baseClassName: {
       type: String,
       default: 'base-button'
+    },
+    color: {
+      type: String,
+      default: 'primary'
+    },
+    underline: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     computedClasses() {
       return [
-        this.baseClassName,
-        this.fullWidthModifier,
+        this.baseClassNameModifier,
         this.colorModifier,
-        this.disabledModifier
+        this.disabledModifier,
+        this.fullWidthModifier,
+        this.preloaderModifier,
+        this.underlineModifier
       ];
     },
     disabledAttribute() {
-      return this.tagName === 'button' && this.disabled;
+      return this.tagName === 'button' && this.disabled ? this.disabled : null;
     },
-    fullWidthModifier() {
-      return this.fullWidth ? 'full-width' : '';
+    targetAttribute() {
+      return this.tagName !== 'button' && this.target ? this.target : null;
+    },
+    baseClassNameModifier() {
+      return this.tagName === 'button' ? this.baseClassName : 'base-link';
     },
     colorModifier() {
       return this.color !== '' ? this.color : '';
     },
     disabledModifier() {
       return this.disabled ? 'disabled' : '';
+    },
+    fullWidthModifier() {
+      return this.fullWidth ? 'full-width' : '';
+    },
+    preloaderModifier() {
+      return this.loading ? 'preloader' : '';
+    },
+    underlineModifier() {
+      return this.underline ? 'underline' : '';
+    }
+  },
+  methods: {
+    onClick() {
+      if (this.to !== null) {
+        this.$router.push(this.to);
+      }
     }
   }
 };
@@ -72,7 +112,7 @@ $border-radius: 12px;
 $padding: 24px 48px;
 $height: 32px;
 
-$colors: (
+$button-colors: (
   primary: (
     background-color: $primary,
     hover-background: darken($primary, 4%),
@@ -92,6 +132,13 @@ $colors: (
   )
 );
 
+$link-colors: (
+  secondary: (
+    color: $font-color-secondary,
+    hover-color: $font-color-base
+  )
+);
+
 .base-button {
   position: relative;
   display: inline-flex;
@@ -102,9 +149,9 @@ $colors: (
   height: $height;
   border: 0;
   border-radius: $border-radius;
-  background-color: map-get($colors, primary, background-color);
+  background-color: map-get($button-colors, primary, background-color);
   line-height: $line-height-base;
-  color: map-get($colors, primary, color);
+  color: map-get($button-colors, primary, color);
   font-family: $font-family-base;
   font-weight: $font-weight-base;
   font-size: $font-size-base;
@@ -116,7 +163,7 @@ $colors: (
 
   &:hover,
   &:focus {
-    background-color: map-get($colors, primary, hover-background);
+    background-color: map-get($button-colors, primary, hover-background);
   }
 
   &.full-width {
@@ -124,25 +171,48 @@ $colors: (
   }
 
   &.dark {
-    background-color: map-get($colors, dark, background-color);
+    background-color: map-get($button-colors, dark, background-color);
 
     &:hover {
-      background-color: map-get($colors, dark, hover-background);
+      background-color: map-get($button-colors, dark, hover-background);
     }
   }
 
   &.success {
-    background-color: map-get($colors, success, background-color);
+    background-color: map-get($button-colors, success, background-color);
 
     &:hover {
-      background-color: map-get($colors, success, hover-background);
+      background-color: map-get($button-colors, success, hover-background);
     }
   }
 
   &.disabled {
     cursor: default;
-    background-color: map-get($colors, disabled, background-color);
-    color: map-get($colors, disabled, color);
+    background-color: map-get($button-colors, disabled, background-color);
+    color: map-get($button-colors, disabled, color);
+  }
+}
+
+.base-link {
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+    color: map-get($link-colors, secondary, color);
+  }
+
+  &.secondary {
+    color: map-get($link-colors, secondary, color);
+
+    &:hover {
+      color: map-get($link-colors, secondary, hover-color);
+    }
+  }
+
+  &.underline {
+    text-decoration: underline;
   }
 }
 </style>
