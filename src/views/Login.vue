@@ -7,7 +7,7 @@
         <BaseInput
           :class="$style['form-item']"
           type="text"
-          placeholder="Логин или email"
+          placeholder="Логин или электронная почта"
         />
 
         <BaseInput
@@ -19,7 +19,7 @@
         <div :class="$style['form-controls']">
           <BaseButton> Войти </BaseButton>
 
-          <BaseButton tag-name="a" to="forgot-password" color="secondary">
+          <BaseButton tag-name="a" to="reset-password" color="secondary">
             Восстановить аккаунт
           </BaseButton>
         </div>
