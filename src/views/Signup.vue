@@ -1,93 +1,107 @@
 <template>
   <div class="container" :class="$style.container">
     <div class="row" :class="$style.row">
-      <form :class="$style.form" @submit.prevent="submitHandler">
-        <h2 :class="$style['form-title']">Регистрация аккаунта</h2>
-
-        <BaseInput
-          :class="$style['form-item']"
-          :loading="isLoading.username"
-          :disabled="isDisabledAllFields"
-          v-model:value="username"
-          type="text"
-          placeholder="Никнейм"
-          @input="v$.username.$reset()"
-          @blur="v$.username.$touch()"
+      <transition name="hide-window">
+        <form
+          v-if="!is.hideForm"
+          :class="$style['form']"
+          @submit.prevent="submitHandler"
         >
-          <template v-if="isUsernameInvalid()" #error>
-            {{ errorMessage.username }}
-          </template>
-        </BaseInput>
+          <h2 :class="$style['form-title']">Регистрация аккаунта</h2>
 
-        <BaseInput
-          :class="$style['form-item']"
-          :disabled="isDisabledAllFields"
-          v-model:value="email"
-          type="email"
-          placeholder="Электронная почта"
-          @input="v$.email.$reset()"
-          @blur="v$.email.$touch()"
-        >
-          <template v-if="isEmailInvalid()" #error>
-            {{ errorMessage.email }}
-          </template>
-        </BaseInput>
+          <BaseInput
+            :class="$style['form-item']"
+            :loading="is.loading.username"
+            :disabled="is.disableAllFields"
+            v-model:value="username"
+            type="text"
+            placeholder="Никнейм"
+            @input="v$.username.$reset()"
+            @blur="v$.username.$touch()"
+          >
+            <template v-if="isUsernameInvalid()" #error>
+              {{ errorMessage.username }}
+            </template>
+          </BaseInput>
 
-        <BaseInput
-          :class="$style['form-item']"
-          :disabled="isDisabledAllFields"
-          v-model:value="password"
-          create-password
-          type="password"
-          placeholder="Пароль"
-          @input="v$.password.$touch()"
-        >
-          <template v-if="isPasswordInvalid()" #error>
-            {{ errorMessage.password }}
-          </template>
-        </BaseInput>
+          <BaseInput
+            :class="$style['form-item']"
+            :disabled="is.disableAllFields"
+            v-model:value="email"
+            type="email"
+            placeholder="Электронная почта"
+            @input="v$.email.$reset()"
+            @blur="v$.email.$touch()"
+          >
+            <template v-if="isEmailInvalid()" #error>
+              {{ errorMessage.email }}
+            </template>
+          </BaseInput>
 
-        <BaseInput
-          :class="$style['form-item']"
-          :disabled="isDisabledAllFields"
-          :success="isConfirmPasswordValid"
-          v-model:value="confirmPassword"
-          repeat-password
-          type="password"
-          placeholder="Повторите пароль"
-          @input="v$.confirmPassword.$reset()"
-          @blur="v$.confirmPassword.$touch()"
-        >
-          <template v-if="isConfirmPasswordInvalid()" #error>
-            {{ errorMessage.confirmPassword }}x
-          </template>
-        </BaseInput>
+          <BaseInput
+            :class="$style['form-item']"
+            :disabled="is.disableAllFields"
+            v-model:value="password"
+            create-password
+            type="password"
+            placeholder="Пароль"
+            @input="v$.password.$touch()"
+          >
+            <template v-if="isPasswordInvalid()" #error>
+              {{ errorMessage.password }}
+            </template>
+          </BaseInput>
 
-        <div :class="$style['form-controls']">
-          <BaseButton :loading="isLoading.button" :disabled="!eula" full-width>
-            Зарегистрироваться
-          </BaseButton>
-        </div>
+          <BaseInput
+            :class="$style['form-item']"
+            :disabled="is.disableAllFields"
+            :success="isConfirmPasswordValid"
+            v-model:value="confirmPassword"
+            repeat-password
+            type="password"
+            placeholder="Повторите пароль"
+            @input="v$.confirmPassword.$reset()"
+            @blur="v$.confirmPassword.$touch()"
+          >
+            <template v-if="isConfirmPasswordInvalid()" #error>
+              {{ errorMessage.confirmPassword }}
+            </template>
+          </BaseInput>
 
-        <div :class="$style['form-eula']">
-          <span> Нажимая кнопку «Зарегистрироваться»: </span>
-
-          <BaseCheckbox v-model:checked="eula">
-            Я принимаю
-            <BaseButton tag-name="a" to="/" target="_blank" underline>
-              пользовательское соглашение
+          <div :class="$style['form-controls']">
+            <BaseButton
+              :loading="is.loading.button"
+              :disabled="!eula"
+              full-width
+            >
+              Зарегистрироваться
             </BaseButton>
+          </div>
 
-            <br />и
+          <div :class="$style['form-eula']">
+            <span> Нажимая кнопку «Зарегистрироваться»: </span>
 
-            <BaseButton tag-name="a" target="_blank" to="/" underline>
-              политику конфиденциальности
-            </BaseButton>
-          </BaseCheckbox>
-        </div>
-      </form>
+            <BaseCheckbox v-model:checked="eula">
+              Я принимаю
+              <BaseButton tag-name="a" to="/" target="_blank" underline>
+                пользовательское соглашение
+              </BaseButton>
 
-      <BaseNotice signup-success />
+              <br />и
+
+              <BaseButton tag-name="a" target="_blank" to="/" underline>
+                политику конфиденциальности
+              </BaseButton>
+            </BaseCheckbox>
+          </div>
+        </form>
+      </transition>
+
+      <transition name="show-window">
+        <template v-if="is.signup.success">
+          <BaseNotice signup-success />
+        </template>
+      </transition>
     </div>
   </div>
 </template>
@@ -141,11 +155,18 @@ export default {
         password: '',
         confirmPassword: ''
       },
-      isLoading: {
-        username: false,
-        button: false
-      },
-      isDisabledAllFields: false
+      is: {
+        loading: {
+          username: false,
+          button: false
+        },
+        signup: {
+          success: false,
+          error: false
+        },
+        disableAllFields: false,
+        hideForm: false
+      }
     };
   },
   setup() {
@@ -300,8 +321,17 @@ export default {
         return false;
       }
 
-      this.isLoading.button = true;
-      this.isDisabledAllFields = true;
+      // this.is.loading.button = true;
+      // this.is.disableAllFields = true;
+      //
+      // setTimeout(() => {
+      //   this.is.loading.button = false;
+      //   this.is.hideForm = true;
+      //
+      //   setTimeout(() => {
+      //     this.is.signup.success = true;
+      //   }, 400)
+      // }, 1000)
     }
   }
 };
@@ -314,7 +344,6 @@ export default {
 }
 
 .form {
-  display: none;
   margin-top: 96px;
   margin-bottom: 48px;
   width: 320px;
