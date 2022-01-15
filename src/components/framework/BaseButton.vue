@@ -129,16 +129,19 @@ $height: 32px;
 $button-colors: (
   primary: (
     background-color: $primary,
-    hover-background: darken($primary, 4%),
+    hover-background: darken($primary, 6%),
+    active-background: lighten($primary, 6%),
     color: $font-color-base
   ),
   dark: (
     background-color: $black,
-    hover-background: darken($black, 4%)
+    hover-background: darken($black, 6%),
+    active-background: lighten($black, 6%)
   ),
   success: (
     background-color: $success,
-    hover-background: darken($success, 4%)
+    hover-background: darken($success, 6%),
+    active-background: lighten($success, 6%)
   ),
   disabled: (
     background-color: $disabled-background,
@@ -181,8 +184,7 @@ $link-colors: (
   }
 
   &:active {
-    transition: 0.1s;
-    transform: scale(0.975);
+    background-color: map-get($button-colors, primary, active-background);
   }
 
   &.full-width {
@@ -200,6 +202,10 @@ $link-colors: (
     &:hover {
       background-color: map-get($button-colors, dark, hover-background);
     }
+
+    &:active {
+      background-color: map-get($button-colors, dark, active-background);
+    }
   }
 
   &.success {
@@ -207,6 +213,10 @@ $link-colors: (
 
     &:hover {
       background-color: map-get($button-colors, success, hover-background);
+    }
+
+    &:active {
+      background-color: map-get($button-colors, success, active-background);
     }
   }
 

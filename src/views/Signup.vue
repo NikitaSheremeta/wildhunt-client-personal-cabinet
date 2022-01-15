@@ -74,16 +74,20 @@
 
           <BaseCheckbox v-model:checked="eula">
             Я принимаю
-            <BaseButton tag-name="a" to="/" underline
-              >пользовательское соглашение</BaseButton
-            >
+            <BaseButton tag-name="a" to="/" target="_blank" underline>
+              пользовательское соглашение
+            </BaseButton>
+
             <br />и
-            <BaseButton tag-name="a" to="/" underline
-              >политику конфиденциальности</BaseButton
-            >.
+
+            <BaseButton tag-name="a" target="_blank" to="/" underline>
+              политику конфиденциальности
+            </BaseButton>
           </BaseCheckbox>
         </div>
       </form>
+
+      <BaseNotice signup-success />
     </div>
   </div>
 </template>
@@ -101,6 +105,7 @@ import {
 import BaseInput from '../components/framework/BaseInput';
 import BaseButton from '../components/framework/BaseButton';
 import BaseCheckbox from '../components/framework/BaseCheckbox';
+import BaseNotice from '../components/framework/BaseNotice';
 import { useDebounce } from '../components/use/debounce';
 import { validationMessages } from '../utils/validation-messages';
 
@@ -120,7 +125,8 @@ export default {
   components: {
     BaseInput,
     BaseButton,
-    BaseCheckbox
+    BaseCheckbox,
+    BaseNotice
   },
   data() {
     return {
@@ -308,6 +314,7 @@ export default {
 }
 
 .form {
+  display: none;
   margin-top: 96px;
   margin-bottom: 48px;
   width: 320px;
