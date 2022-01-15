@@ -71,7 +71,7 @@
           <div :class="$style['form-controls']">
             <BaseButton
               :loading="is.loading.button"
-              :disabled="!eula"
+              :disabled="!eula || is.disableAllFields"
               full-width
             >
               Зарегистрироваться
@@ -100,6 +100,12 @@
       <transition name="show-window">
         <template v-if="is.signup.success">
           <BaseNotice signup-success />
+        </template>
+      </transition>
+
+      <transition name="show-window">
+        <template v-if="is.signup.error">
+          <BaseNotice signup-error />
         </template>
       </transition>
     </div>

@@ -25,7 +25,7 @@ $black: #212529;
 
 // Color assignments
 $secondary: $gray-600;
-$disabled-background: $gray-900;
+$disabled-background: darken($gray-900, 1%);
 $disabled-color: $gray-700;
 $primary: $purple;
 $info: $cyan;

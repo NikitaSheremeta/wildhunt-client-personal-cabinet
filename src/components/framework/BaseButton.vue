@@ -130,8 +130,7 @@ $button-colors: (
   primary: (
     background-color: $primary,
     hover-background: darken($primary, 6%),
-    active-background: lighten($primary, 6%),
-    color: $font-color-base
+    active-background: lighten($primary, 6%)
   ),
   dark: (
     background-color: $black,
@@ -142,6 +141,11 @@ $button-colors: (
     background-color: $success,
     hover-background: darken($success, 6%),
     active-background: lighten($success, 6%)
+  ),
+  danger: (
+    background-color: $danger,
+    hover-background: darken($danger, 6%),
+    active-background: lighten($danger, 6%)
   ),
   disabled: (
     background-color: $disabled-background,
@@ -168,7 +172,7 @@ $link-colors: (
   border-radius: $border-radius;
   background-color: map-get($button-colors, primary, background-color);
   line-height: $line-height-base;
-  color: map-get($button-colors, primary, color);
+  color: $font-color-base;
   font-family: $font-family-base;
   font-weight: $font-weight-base;
   font-size: $font-size-base;
@@ -189,11 +193,6 @@ $link-colors: (
 
   &.full-width {
     width: 100%;
-  }
-
-  &.preloader {
-    pointer-events: none;
-    cursor: default;
   }
 
   &.dark {
@@ -217,6 +216,18 @@ $link-colors: (
 
     &:active {
       background-color: map-get($button-colors, success, active-background);
+    }
+  }
+
+  &.danger {
+    background-color: map-get($button-colors, danger, background-color);
+
+    &:hover {
+      background-color: map-get($button-colors, danger, hover-background);
+    }
+
+    &:active {
+      background-color: map-get($button-colors, danger, active-background);
     }
   }
 

@@ -14,10 +14,10 @@
 
     <BaseButton
       v-if="configuration.isShowButton"
+      :color="button.color"
       class="control"
-      color="success"
     >
-      {{ buttonSlot }}
+      {{ button.slot }}
     </BaseButton>
   </div>
 </template>
@@ -35,11 +35,11 @@ export default {
       type: String,
       default: 'base-notice'
     },
-    success: {
+    signupSuccess: {
       type: Boolean,
       default: false
     },
-    signupSuccess: {
+    signupError: {
       type: Boolean,
       default: false
     }
@@ -59,20 +59,30 @@ export default {
       emoji: '',
       title: '',
       content: '',
-      buttonSlot: ''
+      button: {
+        slot: '',
+        color: null
+      }
     };
   },
   created() {
     if (this.signupSuccess) {
       this.signupSuccessModifier();
     }
+
+    if (this.signupError) {
+      this.signupErrorModifier();
+    }
   },
   computed: {
     computedClasses() {
-      return [this.baseClassName, this.successModifier];
+      return [this.baseClassName, this.successModifier, this.errorModifier];
     },
     successModifier() {
       return this.status.success ? 'success' : '';
+    },
+    errorModifier() {
+      return this.status.error ? 'error' : '';
     }
   },
   methods: {
@@ -87,7 +97,22 @@ export default {
       this.title = 'Вы успешно зарегистрированы!';
       this.content =
         'На указанный почтовый ящик придет письмо, содержащее ссылку для подтверждения адреса.';
-      this.buttonSlot = 'Подтвердить';
+      this.button.slot = 'Подтвердить';
+      this.button.color = 'success';
+    },
+    signupErrorModifier() {
+      for (const key in this.configuration) {
+        this.configuration[key] = true;
+      }
+
+      this.status.error = true;
+
+      this.emoji = '💩';
+      this.title = 'Вот это поворот';
+      this.content =
+        'Повторите попытку еще раз или обратитесь в тех. поддержку';
+      this.button.slot = 'Повторить';
+      this.button.color = 'danger';
     }
   }
 };
@@ -122,6 +147,12 @@ export default {
   &.success {
     &:before {
       background-color: $success;
+    }
+  }
+
+  &.error {
+    &:before {
+      background-color: $danger;
     }
   }
 
