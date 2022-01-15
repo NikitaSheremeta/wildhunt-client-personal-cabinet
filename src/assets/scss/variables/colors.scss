@@ -7,7 +7,7 @@ $gray-500: #adb5bd;
 $gray-600: #808191;
 $gray-700: #495057;
 $gray-800: #2f323b;
-$gray-900: #212529;
+$gray-900: #282b32;
 
 // Color values
 $white: #fff;
@@ -21,13 +21,15 @@ $yellow: #ffcf74;
 $green: #28a745;
 $teal: #7fba7a;
 $cyan: #4A90E2;
-$black: #101113;
+$black: #212529;
 
 // Color assignments
 $secondary: $gray-600;
-$disabled: $gray-400;
+$disabled-background: $gray-900;
+$disabled-color: $gray-700;
 $primary: $purple;
 $info: $cyan;
 $success: $teal;
 $warning: $yellow;
 $danger: $orange;
+

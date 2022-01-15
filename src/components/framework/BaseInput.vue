@@ -223,8 +223,8 @@ $colors: (
     hover-placeholder-color: $gray-700
   ),
   disabled: (
-    background-color: darken($gray-800, 5%),
-    placeholder-color: $font-color-disabled
+    background-color: $disabled-background,
+    color: $disabled-color
   )
 );
 
@@ -283,9 +283,10 @@ $colors: (
   &.disabled {
     .field {
       background-color: map-get($colors, disabled, background-color);
+      color: map-get($colors, disabled, color);
 
       @include placeholder() {
-        color: map-get($colors, disabled, placeholder-color);
+        color: map-get($colors, disabled, color);
       }
 
       &,
@@ -308,10 +309,6 @@ $colors: (
     border: none;
     color: $gray-600;
     text-decoration: none;
-
-    &:hover {
-      color: $gray-900;
-    }
   }
 
   .strength-password-checker {

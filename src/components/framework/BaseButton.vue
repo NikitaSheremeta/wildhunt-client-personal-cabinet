@@ -141,8 +141,8 @@ $button-colors: (
     hover-background: darken($success, 4%)
   ),
   disabled: (
-    background-color: $gray-600,
-    color: $font-color-disabled
+    background-color: $disabled-background,
+    color: $disabled-color
   )
 );
 
@@ -178,6 +178,11 @@ $link-colors: (
   &:hover,
   &:focus {
     background-color: map-get($button-colors, primary, hover-background);
+  }
+
+  &:active {
+    transition: 0.1s;
+    transform: scale(0.975);
   }
 
   &.full-width {

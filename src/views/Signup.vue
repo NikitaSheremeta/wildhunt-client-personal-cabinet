@@ -7,6 +7,7 @@
         <BaseInput
           :class="$style['form-item']"
           :loading="isLoading.username"
+          :disabled="isDisabledAllFields"
           v-model:value="username"
           type="text"
           placeholder="Никнейм"
@@ -20,6 +21,7 @@
 
         <BaseInput
           :class="$style['form-item']"
+          :disabled="isDisabledAllFields"
           v-model:value="email"
           type="email"
           placeholder="Электронная почта"
@@ -33,6 +35,7 @@
 
         <BaseInput
           :class="$style['form-item']"
+          :disabled="isDisabledAllFields"
           v-model:value="password"
           create-password
           type="password"
@@ -46,6 +49,7 @@
 
         <BaseInput
           :class="$style['form-item']"
+          :disabled="isDisabledAllFields"
           :success="isConfirmPasswordValid"
           v-model:value="confirmPassword"
           repeat-password
@@ -134,7 +138,8 @@ export default {
       isLoading: {
         username: false,
         button: false
-      }
+      },
+      isDisabledAllFields: false
     };
   },
   setup() {
@@ -288,6 +293,9 @@ export default {
       if (!isFormValid) {
         return false;
       }
+
+      this.isLoading.button = true;
+      this.isDisabledAllFields = true;
     }
   }
 };
