@@ -8,13 +8,27 @@
     :target="targetAttribute"
     @click="onClick"
   >
-    <slot />
+    <BaseIcon
+      v-if="loading"
+      class="button-icon"
+      icon="preloader"
+      spin
+      width="24"
+      height="24"
+    />
+
+    <slot v-if="!!$slots.default && !loading" />
   </component>
 </template>
 
 <script>
+import BaseIcon from './BaseIcon';
+
 export default {
   name: 'BaseButton',
+  components: {
+    BaseIcon
+  },
   props: {
     tagName: {
       type: String,
@@ -168,6 +182,11 @@ $link-colors: (
 
   &.full-width {
     width: 100%;
+  }
+
+  &.preloader {
+    pointer-events: none;
+    cursor: default;
   }
 
   &.dark {

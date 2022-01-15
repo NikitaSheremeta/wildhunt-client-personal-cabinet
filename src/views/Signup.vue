@@ -6,6 +6,7 @@
 
         <BaseInput
           :class="$style['form-item']"
+          :loading="isLoading.username"
           v-model:value="username"
           type="text"
           placeholder="Никнейм"
@@ -54,12 +55,12 @@
           @blur="v$.confirmPassword.$touch()"
         >
           <template v-if="isConfirmPasswordInvalid()" #error>
-            {{ errorMessage.confirmPassword }}
+            {{ errorMessage.confirmPassword }}x
           </template>
         </BaseInput>
 
         <div :class="$style['form-controls']">
-          <BaseButton :disabled="!eula" full-width>
+          <BaseButton :loading="isLoading.button" :disabled="!eula" full-width>
             Зарегистрироваться
           </BaseButton>
         </div>
@@ -129,6 +130,10 @@ export default {
         email: '',
         password: '',
         confirmPassword: ''
+      },
+      isLoading: {
+        username: false,
+        button: false
       }
     };
   },
