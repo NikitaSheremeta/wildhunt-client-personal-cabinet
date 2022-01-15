@@ -21,6 +21,10 @@
         <BaseIcon :icon="iconName" color="secondary" />
       </span>
 
+      <span v-if="loading" class="field-icon">
+        <BaseIcon icon="preloader" color="secondary" spin />
+      </span>
+
       <span v-if="success || !!$slots.success" class="field-icon">
         <BaseIcon icon="check" color="success" />
       </span>
@@ -29,7 +33,7 @@
         v-if="error || (!!$slots.error && !createPassword)"
         class="field-icon"
       >
-        <BaseIcon icon="cross" color="danger" width="14" height="14" />
+        <BaseIcon icon="exclamation" color="danger" />
       </span>
     </label>
 
@@ -126,6 +130,10 @@ export default {
       default: false
     },
     repeatPassword: {
+      type: Boolean,
+      default: false
+    },
+    loading: {
       type: Boolean,
       default: false
     }
