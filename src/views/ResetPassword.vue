@@ -106,7 +106,7 @@ export default {
   width: 320px;
 
   &-title {
-    margin-bottom: 0;
+    margin-top: 0;
     font-weight: $font-weight-base;
   }
 

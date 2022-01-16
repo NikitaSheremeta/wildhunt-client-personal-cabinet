@@ -42,20 +42,17 @@ span {
   display: inline-block;
 }
 
-.hide-window-leave-active {
-  transition: 0.4s ease-out;
-}
-
-.hide-window-leave-to {
-  opacity: 0;
-  transform: translateY(-192px);
-}
-
-.show-window-enter-active {
+.fade-slide-up-enter-active,
+.fade-slide-up-leave-active {
   transition: 0.2s ease-out;
 }
 
-.show-window-enter-from {
+.fade-slide-up-enter-from {
   opacity: 0;
   transform: translateY(64px);
+}
+
+.fade-slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(-64px);
 }

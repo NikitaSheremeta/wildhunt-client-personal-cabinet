@@ -1,7 +1,7 @@
 <template>
   <div class="container" :class="$style.container">
     <div class="row" :class="$style.row">
-      <transition name="hide-window">
+      <transition name="fade-slide-up">
         <form
           v-if="!is.hideForm"
           :class="$style['form']"
@@ -79,7 +79,7 @@
           </div>
 
           <div :class="$style['form-eula']">
-            <span> Нажимая кнопку «Зарегистрироваться»: </span>
+            <span>Нажимая кнопку «Зарегистрироваться»: </span>
 
             <BaseCheckbox v-model:checked="eula">
               Я принимаю
@@ -97,15 +97,15 @@
         </form>
       </transition>
 
-      <transition name="show-window">
+      <transition name="fade-slide-up">
         <template v-if="is.signup.success">
-          <BaseNotice signup-success />
+          <BaseNotice signup-success @click="BaseNoticeOnClick" />
         </template>
       </transition>
 
-      <transition name="show-window">
+      <transition name="fade-slide-up">
         <template v-if="is.signup.error">
-          <BaseNotice signup-error />
+          <BaseNotice signup-error @click="BaseNoticeOnClick" />
         </template>
       </transition>
     </div>
@@ -138,6 +138,7 @@ const MAGIC_NUMBERS = {
   MAX_USERNAME_LENGTH: 24,
   MIN_PASSWORD_LENGTH: 4,
   MAX_PASSWORD_LENGTH: 24,
+  TWO_HUNDRED_MILLISECONDS: 200,
   ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS: 1200
 };
 
@@ -327,17 +328,26 @@ export default {
         return false;
       }
 
-      // this.is.loading.button = true;
-      // this.is.disableAllFields = true;
-      //
-      // setTimeout(() => {
-      //   this.is.loading.button = false;
-      //   this.is.hideForm = true;
-      //
-      //   setTimeout(() => {
-      //     this.is.signup.success = true;
-      //   }, 400)
-      // }, 1000)
+      [this.is.loading.button, this.is.disableAllFields] = [true, true];
+
+      setTimeout(() => {
+        [this.is.loading.button, this.is.hideForm] = [false, true];
+
+        useDebounce(
+          () => (this.is.signup.error = true),
+          MAGIC_NUMBERS.TWO_HUNDRED_MILLISECONDS
+        )();
+      }, MAGIC_NUMBERS.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS);
+    },
+    BaseNoticeOnClick() {
+      if (this.is.signup.error) {
+        [this.is.signup.error, this.is.disableAllFields] = [false, false];
+
+        useDebounce(
+          () => (this.is.hideForm = false),
+          MAGIC_NUMBERS.TWO_HUNDRED_MILLISECONDS
+        )();
+      }
     }
   }
 };
@@ -355,6 +365,7 @@ export default {
   width: 320px;
 
   &-title {
+    margin-top: 0;
     font-weight: $font-weight-base;
   }
 

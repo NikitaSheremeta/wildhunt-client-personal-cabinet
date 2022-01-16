@@ -15,7 +15,8 @@
     <BaseButton
       v-if="configuration.isShowButton"
       :color="button.color"
-      class="control"
+      class="button"
+      @click="onClick"
     >
       {{ button.slot }}
     </BaseButton>
@@ -86,6 +87,9 @@ export default {
     }
   },
   methods: {
+    onClick() {
+      this.$emit('click');
+    },
     signupSuccessModifier() {
       for (const key in this.configuration) {
         this.configuration[key] = true;
@@ -175,7 +179,7 @@ export default {
     text-align: center;
   }
 
-  .control {
+  .button {
     margin-top: 24px;
   }
 }
