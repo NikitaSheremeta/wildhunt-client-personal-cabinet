@@ -1,6 +1,6 @@
 export const validationMessages = {
   NICKNAME: {
-    ONLY_LATIN: 'Никнейм не должен содержать русские буквы',
+    ALLOWED_CHARACTERS: 'Никнейм содержит запрещенные символы',
     REQUIRED: 'Необходимо придумать никнейм',
     MIN_LENGTH: 'Никнейм должен быть не менее 2 символов',
     MAX_LENGTH: 'Никнейм должен быть не более 24 символов'
@@ -13,7 +13,7 @@ export const validationMessages = {
     REQUIRED: 'Необходимо придумать пароль',
     MIN_LENGTH: 'Пароль должен быть не менее 4 символов',
     MAX_LENGTH: 'Пароль должен быть не более 24 символов',
-    ONLY_LATIN: 'Пароль не должен содержать русские буквы'
+    ALLOWED_CHARACTERS: 'Пароль содержит запрещенные символы'
   },
   CONFIRM_PASSWORD: {
     REQUIRED: 'Введите пароль еще раз',

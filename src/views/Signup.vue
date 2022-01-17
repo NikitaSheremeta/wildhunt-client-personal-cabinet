@@ -46,6 +46,7 @@
             type="password"
             placeholder="Пароль"
             @input="v$.password.$touch()"
+            @blur="v$.password.$touch()"
           >
             <template v-if="isPasswordInvalid()" #error>
               {{ errorMessage.password }}
@@ -115,7 +116,6 @@
 <script>
 import useVuelidate from '@vuelidate/core';
 import {
-  helpers,
   required,
   email,
   minLength,
@@ -127,20 +127,14 @@ import BaseButton from '../components/framework/BaseButton';
 import BaseCheckbox from '../components/framework/BaseCheckbox';
 import BaseNotice from '../components/framework/BaseNotice';
 import { useDebounce } from '../components/use/debounce';
-import { validationMessages } from '../utils/validation-messages';
-
-const onlyLatinCharacters = helpers.regex(
-  /^[a-zA-Z0-9~!@#$%^&*()_+-={}\\|;',./<>?":]+$/
-);
-
-const MAGIC_NUMBERS = {
-  MIN_USERNAME_LENGTH: 2,
-  MAX_USERNAME_LENGTH: 24,
-  MIN_PASSWORD_LENGTH: 4,
-  MAX_PASSWORD_LENGTH: 24,
-  TWO_HUNDRED_MILLISECONDS: 200,
-  ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS: 1200
-};
+import {
+  allowedCharacters,
+  useUsernameValidator,
+  useEmailValidator,
+  usePasswordValidator,
+  useConfirmPasswordValidator
+} from '../components/use/validators';
+import { magicNumbers } from '../utils/magic-numbers';
 
 export default {
   components: {
@@ -185,9 +179,9 @@ export default {
     return {
       username: {
         required,
-        onlyLatinCharacters,
-        minLength: minLength(MAGIC_NUMBERS.MIN_USERNAME_LENGTH),
-        maxLength: maxLength(MAGIC_NUMBERS.MAX_USERNAME_LENGTH)
+        allowedCharacters,
+        minLength: minLength(magicNumbers.MIN_USERNAME_LENGTH),
+        maxLength: maxLength(magicNumbers.MAX_USERNAME_LENGTH)
       },
       email: {
         required,
@@ -195,9 +189,9 @@ export default {
       },
       password: {
         required,
-        onlyLatinCharacters,
-        minLength: minLength(MAGIC_NUMBERS.MIN_PASSWORD_LENGTH),
-        maxLength: maxLength(MAGIC_NUMBERS.MAX_PASSWORD_LENGTH)
+        allowedCharacters,
+        minLength: minLength(magicNumbers.MIN_PASSWORD_LENGTH),
+        maxLength: maxLength(magicNumbers.MAX_PASSWORD_LENGTH)
       },
       confirmPassword: {
         required,
@@ -216,117 +210,59 @@ export default {
   watch: {
     username: useDebounce(function () {
       this.v$.username.$touch();
-    }, MAGIC_NUMBERS.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)
+    }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)
   },
   methods: {
     isUsernameInvalid() {
-      const username = this.v$.username;
+      const validator = useUsernameValidator(this.v$.username);
 
-      if (username.$dirty) {
-        if (username['required'].$invalid) {
-          this.errorMessage.username = validationMessages.NICKNAME.REQUIRED;
+      if (validator.isInvalid) {
+        this.errorMessage.username = validator.errorMessage;
 
-          return true;
-        }
-
-        if (username['minLength'].$invalid) {
-          this.errorMessage.username = validationMessages.NICKNAME.MIN_LENGTH;
-
-          return true;
-        }
-
-        if (username['maxLength'].$invalid) {
-          this.errorMessage.username = validationMessages.NICKNAME.MAX_LENGTH;
-
-          return true;
-        }
-
-        if (username['onlyLatinCharacters'].$invalid) {
-          this.errorMessage.username = validationMessages.NICKNAME.ONLY_LATIN;
-
-          return true;
-        }
-
-        return false;
+        return validator.isInvalid;
       }
+
+      return validator.isInvalid;
     },
     isEmailInvalid() {
-      const email = this.v$.email;
+      const validator = useEmailValidator(this.v$.email);
 
-      if (email.$dirty) {
-        if (email['required'].$invalid) {
-          this.errorMessage.email = validationMessages.EMAIL.REQUIRED;
+      if (validator.isInvalid) {
+        this.errorMessage.email = validator.errorMessage;
 
-          return true;
-        }
-
-        if (email['email'].$invalid) {
-          this.errorMessage.email = validationMessages.EMAIL.INCORRECT;
-
-          return true;
-        }
-
-        return false;
+        return validator.isInvalid;
       }
+
+      return validator.isInvalid;
     },
     isPasswordInvalid() {
-      const password = this.v$.password;
+      const validator = usePasswordValidator(this.v$.password);
 
-      if (password.$dirty) {
-        if (password['required'].$invalid) {
-          this.errorMessage.password = validationMessages.PASSWORD.REQUIRED;
+      if (validator.isInvalid) {
+        this.errorMessage.password = validator.errorMessage;
 
-          return true;
-        }
-
-        if (password['minLength'].$invalid) {
-          this.errorMessage.password = validationMessages.PASSWORD.MIN_LENGTH;
-
-          return true;
-        }
-
-        if (password['maxLength'].$invalid) {
-          this.errorMessage.password = validationMessages.PASSWORD.MAX_LENGTH;
-
-          return true;
-        }
-
-        if (password['onlyLatinCharacters'].$invalid) {
-          this.errorMessage.password = validationMessages.PASSWORD.ONLY_LATIN;
-
-          return true;
-        }
-
-        return false;
+        return validator.isInvalid;
       }
+
+      return validator.isInvalid;
     },
     isConfirmPasswordInvalid() {
-      const confirmPassword = this.v$.confirmPassword;
+      const validator = useConfirmPasswordValidator(this.v$.confirmPassword);
 
-      if (confirmPassword.$dirty) {
-        if (confirmPassword['required'].$invalid) {
-          this.errorMessage.confirmPassword =
-            validationMessages.CONFIRM_PASSWORD.REQUIRED;
+      if (validator.isInvalid) {
+        this.errorMessage.confirmPassword = validator.errorMessage;
 
-          return true;
-        }
-
-        if (confirmPassword['sameAs'].$invalid) {
-          this.errorMessage.confirmPassword =
-            validationMessages.CONFIRM_PASSWORD.SAME_AS;
-
-          return true;
-        }
-
-        return false;
+        return validator.isInvalid;
       }
+
+      return validator.isInvalid;
     },
     async submitHandler() {
-      const isFormValid = await this.v$.$validate();
-
-      if (!isFormValid) {
-        return false;
-      }
+      // const isFormValid = await this.v$.$validate();
+      //
+      // if (!isFormValid) {
+      //   return false;
+      // }
 
       [this.is.loading.button, this.is.disableAllFields] = [true, true];
 
@@ -335,9 +271,9 @@ export default {
 
         useDebounce(
           () => (this.is.signup.error = true),
-          MAGIC_NUMBERS.TWO_HUNDRED_MILLISECONDS
+          magicNumbers.TWO_HUNDRED_MILLISECONDS
         )();
-      }, MAGIC_NUMBERS.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS);
+      }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS);
     },
     BaseNoticeOnClick() {
       if (this.is.signup.error) {
@@ -345,7 +281,7 @@ export default {
 
         useDebounce(
           () => (this.is.hideForm = false),
-          MAGIC_NUMBERS.TWO_HUNDRED_MILLISECONDS
+          magicNumbers.TWO_HUNDRED_MILLISECONDS
         )();
       }
     }
