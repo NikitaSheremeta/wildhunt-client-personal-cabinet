@@ -1,43 +1,62 @@
 <template>
   <div class="container" :class="$style.container">
     <div class="row" :class="$style.row">
-      <form :class="$style.form" @submit.prevent="submitHandler">
-        <h2 :class="$style['form-title']">Вход в аккаунт</h2>
-
-        <BaseInput
-          :class="$style['form-item']"
-          v-model:value="username"
-          type="text"
-          placeholder="Логин или электронная почта"
-          @input="v$.username.$reset()"
-          @blur="v$.username.$touch()"
+      <transition name="fade-slide-up">
+        <form
+          v-if="!is.hideForm"
+          :class="$style['form']"
+          @submit.prevent="submitHandler"
         >
-          <template v-if="isUsernameInvalid()" #error>
-            {{ errorMessage.username }}
-          </template>
-        </BaseInput>
+          <h2 :class="$style['form-title']">Вход в аккаунт</h2>
 
-        <BaseInput
-          :class="$style['form-item']"
-          v-model:value="password"
-          type="password"
-          placeholder="Пароль"
-          @input="v$.password.$touch()"
-          @blur="v$.password.$touch()"
-        >
-          <template v-if="isPasswordInvalid()" #error>
-            {{ errorMessage.password }}
-          </template>
-        </BaseInput>
+          <BaseInput
+            :class="$style['form-item']"
+            :disabled="is.disableAllFields"
+            v-model:value="username"
+            type="text"
+            placeholder="Логин или электронная почта"
+            @input="v$.username.$reset()"
+            @blur="v$.username.$touch()"
+          >
+            <template v-if="isUsernameInvalid()" #error>
+              {{ errorMessage.username }}
+            </template>
+          </BaseInput>
 
-        <div :class="$style['form-controls']">
-          <BaseButton> Войти </BaseButton>
+          <BaseInput
+            :class="$style['form-item']"
+            :disabled="is.disableAllFields"
+            v-model:value="password"
+            type="password"
+            placeholder="Пароль"
+            @input="v$.password.$reset()"
+            @blur="v$.password.$touch()"
+          >
+            <template v-if="isPasswordInvalid()" #error>
+              {{ errorMessage.password }}
+            </template>
+          </BaseInput>
 
-          <BaseButton tag-name="a" to="reset-password" color="secondary">
-            Восстановить аккаунт
-          </BaseButton>
-        </div>
-      </form>
+          <div :class="$style['form-controls']">
+            <BaseButton
+              :loading="is.loadingButton"
+              :disabled="is.disableAllFields"
+            >
+              Войти
+            </BaseButton>
+
+            <BaseButton tag-name="a" to="reset-password" color="secondary">
+              Восстановить аккаунт
+            </BaseButton>
+          </div>
+        </form>
+      </transition>
+
+      <transition name="fade-slide-up">
+        <template v-if="is.login.error">
+          <BaseNotice login-error @click="BaseNoticeOnClick" />
+        </template>
+      </transition>
     </div>
   </div>
 </template>
@@ -47,17 +66,20 @@ import useVuelidate from '@vuelidate/core';
 import { required, minLength, maxLength } from '@vuelidate/validators';
 import BaseInput from '../components/framework/BaseInput';
 import BaseButton from '../components/framework/BaseButton';
+import BaseNotice from '../components/framework/BaseNotice';
 import {
   allowedCharacters,
   useLoginUsernameValidator,
   useLoginPasswordValidator
 } from '../components/use/validators';
 import { magicNumbers } from '../utils/magic-numbers';
+import { useDebounce } from '../components/use/debounce';
 
 export default {
   components: {
     BaseInput,
-    BaseButton
+    BaseButton,
+    BaseNotice
   },
   data() {
     return {
@@ -66,6 +88,14 @@ export default {
       errorMessage: {
         username: '',
         password: ''
+      },
+      is: {
+        login: {
+          error: false
+        },
+        loadingButton: false,
+        disableAllFields: false,
+        hideForm: false
       }
     };
   },
@@ -119,17 +149,33 @@ export default {
       if (!isFormValid) {
         return false;
       }
+
+      [this.is.loadingButton, this.is.disableAllFields] = [true, true];
+
+      setTimeout(() => {
+        [this.is.loadingButton, this.is.hideForm] = [false, true];
+
+        useDebounce(
+          () => (this.is.login.error = true),
+          magicNumbers.TWO_HUNDRED_MILLISECONDS
+        )();
+      }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS);
+    },
+    BaseNoticeOnClick() {
+      if (this.is.login.error) {
+        [this.is.login.error, this.is.disableAllFields] = [false, false];
+
+        useDebounce(
+          () => (this.is.hideForm = false),
+          magicNumbers.TWO_HUNDRED_MILLISECONDS
+        )();
+      }
     }
   }
 };
 </script>
 
 <style lang="scss" module>
-.container,
-.row {
-  height: 100%;
-}
-
 .row {
   display: flex;
   justify-content: center;

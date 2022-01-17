@@ -85,8 +85,8 @@ export default {
           error: false
         },
         loadingButton: false,
-        hideForm: false,
-        disableAllFields: false
+        disableAllFields: false,
+        hideForm: false
       }
     };
   },
