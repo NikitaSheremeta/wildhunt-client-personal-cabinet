@@ -35,7 +35,7 @@ import useVuelidate from '@vuelidate/core';
 import { required, email } from '@vuelidate/validators';
 import BaseInput from '../components/framework/BaseInput';
 import BaseButton from '../components/framework/BaseButton';
-import { validationMessages } from '../utils/validation-messages';
+import { useLoginUsernameValidator } from '../components/use/validators';
 
 export default {
   components: {
@@ -65,23 +65,15 @@ export default {
   },
   methods: {
     isEmailInvalid() {
-      const email = this.v$.email;
+      const validator = useLoginUsernameValidator(this.v$.email);
 
-      if (email.$dirty) {
-        if (email['required'].$invalid) {
-          this.errorMessage.email = validationMessages.EMAIL.REQUIRED;
+      if (validator.isInvalid) {
+        this.errorMessage.email = validator.errorMessage;
 
-          return true;
-        }
-
-        if (email['email'].$invalid) {
-          this.errorMessage.email = validationMessages.EMAIL.INCORRECT;
-
-          return true;
-        }
-
-        return false;
+        return validator.isInvalid;
       }
+
+      return validator.isInvalid;
     },
     async submitHandler() {
       const isFormValid = await this.v$.$validate();

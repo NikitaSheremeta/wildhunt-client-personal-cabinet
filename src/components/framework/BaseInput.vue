@@ -25,12 +25,15 @@
         <BaseIcon icon="preloader" color="secondary" spin />
       </span>
 
-      <span v-if="success || !!$slots.success" class="field-icon">
+      <span
+        v-if="success || (!!$slots.success && isPasswordInput)"
+        class="field-icon"
+      >
         <BaseIcon icon="check" color="success" />
       </span>
 
       <span
-        v-if="error || (!!$slots.error && !createPassword)"
+        v-if="error || (!!$slots.error && isPasswordInput)"
         class="field-icon"
       >
         <BaseIcon icon="exclamation" color="danger" />
@@ -155,6 +158,9 @@ export default {
     },
     disabledModifier() {
       return this.disabled ? 'disabled' : '';
+    },
+    isPasswordInput() {
+      return this.local.type !== 'password' && !this.createPassword;
     },
     attrs() {
       return {

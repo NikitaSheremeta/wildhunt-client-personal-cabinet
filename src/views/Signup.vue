@@ -15,7 +15,7 @@
             :disabled="is.disableAllFields"
             v-model:value="username"
             type="text"
-            placeholder="Никнейм"
+            placeholder="Логин"
             @input="v$.username.$reset()"
             @blur="v$.username.$touch()"
           >
@@ -129,10 +129,10 @@ import BaseNotice from '../components/framework/BaseNotice';
 import { useDebounce } from '../components/use/debounce';
 import {
   allowedCharacters,
-  useUsernameValidator,
-  useEmailValidator,
-  usePasswordValidator,
-  useConfirmPasswordValidator
+  useSignupUsernameValidator,
+  useSignupEmailValidator,
+  useSignupPasswordValidator,
+  useSignupConfirmPasswordValidator
 } from '../components/use/validators';
 import { magicNumbers } from '../utils/magic-numbers';
 
@@ -214,7 +214,7 @@ export default {
   },
   methods: {
     isUsernameInvalid() {
-      const validator = useUsernameValidator(this.v$.username);
+      const validator = useSignupUsernameValidator(this.v$.username);
 
       if (validator.isInvalid) {
         this.errorMessage.username = validator.errorMessage;
@@ -225,7 +225,7 @@ export default {
       return validator.isInvalid;
     },
     isEmailInvalid() {
-      const validator = useEmailValidator(this.v$.email);
+      const validator = useSignupEmailValidator(this.v$.email);
 
       if (validator.isInvalid) {
         this.errorMessage.email = validator.errorMessage;
@@ -236,7 +236,7 @@ export default {
       return validator.isInvalid;
     },
     isPasswordInvalid() {
-      const validator = usePasswordValidator(this.v$.password);
+      const validator = useSignupPasswordValidator(this.v$.password);
 
       if (validator.isInvalid) {
         this.errorMessage.password = validator.errorMessage;
@@ -247,7 +247,9 @@ export default {
       return validator.isInvalid;
     },
     isConfirmPasswordInvalid() {
-      const validator = useConfirmPasswordValidator(this.v$.confirmPassword);
+      const validator = useSignupConfirmPasswordValidator(
+        this.v$.confirmPassword
+      );
 
       if (validator.isInvalid) {
         this.errorMessage.confirmPassword = validator.errorMessage;
@@ -258,11 +260,11 @@ export default {
       return validator.isInvalid;
     },
     async submitHandler() {
-      // const isFormValid = await this.v$.$validate();
-      //
-      // if (!isFormValid) {
-      //   return false;
-      // }
+      const isFormValid = await this.v$.$validate();
+
+      if (!isFormValid) {
+        return false;
+      }
 
       [this.is.loading.button, this.is.disableAllFields] = [true, true];
 
@@ -270,7 +272,7 @@ export default {
         [this.is.loading.button, this.is.hideForm] = [false, true];
 
         useDebounce(
-          () => (this.is.signup.error = true),
+          () => (this.is.signup.success = true),
           magicNumbers.TWO_HUNDRED_MILLISECONDS
         )();
       }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS);
