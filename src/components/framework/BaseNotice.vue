@@ -43,6 +43,18 @@ export default {
     signupError: {
       type: Boolean,
       default: false
+    },
+    resetPasswordSuccess: {
+      type: Boolean,
+      default: false
+    },
+    resetPasswordError: {
+      type: Boolean,
+      default: false
+    },
+    loginError: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -73,6 +85,18 @@ export default {
 
     if (this.signupError) {
       this.signupErrorModifier();
+    }
+
+    if (this.resetPasswordSuccess) {
+      this.resetPasswordSuccessModifier();
+    }
+
+    if (this.resetPasswordError) {
+      this.resetPasswordErrorModifier();
+    }
+
+    if (this.loginError) {
+      this.loginErrorModifier();
     }
   },
   computed: {
@@ -113,6 +137,48 @@ export default {
 
       this.emoji = '💩';
       this.title = 'Вот это поворот';
+      this.content =
+        'Повторите попытку еще раз или обратитесь в тех. поддержку';
+      this.button.slot = 'Повторить';
+      this.button.color = 'danger';
+    },
+    resetPasswordSuccessModifier() {
+      for (const key in this.configuration) {
+        this.configuration[key] = true;
+      }
+
+      this.status.success = true;
+
+      this.emoji = '🙌';
+      this.title = 'Письмо успешно отправленно!';
+      this.content =
+        'На указанный почтовый ящик придет письмо, содержащее ссылку для сброса пароля.';
+      this.button.slot = 'Перейти в почтовый ящик';
+      this.button.color = 'success';
+    },
+    resetPasswordErrorModifier() {
+      for (const key in this.configuration) {
+        this.configuration[key] = true;
+      }
+
+      this.status.error = true;
+
+      this.emoji = '😞';
+      this.title = 'Ошибка при отправке письма';
+      this.content =
+        'Повторите попытку еще раз или обратитесь в тех. поддержку';
+      this.button.slot = 'Повторить';
+      this.button.color = 'danger';
+    },
+    loginErrorModifier() {
+      for (const key in this.configuration) {
+        this.configuration[key] = true;
+      }
+
+      this.status.error = true;
+
+      this.emoji = '😵';
+      this.title = 'Ошибка аунтификации';
       this.content =
         'Повторите попытку еще раз или обратитесь в тех. поддержку';
       this.button.slot = 'Повторить';

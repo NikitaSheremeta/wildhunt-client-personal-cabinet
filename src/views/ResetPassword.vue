@@ -1,74 +1,114 @@
 <template>
   <div class="container" :class="$style.container">
     <div class="row" :class="$style.row">
-      <form :class="$style.form" @submit.prevent="submitHandler">
-        <h2 :class="$style['form-title']">Восстановление аккаунта</h2>
-
-        <p :class="$style['form-description']">
-          Укажите логин или электронную почту, которую вы использовали при
-          регистрации. Мы отправим вам письмо с дальнейшими инструкциями
-        </p>
-
-        <BaseInput
-          :class="$style['form-item']"
-          v-model:value="email"
-          type="text"
-          placeholder="Логин или электронная почта"
-          @input="v$.email.$reset()"
-          @blur="v$.email.$touch()"
+      <transition name="fade-slide-up">
+        <form
+          v-if="!is.hideForm"
+          :class="$style.form"
+          @submit.prevent="submitHandler"
         >
-          <template v-if="isEmailInvalid()" #error>
-            {{ errorMessage.email }}
-          </template>
-        </BaseInput>
+          <h2 :class="$style['form-title']">Восстановление аккаунта</h2>
 
-        <div :class="$style['form-controls']">
-          <BaseButton> Восстановить </BaseButton>
-        </div>
-      </form>
+          <p :class="$style['form-description']">
+            Укажите логин или электронную почту, которую вы использовали при
+            регистрации. Мы отправим вам письмо с дальнейшими инструкциями
+          </p>
+
+          <BaseInput
+            :class="$style['form-item']"
+            :disabled="is.disableAllFields"
+            v-model:value="login"
+            type="text"
+            placeholder="Логин или электронная почта"
+            @input="v$.login.$reset()"
+            @blur="v$.login.$touch()"
+          >
+            <template v-if="isLoginInvalid()" #error>
+              {{ errorMessage.login }}
+            </template>
+          </BaseInput>
+
+          <div :class="$style['form-controls']">
+            <BaseButton
+              :loading="is.loadingButton"
+              :disabled="is.disableAllFields"
+            >
+              Восстановить
+            </BaseButton>
+          </div>
+        </form>
+      </transition>
+
+      <transition name="fade-slide-up">
+        <template v-if="is.resetPassword.success">
+          <BaseNotice reset-password-success @click="BaseNoticeOnClick" />
+        </template>
+      </transition>
+
+      <transition name="fade-slide-up">
+        <template v-if="is.resetPassword.error">
+          <BaseNotice reset-password-error @click="BaseNoticeOnClick" />
+        </template>
+      </transition>
     </div>
   </div>
 </template>
 
 <script>
 import useVuelidate from '@vuelidate/core';
-import { required, email } from '@vuelidate/validators';
+import { required } from '@vuelidate/validators';
 import BaseInput from '../components/framework/BaseInput';
 import BaseButton from '../components/framework/BaseButton';
-import { useLoginUsernameValidator } from '../components/use/validators';
+import BaseNotice from '../components/framework/BaseNotice';
+import {
+  allowedCharacters,
+  useLoginUsernameValidator
+} from '../components/use/validators';
+import { useDebounce } from '../components/use/debounce';
+import { magicNumbers } from '../utils/magic-numbers';
 
 export default {
   components: {
     BaseInput,
-    BaseButton
+    BaseButton,
+    BaseNotice
   },
   data() {
     return {
-      email: '',
+      login: '',
       errorMessage: {
-        email: ''
+        login: ''
+      },
+      is: {
+        resetPassword: {
+          success: false,
+          error: false
+        },
+        loadingButton: false,
+        hideForm: false,
+        disableAllFields: false
       }
     };
   },
   setup() {
     return {
-      v$: useVuelidate({ $lazy: true })
+      v$: useVuelidate()
     };
   },
   validations() {
     return {
-      email: {
+      login: {
         required,
-        email
+        allowedCharacters
       }
     };
   },
   methods: {
-    isEmailInvalid() {
-      const validator = useLoginUsernameValidator(this.v$.email);
+    isLoginInvalid() {
+      const validator = useLoginUsernameValidator(this.v$.login);
 
       if (validator.isInvalid) {
-        this.errorMessage.email = validator.errorMessage;
+        this.errorMessage.login = validator.errorMessage;
 
         return validator.isInvalid;
       }
@@ -80,6 +120,30 @@ export default {
 
       if (!isFormValid) {
         return false;
+      }
+
+      [this.is.loadingButton, this.is.disableAllFields] = [true, true];
+
+      setTimeout(() => {
+        [this.is.loadingButton, this.is.hideForm] = [false, true];
+
+        useDebounce(
+          () => (this.is.resetPassword.success = true),
+          magicNumbers.TWO_HUNDRED_MILLISECONDS
+        )();
+      }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS);
+    },
+    BaseNoticeOnClick() {
+      if (this.is.resetPassword.error) {
+        [this.is.resetPassword.error, this.is.disableAllFields] = [
+          false,
+          false
+        ];
+
+        useDebounce(
+          () => (this.is.hideForm = false),
+          magicNumbers.TWO_HUNDRED_MILLISECONDS
+        )();
       }
     }
   }

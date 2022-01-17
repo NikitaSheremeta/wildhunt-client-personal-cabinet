@@ -5,15 +5,15 @@ export const allowedCharacters = helpers.regex(
   /^[a-zA-Z0-9~!@#$%^&*()_+-={}\\|;',./<>?":]+$/
 );
 
-export function useLoginUsernameValidator(username) {
-  if (username.$dirty && username['required'].$invalid) {
+export function useLoginUsernameValidator(login) {
+  if (login.$dirty && login['required'].$invalid) {
     return {
       isInvalid: true,
       errorMessage: validationMessages.LOGIN.USERNAME.REQUIRED
     };
   }
 
-  if (username.$dirty && username['allowedCharacters'].$invalid) {
+  if (login.$dirty && login['allowedCharacters'].$invalid) {
     return {
       isInvalid: true,
       errorMessage: validationMessages.LOGIN.USERNAME.ALLOWED_CHARACTERS

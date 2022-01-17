@@ -17,7 +17,7 @@
       height="24"
     />
 
-    <slot v-if="!!$slots.default && !loading" />
+    <slot v-if="!!$slots.default" />
   </component>
 </template>
 
@@ -235,6 +235,14 @@ $link-colors: (
     cursor: default;
     background-color: map-get($button-colors, disabled, background-color);
     color: map-get($button-colors, disabled, color);
+  }
+
+  &.preloader {
+    color: rgba(0, 0, 0, 0);
+  }
+
+  .base-icon {
+    position: absolute;
   }
 }
 
