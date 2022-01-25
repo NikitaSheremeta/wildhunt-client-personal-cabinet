@@ -10,8 +10,9 @@
           <h2 :class="$style['form-title']">Восстановление аккаунта</h2>
 
           <p :class="$style['form-description']">
-            Укажите логин или электронную почту, которую вы использовали при
-            регистрации. Мы отправим вам письмо с дальнейшими инструкциями
+            Укажите электронную почту, которую вы использовали при регистрации.
+            Мы отправим вам письмо с дальнейшими инструкциями по восстановлению
+            пароля
           </p>
 
           <BaseInput
@@ -19,7 +20,7 @@
             :disabled="is.disableAllFields"
             v-model:value="login"
             type="text"
-            placeholder="Логин или электронная почта"
+            placeholder="Электронная почта"
             @input="v$.login.$reset()"
             @blur="v$.login.$touch()"
           >
@@ -56,14 +57,11 @@
 
 <script>
 import useVuelidate from '@vuelidate/core';
-import { required } from '@vuelidate/validators';
+import { required, email } from '@vuelidate/validators';
 import BaseInput from '../components/framework/BaseInput';
 import BaseButton from '../components/framework/BaseButton';
 import BaseNotice from '../components/framework/BaseNotice';
-import {
-  allowedCharacters,
-  useLoginUsernameValidator
-} from '../components/use/validators';
+import { useSignupEmailValidator } from '../components/use/validators';
 import { useDebounce } from '../components/use/debounce';
 import { magicNumbers } from '../utils/magic-numbers';
 
@@ -99,13 +97,13 @@ export default {
     return {
       login: {
         required,
-        allowedCharacters
+        email
       }
     };
   },
   methods: {
     isLoginInvalid() {
-      const validator = useLoginUsernameValidator(this.v$.login);
+      const validator = useSignupEmailValidator(this.v$.login);
 
       if (validator.isInvalid) {
         this.errorMessage.login = validator.errorMessage;

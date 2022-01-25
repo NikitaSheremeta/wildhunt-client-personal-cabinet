@@ -42,6 +42,7 @@
             :class="$style['form-item']"
             :disabled="is.disableAllFields"
             v-model:value="password"
+            password
             create-password
             type="password"
             placeholder="Пароль"

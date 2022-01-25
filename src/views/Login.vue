@@ -27,6 +27,7 @@
             :class="$style['form-item']"
             :disabled="is.disableAllFields"
             v-model:value="password"
+            password
             type="password"
             placeholder="Пароль"
             @input="v$.password.$reset()"

@@ -26,16 +26,13 @@
       </span>
 
       <span
-        v-if="success || (!!$slots.success && iconPasswordModifier)"
+        v-if="success || (!!$slots.success && !password)"
         class="field-icon"
       >
         <BaseIcon icon="check" color="success" />
       </span>
 
-      <span
-        v-if="error || (!!$slots.error && iconPasswordModifier)"
-        class="field-icon"
-      >
+      <span v-if="error || (!!$slots.error && !password)" class="field-icon">
         <BaseIcon icon="exclamation" color="danger" />
       </span>
     </label>
@@ -128,6 +125,10 @@ export default {
       type: Boolean,
       default: false
     },
+    password: {
+      type: Boolean,
+      default: false
+    },
     createPassword: {
       type: Boolean,
       default: false
@@ -159,12 +160,6 @@ export default {
     disabledModifier() {
       return this.disabled ? 'disabled' : '';
     },
-    iconPasswordModifier() {
-      return (
-        this.local.type !== 'password' ||
-        (this.local.type === 'password' && this.repeatPassword)
-      );
-    },
     attrs() {
       return {
         ...this.$attrs,
@@ -172,7 +167,6 @@ export default {
         type: this.tagName !== 'textarea' ? this.local.type : null,
         disabled: this.disabled,
         autofocus: this.autofocus,
-        ref: this.createPassword ? 'createPassword' : 'field',
         class: 'field'
       };
     }
