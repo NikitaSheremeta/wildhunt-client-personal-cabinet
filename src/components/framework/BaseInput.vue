@@ -11,9 +11,9 @@
       >
         <BaseIcon
           :icon="local.type === 'password' ? 'eye' : 'eye-slash'"
+          :color="!disabled ? 'secondary' : 'disabled'"
           width="20"
           height="20"
-          color="secondary"
         />
       </a>
 
@@ -198,7 +198,8 @@ export default {
       }
     },
     changePasswordType() {
-      this.local.type = this.local.type === 'password' ? 'text' : 'password';
+      this.local.type =
+        this.local.type === 'password' && !this.disabled ? 'text' : 'password';
     }
   }
 };
@@ -294,6 +295,10 @@ $colors: (
 
       &,
       &:focus {
+        cursor: default;
+      }
+
+      &-icon {
         cursor: default;
       }
     }

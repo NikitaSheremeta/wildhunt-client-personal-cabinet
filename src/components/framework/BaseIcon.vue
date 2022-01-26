@@ -130,6 +130,11 @@ export default {
     stroke: $danger;
   }
 
+  &.disabled {
+    fill: $disabled-color;
+    stroke: $disabled-color;
+  }
+
   &.preloader {
     animation: spin 3s infinite;
     animation-timing-function: cubic-bezier(0.1, 0.55, 0.265, 3);
