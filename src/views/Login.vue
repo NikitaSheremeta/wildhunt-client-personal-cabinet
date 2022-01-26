@@ -46,7 +46,7 @@
               Войти
             </BaseButton>
 
-            <BaseButton tag-name="a" to="reset-password" color="secondary">
+            <BaseButton to="reset-password" tag-name="a" color="secondary">
               Восстановить аккаунт
             </BaseButton>
           </div>
@@ -183,7 +183,6 @@ export default {
 }
 
 .form {
-  margin-top: 96px;
   width: 320px;
 
   &-title {

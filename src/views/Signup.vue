@@ -85,13 +85,13 @@
 
             <BaseCheckbox v-model:checked="eula">
               Я принимаю
-              <BaseButton tag-name="a" to="/" target="_blank" underline>
+              <BaseButton to="/" tag-name="a" target="_blank" underline>
                 пользовательское соглашение
               </BaseButton>
 
               <br />и
 
-              <BaseButton tag-name="a" target="_blank" to="/" underline>
+              <BaseButton to="/" tag-name="a" target="_blank" underline>
                 политику конфиденциальности
               </BaseButton>
             </BaseCheckbox>
@@ -301,7 +301,6 @@ export default {
 }
 
 .form {
-  margin-top: 96px;
   margin-bottom: 48px;
   width: 320px;
 

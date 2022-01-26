@@ -155,8 +155,6 @@ export default {
 }
 
 .form {
-  margin-top: 96px;
-  margin-bottom: 48px;
   width: 320px;
 
   &-title {
