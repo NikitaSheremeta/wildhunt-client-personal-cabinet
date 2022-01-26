@@ -282,11 +282,13 @@ export default {
       if (this.is.signup.error) {
         [this.is.signup.error, this.is.disableAllFields] = [false, false];
 
-        useDebounce(
+        return useDebounce(
           () => (this.is.hideForm = false),
           magicNumbers.TWO_HUNDRED_MILLISECONDS
         )();
       }
+
+      return this.$router.push('/');
     }
   }
 };

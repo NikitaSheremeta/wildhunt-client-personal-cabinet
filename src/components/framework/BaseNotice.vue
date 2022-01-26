@@ -16,7 +16,6 @@
       v-if="configuration.isShowButton"
       :color="button.color"
       class="button"
-      @click="onClick"
     >
       {{ button.slot }}
     </BaseButton>
@@ -111,9 +110,6 @@ export default {
     }
   },
   methods: {
-    onClick() {
-      this.$emit('click');
-    },
     signupSuccessModifier() {
       for (const key in this.configuration) {
         this.configuration[key] = true;
@@ -125,7 +121,7 @@ export default {
       this.title = 'Вы успешно зарегистрированы!';
       this.content =
         'На указанный почтовый ящик придет письмо, содержащее ссылку для подтверждения адреса.';
-      this.button.slot = 'Подтвердить';
+      this.button.slot = 'Перейти в кабинет';
       this.button.color = 'success';
     },
     signupErrorModifier() {
