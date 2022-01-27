@@ -18,6 +18,14 @@
     />
 
     <slot v-if="!!$slots.default" />
+
+    <BaseIcon
+      v-if="iconRight"
+      :icon="iconRight"
+      class="button-icon"
+      width="20"
+      height="20"
+    />
   </component>
 </template>
 
@@ -73,6 +81,10 @@ export default {
     underline: {
       type: Boolean,
       default: false
+    },
+    iconRight: {
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -83,7 +95,8 @@ export default {
         this.disabledModifier,
         this.fullWidthModifier,
         this.preloaderModifier,
-        this.underlineModifier
+        this.underlineModifier,
+        this.iconRightModifier
       ];
     },
     disabledAttribute() {
@@ -109,6 +122,9 @@ export default {
     },
     underlineModifier() {
       return this.underline ? 'underline' : '';
+    },
+    iconRightModifier() {
+      return this.iconRight ? 'icon-right' : '';
     }
   },
   methods: {
@@ -247,13 +263,23 @@ $link-colors: (
 }
 
 .base-link {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   text-decoration: none;
   cursor: pointer;
   transition: 0.2s;
 
+  .base-icon {
+    transition: 0.2s;
+  }
+
   &:hover {
     color: map-get($link-colors, secondary, color);
+
+    .base-icon {
+      fill: map-get($link-colors, secondary, color);
+      stroke: map-get($link-colors, secondary, color);
+    }
   }
 
   &.secondary {
@@ -266,6 +292,12 @@ $link-colors: (
 
   &.underline {
     text-decoration: underline;
+  }
+
+  &.icon-right {
+    .base-icon {
+      margin-left: 12px;
+    }
   }
 }
 </style>

@@ -21,8 +21,7 @@ body {
   @include container-initialization();
 
   &-fluid {
-    padding-left: 48px;
-    padding-right: 48px;
+    padding: 0 48px;
   }
 }
 
@@ -32,9 +31,14 @@ body {
 }
 
 @include media-breakpoint-down(xxs) {
+  .container {
+    &-fluid {
+      padding: 0;
+    }
+  }
+
   .row {
-    padding-left: 24px;
-    padding-right: 24px;
+    padding: 0 24px;
   }
 }
 

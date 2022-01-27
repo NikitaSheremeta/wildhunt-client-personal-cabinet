@@ -183,6 +183,7 @@ export default {
 }
 
 .form {
+  margin-top: 24px;
   width: 320px;
 
   &-title {
