@@ -86,6 +86,10 @@ export default {
       type: String,
       default: 'primary'
     },
+    hover: {
+      type: Boolean,
+      default: false
+    },
     spin: {
       type: Boolean,
       default: false
@@ -100,7 +104,8 @@ export default {
       return [
         this.baseClassName,
         this.colorModifier,
-        this.preloaderModifier
+        this.preloaderModifier,
+        this.hoverModifier
       ];
     },
     isExclamation() {
@@ -108,6 +113,9 @@ export default {
     },
     colorModifier() {
       return this.color !== '' ? this.color : '';
+    },
+    hoverModifier() {
+      return this.hover ? 'hover' : '';
     },
     preloaderModifier() {
       return this.spin ? 'preloader' : '';
@@ -124,6 +132,10 @@ export default {
   display: inline-block;
   vertical-align: baseline;
 
+  &.hover {
+    transition: 0.2s;
+  }
+
   &.primary {
     fill: $font-color-base;
     stroke: $font-color-base;
@@ -137,6 +149,13 @@ export default {
   &.secondary {
     fill: $font-color-secondary;
     stroke: $font-color-secondary;
+
+    &.hover {
+      &:hover {
+        fill: $font-color-base;
+        stroke: $font-color-base;
+      }
+    }
 
     .duo-tone {
       fill: $gray-700;

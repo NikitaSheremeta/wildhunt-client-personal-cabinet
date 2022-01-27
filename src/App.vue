@@ -10,12 +10,10 @@
           />
 
           <div :class="$style['online-now']">
-            <BaseIcon
-              icon="online"
-              color="transparent"
-              width="22"
-              height="22"
-            />
+            <div :class="$style['online-now-icon']">
+              <span></span>
+              <span></span>
+            </div>
             <span :class="$style['online-now-text']">Игроков в сети: 941</span>
           </div>
 
@@ -26,6 +24,7 @@
               color="secondary"
               width="24"
               height="24"
+              hover
             />
             <BaseIcon
               :class="$style['social-networks-icon']"
@@ -33,6 +32,7 @@
               color="secondary"
               width="24"
               height="24"
+              hover
             />
           </div>
 
@@ -119,10 +119,69 @@ export default {
   display: flex;
   align-items: center;
 
+  &-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 16px;
+    height: 16px;
+
+    span {
+      position: absolute;
+      background-color: $success;
+      border-radius: 50%;
+      animation-duration: 2s;
+      animation-timing-function: ease-out;
+      animation-iteration-count: infinite;
+    }
+
+    span:first-child {
+      width: 8px;
+      height: 8px;
+      animation-name: small-circle;
+    }
+
+    span:last-child {
+      width: 16px;
+      height: 16px;
+      opacity: 0.3;
+      animation-name: big-circle;
+    }
+  }
+
   &-text {
     margin-top: 2px;
     margin-left: 12px;
     color: $font-color-secondary;
+  }
+
+  @keyframes small-circle {
+    0% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.2);
+    }
+
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes big-circle {
+    0% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(0.8);
+    }
+
+    100% {
+      transform: scale(1);
+    }
   }
 }
 
