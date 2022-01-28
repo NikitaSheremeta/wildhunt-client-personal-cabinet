@@ -37,9 +37,9 @@
             <BaseButton
               :to="authorizationHrefModifier"
               :icon-right="authorizationIconModifier"
+              :color="authorizationColorModifier"
               tag-name="a"
               target="_blank"
-              color="secondary"
             >
               {{ authorizationTextModifier }}
             </BaseButton>
@@ -66,16 +66,19 @@ export default {
     };
   },
   computed: {
-    authorizationTextModifier() {
-      return this.$route.fullPath === '/login'
-        ? 'Регистрация аккаунта'
-        : 'Войти в аккаунт';
-    },
     authorizationHrefModifier() {
       return this.$route.fullPath === '/login' ? '/signup' : '/login';
     },
     authorizationIconModifier() {
       return this.$route.fullPath === '/login' ? 'signup' : 'login';
+    },
+    authorizationColorModifier() {
+      return this.$route.fullPath === '/login' ? 'secondary' : 'secondary';
+    },
+    authorizationTextModifier() {
+      return this.$route.fullPath === '/login'
+        ? 'Регистрация аккаунта'
+        : 'Войти в аккаунт';
     }
   }
 };
@@ -89,6 +92,7 @@ export default {
 }
 
 .header {
+  margin-bottom: 8px;
   padding: 24px 0;
   top: 0;
   left: 0;

@@ -42,7 +42,7 @@
 
       <transition name="fade-slide-up">
         <template v-if="is.resetPassword.success">
-          <BaseNotice reset-password-success @click="BaseNoticeOnClick" />
+          <BaseNotice reset-password-success />
         </template>
       </transition>
 

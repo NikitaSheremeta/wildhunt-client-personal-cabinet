@@ -140,7 +140,9 @@ export default {
     },
     resetPasswordSuccessModifier() {
       for (const key in this.configuration) {
-        this.configuration[key] = true;
+        if (key !== 'isShowButton') {
+          this.configuration[key] = true;
+        }
       }
 
       this.status.success = true;
@@ -148,9 +150,7 @@ export default {
       this.emoji = '🙌';
       this.title = 'Письмо успешно отправленно!';
       this.content =
-        'На указанный почтовый ящик придет письмо, содержащее ссылку для сброса пароля.';
-      this.button.slot = 'Перейти в почтовый ящик';
-      this.button.color = 'success';
+        'На указанный почтовый ящик придет письмо, содержащее инструкцую по восстановлению пароля';
     },
     resetPasswordErrorModifier() {
       for (const key in this.configuration) {
@@ -190,7 +190,6 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 96px;
   padding: 32px 0 40px 0;
   width: 320px;
   background-color: $gray-900;
