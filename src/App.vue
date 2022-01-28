@@ -9,41 +9,39 @@
             alt="Wild Hunt"
           />
 
-          <div :class="$style['online-now']">
-            <div :class="$style['online-now-icon']">
-              <span></span>
-              <span></span>
-            </div>
-            <span :class="$style['online-now-text']">Игроков в сети: 941</span>
+          <div :class="$style['download-launcher']">
+            <BaseButton
+              tag-name="a"
+              target="_blank"
+              color="secondary"
+              icon-left="download"
+            >
+              Скачать лаунчер
+            </BaseButton>
           </div>
 
           <div :class="$style['social-networks']">
             <BaseIcon
+              v-for="item in socialNetworks"
+              :key="item"
               :class="$style['social-networks-icon']"
-              icon="vk"
-              color="secondary"
+              :icon="item"
               width="24"
               height="24"
-              hover
-            />
-            <BaseIcon
-              :class="$style['social-networks-icon']"
-              icon="discord"
               color="secondary"
-              width="24"
-              height="24"
               hover
             />
           </div>
 
           <div :class="$style.controls">
             <BaseButton
-              :to="linkHrefModifier"
-              :icon-right="linkIconModifier"
+              :to="authorizationHrefModifier"
+              :icon-right="authorizationIconModifier"
               tag-name="a"
               target="_blank"
+              color="secondary"
             >
-              {{ linkTextModifier }}
+              {{ authorizationTextModifier }}
             </BaseButton>
           </div>
         </div>
@@ -62,24 +60,22 @@ export default {
     BaseIcon,
     BaseButton
   },
+  data() {
+    return {
+      socialNetworks: ['vk', 'discord']
+    };
+  },
   computed: {
-    linkTextModifier() {
-      return this.$route.fullPath === '/signup' ||
-        this.$route.fullPath === '/reset-password'
-        ? 'Войти в аккаунт'
-        : 'Регистрация аккаунта';
+    authorizationTextModifier() {
+      return this.$route.fullPath === '/login'
+        ? 'Регистрация аккаунта'
+        : 'Войти в аккаунт';
     },
-    linkHrefModifier() {
-      return this.$route.fullPath === '/signup' ||
-        this.$route.fullPath === '/reset-password'
-        ? '/login'
-        : '/signup';
+    authorizationHrefModifier() {
+      return this.$route.fullPath === '/login' ? '/signup' : '/login';
     },
-    linkIconModifier() {
-      return this.$route.fullPath === '/signup' ||
-        this.$route.fullPath === '/reset-password'
-        ? 'login'
-        : 'signup';
+    authorizationIconModifier() {
+      return this.$route.fullPath === '/login' ? 'signup' : 'login';
     }
   }
 };
@@ -106,7 +102,7 @@ export default {
 }
 
 .logo {
-  width: 128px;
+  width: 120px;
   cursor: pointer;
   transition: 0.2s;
 
@@ -115,74 +111,9 @@ export default {
   }
 }
 
-.online-now {
+.download-launcher {
   display: flex;
   align-items: center;
-
-  &-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    width: 16px;
-    height: 16px;
-
-    span {
-      position: absolute;
-      background-color: $success;
-      border-radius: 50%;
-      animation-duration: 2s;
-      animation-timing-function: ease-out;
-      animation-iteration-count: infinite;
-    }
-
-    span:first-child {
-      width: 8px;
-      height: 8px;
-      animation-name: small-circle;
-    }
-
-    span:last-child {
-      width: 16px;
-      height: 16px;
-      opacity: 0.3;
-      animation-name: big-circle;
-    }
-  }
-
-  &-text {
-    margin-top: 2px;
-    margin-left: 12px;
-    color: $font-color-secondary;
-  }
-
-  @keyframes small-circle {
-    0% {
-      transform: scale(1);
-    }
-
-    50% {
-      transform: scale(1.2);
-    }
-
-    100% {
-      transform: scale(1);
-    }
-  }
-
-  @keyframes big-circle {
-    0% {
-      transform: scale(1);
-    }
-
-    50% {
-      transform: scale(0.8);
-    }
-
-    100% {
-      transform: scale(1);
-    }
-  }
 }
 
 .social-networks {

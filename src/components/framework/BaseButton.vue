@@ -17,6 +17,14 @@
       height="24"
     />
 
+    <BaseIcon
+      v-if="iconLeft"
+      :icon="iconLeft"
+      class="button-icon"
+      width="20"
+      height="20"
+    />
+
     <slot v-if="!!$slots.default" />
 
     <BaseIcon
@@ -82,6 +90,10 @@ export default {
       type: Boolean,
       default: false
     },
+    iconLeft: {
+      type: String,
+      default: ''
+    },
     iconRight: {
       type: String,
       default: ''
@@ -96,6 +108,7 @@ export default {
         this.fullWidthModifier,
         this.preloaderModifier,
         this.underlineModifier,
+        this.iconLeftModifier,
         this.iconRightModifier
       ];
     },
@@ -122,6 +135,9 @@ export default {
     },
     underlineModifier() {
       return this.underline ? 'underline' : '';
+    },
+    iconLeftModifier() {
+      return this.iconLeft ? 'icon-left' : '';
     },
     iconRightModifier() {
       return this.iconRight ? 'icon-right' : '';
@@ -285,13 +301,29 @@ $link-colors: (
   &.secondary {
     color: map-get($link-colors, secondary, color);
 
+    .base-icon {
+      fill: map-get($link-colors, secondary, color);
+      stroke: map-get($link-colors, secondary, color);
+    }
+
     &:hover {
       color: map-get($link-colors, secondary, hover-color);
+
+      .base-icon {
+        fill: map-get($link-colors, secondary, hover-color);
+        stroke: map-get($link-colors, secondary, hover-color);
+      }
     }
   }
 
   &.underline {
     text-decoration: underline;
+  }
+
+  &.icon-left {
+    .base-icon {
+      margin-right: 12px;
+    }
   }
 
   &.icon-right {
