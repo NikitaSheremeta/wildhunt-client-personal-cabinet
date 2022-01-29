@@ -6,12 +6,13 @@
           <img class="logo" src="../assets/img/logo.svg" alt="Wild Hunt" />
 
           <div class="download-launcher">
-            <BaseButton
-              tag-name="a"
-              target="_blank"
-              color="secondary"
-              icon-left="download"
-            >
+            <img
+              class="steve-head"
+              src="../assets/img/steve-head.svg"
+              alt="Wild Hunt"
+            />
+
+            <BaseButton tag-name="a" target="_blank" color="secondary">
               Скачать лаунчер
             </BaseButton>
           </div>
@@ -98,6 +99,15 @@ export default {
 .download-launcher {
   display: flex;
   align-items: center;
+
+  .steve-head {
+    margin-right: 16px;
+    width: 22px;
+  }
+
+  .base-link {
+    margin-top: 6px;
+  }
 }
 
 .social-networks {

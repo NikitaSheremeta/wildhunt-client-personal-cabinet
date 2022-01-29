@@ -33,6 +33,7 @@
             <BaseButton
               :loading="is.loadingButton"
               :disabled="is.disableAllFields"
+              full-width
             >
               Восстановить
             </BaseButton>
