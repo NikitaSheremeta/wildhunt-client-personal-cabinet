@@ -5,7 +5,8 @@ const routes = [
     path: '/login',
     name: 'Login',
     meta: {
-      title: 'Вход в аккаунт'
+      title: 'Вход в аккаунт',
+      layout: 'Base'
     },
     component: () => import('../views/Login.vue')
   },
@@ -13,7 +14,8 @@ const routes = [
     path: '/signup',
     name: 'Signup',
     meta: {
-      title: 'Регистрация аккаунта'
+      title: 'Регистрация аккаунта',
+      layout: 'Base'
     },
     component: () => import('../views/Signup.vue')
   },
@@ -21,7 +23,8 @@ const routes = [
     path: '/reset-password',
     name: 'Reset password',
     meta: {
-      title: 'Восстановление аккаунта'
+      title: 'Восстановление аккаунта',
+      layout: 'Base'
     },
     component: () => import('../views/ResetPassword.vue')
   }

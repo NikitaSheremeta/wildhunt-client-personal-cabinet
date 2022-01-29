@@ -46,10 +46,20 @@
               Войти
             </BaseButton>
 
-            <BaseButton to="reset-password" tag-name="a" color="secondary">
-              Восстановить аккаунт
+            <BaseButton color="success" to="signup" @click.prevent>
+              Регистрация
             </BaseButton>
           </div>
+
+          <BaseButton
+            :class="$style['form-help']"
+            tag-name="a"
+            to="reset-password"
+            color="secondary"
+            icon-left="question"
+          >
+            Забыли пароль или не можете войти?
+          </BaseButton>
         </form>
       </transition>
 
@@ -203,6 +213,12 @@ export default {
     align-items: center;
     justify-content: space-between;
     margin-top: 24px;
+    gap: 12px;
+  }
+
+  &-help {
+    margin-top: 24px;
+    font-size: $font-size-xs;
   }
 }
 </style>
