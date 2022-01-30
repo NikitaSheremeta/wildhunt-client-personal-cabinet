@@ -6,12 +6,6 @@
           <img class="logo" src="../assets/img/logo.svg" alt="Wild Hunt" />
 
           <div class="download-launcher">
-            <img
-              class="steve-head"
-              src="../assets/img/steve-head.svg"
-              alt="Wild Hunt"
-            />
-
             <BaseButton tag-name="a" target="_blank" color="secondary">
               Скачать лаунчер
             </BaseButton>
@@ -35,7 +29,6 @@
               tag-name="a"
               to="/login"
               target="_blank"
-              icon-right="login"
               color="secondary"
             >
               Вход в аккаунт
@@ -66,17 +59,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .header {
   margin-bottom: 8px;
   padding: 24px 0;
-  top: 0;
-  left: 0;
   width: 100%;
 }
 
@@ -99,15 +84,6 @@ export default {
 .download-launcher {
   display: flex;
   align-items: center;
-
-  .steve-head {
-    margin-right: 16px;
-    width: 22px;
-  }
-
-  .base-link {
-    margin-top: 6px;
-  }
 }
 
 .social-networks {
