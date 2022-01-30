@@ -83,13 +83,18 @@
           <div :class="$style['form-eula']">
             <BaseCheckbox v-model:checked="eula">
               Я принимаю
-              <BaseButton to="/" tag-name="a" target="_blank" underline>
+              <BaseButton to="terms" tag-name="a" target="_blank" underline>
                 пользовательское соглашение
               </BaseButton>
 
               <br />и
 
-              <BaseButton to="/" tag-name="a" target="_blank" underline>
+              <BaseButton
+                to="privacy-policy"
+                tag-name="a"
+                target="_blank"
+                underline
+              >
                 политику конфиденциальности
               </BaseButton>
             </BaseCheckbox>
@@ -286,7 +291,7 @@ export default {
         )();
       }
 
-      return this.$router.push('/');
+      this.$router.push({ path: '/login' });
     }
   }
 };

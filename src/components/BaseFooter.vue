@@ -83,7 +83,7 @@ export default {
           to: ''
         },
         {
-          slot: 'Как начать играть',
+          slot: 'Скачать лаунчер',
           to: ''
         }
       ],
@@ -108,7 +108,7 @@ export default {
   },
   computed: {
     copyright() {
-      return `© 2021 - ${new Date().getFullYear()} minecraft-wildhunt.com`;
+      return `© ${new Date().getFullYear()} minecraft-wildhunt.com`;
     }
   }
 };
@@ -116,21 +116,21 @@ export default {
 
 <style lang="scss" scoped>
 .footer {
-  width: 100%;
-  margin-top: 80px;
+  margin-top: 88px;
   padding: 24px 0;
+  width: 100%;
   background-color: $gray-900;
 }
 
 .row {
   .grid {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: repeat(2, auto);
     width: 100%;
   }
 
   &:first-child {
-    margin-bottom: 4px;
+    margin-bottom: 8px;
   }
 }
 

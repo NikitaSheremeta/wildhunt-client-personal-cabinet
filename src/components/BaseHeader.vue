@@ -3,20 +3,12 @@
     <div class="container">
       <div class="row">
         <div class="grid">
-          <img class="logo" src="../assets/img/logo.svg" alt="Wild Hunt" />
-
-          <div v-if="!isAuthorizationPages" class="social-networks">
-            <BaseIcon
-              v-for="item in socialNetworks"
-              :key="item"
-              :icon="item"
-              class="social-networks-icon"
-              width="24"
-              height="24"
-              color="secondary"
-              hover
-            />
-          </div>
+          <img
+            class="logo"
+            src="../assets/img/logo.svg"
+            alt="Wild Hunt"
+            @click="onLogoClick"
+          />
 
           <div class="controls">
             <template v-if="!isAuthorizationPages">
@@ -49,13 +41,11 @@
 </template>
 
 <script>
-import BaseIcon from './framework/BaseIcon';
 import BaseButton from './framework/BaseButton';
 
 export default {
   name: 'authorizationHeader',
   components: {
-    BaseIcon,
     BaseButton
   },
   computed: {
@@ -86,10 +76,10 @@ export default {
       return this.isSignupLink ? 'Регистрация аккаунта' : 'Вход в аккаунт';
     }
   },
-  data() {
-    return {
-      socialNetworks: ['vk', 'tiktok', 'discord']
-    };
+  methods: {
+    onLogoClick() {
+      this.$router.push({ path: '/' });
+    }
   }
 };
 </script>
@@ -102,18 +92,12 @@ export default {
 
 .grid {
   display: grid;
-  grid-template-columns: 220px 1fr 4fr;
+  grid-template-columns: repeat(2, auto);
   width: 100%;
 }
 
-.authorization-page {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 .logo {
-  width: 128px;
+  width: 124px;
   cursor: pointer;
   transition: 0.2s;
 
@@ -133,20 +117,6 @@ export default {
 
   .base-link {
     margin-top: 6px;
-  }
-}
-
-.social-networks {
-  display: flex;
-  align-items: center;
-
-  &-icon {
-    margin-left: 32px;
-    cursor: pointer;
-
-    &:first-child {
-      margin-left: 0;
-    }
   }
 }
 
