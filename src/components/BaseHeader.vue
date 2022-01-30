@@ -14,14 +14,21 @@
             <template v-if="!isAuthorizationPages">
               <BaseButton
                 tag-name="a"
+                to="/login"
+                target="_blank"
+                color="secondary"
+              >
+                Вход в аккаунт
+              </BaseButton>
+
+              <BaseButton
+                tag-name="a"
                 to="/signup"
                 target="_blank"
                 color="secondary"
               >
                 Регистрация аккаунта
               </BaseButton>
-
-              <BaseButton to="/login" color="dark"> Вход в аккаунт </BaseButton>
             </template>
 
             <BaseButton
@@ -124,6 +131,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 24px;
+  gap: 48px;
 }
 </style>

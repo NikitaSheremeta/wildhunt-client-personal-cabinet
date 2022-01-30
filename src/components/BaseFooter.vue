@@ -130,7 +130,7 @@ export default {
   }
 
   &:first-child {
-    margin-bottom: 8px;
+    margin-bottom: 4px;
   }
 }
 
@@ -138,14 +138,7 @@ export default {
 .information {
   display: flex;
   justify-content: flex-end;
-
-  .base-link {
-    margin: 0 16px;
-
-    &:last-child {
-      margin-right: 0;
-    }
-  }
+  gap: 32px;
 }
 
 .information {
