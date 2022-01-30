@@ -83,16 +83,16 @@
           <div :class="$style['form-eula']">
             <BaseCheckbox v-model:checked="eula">
               Я принимаю
-              <BaseButton to="terms" tag-name="a" target="_blank" underline>
+              <BaseButton tag-name="a" target="_blank" to="terms" underline>
                 пользовательское соглашение
               </BaseButton>
 
               <br />и
 
               <BaseButton
-                to="privacy-policy"
                 tag-name="a"
                 target="_blank"
+                to="privacy-policy"
                 underline
               >
                 политику конфиденциальности

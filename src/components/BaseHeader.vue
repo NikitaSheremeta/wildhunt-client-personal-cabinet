@@ -40,6 +40,12 @@
             >
               {{ authorizationLinkSlotModifier }}
             </BaseButton>
+
+            <div class="menu-button">
+              <span class="menu-button-item"></span>
+              <span class="menu-button-item"></span>
+              <span class="menu-button-item"></span>
+            </div>
           </div>
         </div>
       </div>
@@ -113,24 +119,41 @@ export default {
   }
 }
 
-.download-launcher {
-  display: flex;
-  align-items: center;
-
-  .steve-head {
-    margin-right: 16px;
-    width: 28px;
-  }
-
-  .base-link {
-    margin-top: 6px;
-  }
-}
-
 .controls {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 48px;
+}
+
+.menu-button {
+  display: flex;
+  gap: 8px;
+  padding: 16px 8px;
+  cursor: pointer;
+  $this: &;
+
+  &-item {
+    width: 6px;
+    height: 6px;
+    background-color: $secondary;
+    border-radius: 50%;
+    transition: 0.2s ease-out;
+  }
+
+  &:hover {
+    #{$this}-item {
+      background-color: $white;
+      transform: scale(2);
+
+      &:first-child {
+        transform: translateX(12px);
+      }
+
+      &:last-child {
+        transform: translateX(-12px);
+      }
+    }
+  }
 }
 </style>

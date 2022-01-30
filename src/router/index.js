@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
+  { path: '/', redirect: '/login' },
+  { path: '/:catchAll(.*)', redirect: '/404' },
   {
     path: '/login',
     name: 'Login',
