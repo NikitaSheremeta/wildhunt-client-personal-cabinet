@@ -81,8 +81,6 @@
           </div>
 
           <div :class="$style['form-eula']">
-            <span>Нажимая кнопку «Зарегистрироваться»: </span>
-
             <BaseCheckbox v-model:checked="eula">
               Я принимаю
               <BaseButton to="/" tag-name="a" target="_blank" underline>
@@ -321,7 +319,7 @@ export default {
   }
 
   &-eula {
-    margin-top: 8px;
+    margin-top: 24px;
 
     > span {
       margin-bottom: 12px;

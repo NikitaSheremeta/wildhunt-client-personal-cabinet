@@ -121,7 +121,7 @@ export default {
       this.title = 'Вы успешно зарегистрированы!';
       this.content =
         'На указанный почтовый ящик придет письмо, содержащее ссылку для подтверждения адреса.';
-      this.button.slot = 'Перейти в кабинет';
+      this.button.slot = 'Войти в аккаунт';
       this.button.color = 'success';
     },
     signupErrorModifier() {

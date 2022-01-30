@@ -1,28 +1,34 @@
 <template>
   <footer class="footer">
-    <div class="container-fluid">
+    <div class="container">
       <div class="row">
         <div class="grid">
-          <div class="some">
-            <img
-              class="logo"
-              src="../assets/img/logo-mini.svg"
-              alt="Minecraft Wild Hunt"
-            />
-            <span>© 2022 minecraft-wildhunt.com</span>
+          <span class="copyright">
+            {{ copyright }}
+          </span>
+
+          <div class="navigation">
+            <BaseButton
+              v-for="item in navigation"
+              :key="item.slot"
+              :to="item.to"
+              tag-name="a"
+              color="secondary"
+            >
+              {{ item.slot }}
+            </BaseButton>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="grid">
-          <div class="copyright">
-            <span class="copyright-text">
-              Все права защищены. Копирование материалов сайта запрещено.
-              <br />Мы предоставляем ознакомительный и бесплатный вариант игры
-              Minecraft. <br />Приобрести полную весрию можно на сайте
-              Minecraft.net
-            </span>
-          </div>
+          <span class="policy">
+            Все права защищены. Копирование материалов сайта запрещено.
+            <br />Мы предоставляем ознакомительный и бесплатный вариант игры
+            Minecraft. <br />Приобрести полную весрию можно на сайте
+            Minecraft.net
+          </span>
+
           <div class="information">
             <BaseButton
               v-for="item in information"
@@ -51,6 +57,36 @@ export default {
   },
   data() {
     return {
+      navigation: [
+        {
+          slot: 'Главная',
+          to: ''
+        },
+        {
+          slot: 'Магазин',
+          to: ''
+        },
+        {
+          slot: 'Форум',
+          to: ''
+        },
+        {
+          slot: 'Новости',
+          to: ''
+        },
+        {
+          slot: 'Wiki',
+          to: ''
+        },
+        {
+          slot: 'FAQ',
+          to: ''
+        },
+        {
+          slot: 'Как начать играть',
+          to: ''
+        }
+      ],
       information: [
         {
           slot: 'Техническая поддержка',
@@ -69,6 +105,11 @@ export default {
         }
       ]
     };
+  },
+  computed: {
+    copyright() {
+      return `© 2021 - ${new Date().getFullYear()} minecraft-wildhunt.com`;
+    }
   }
 };
 </script>
@@ -76,54 +117,53 @@ export default {
 <style lang="scss" scoped>
 .footer {
   width: 100%;
-  margin-top: 48px;
+  margin-top: 80px;
   padding: 24px 0;
   background-color: $gray-900;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 2fr 3fr;
-  width: 100%;
-}
+.row {
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    width: 100%;
+  }
 
-.some {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-
-  .logo {
-    margin-right: 16px;
-    margin-bottom: 8px;
-    width: 32px;
+  &:first-child {
+    margin-bottom: 4px;
   }
 }
 
-.copyright {
+.navigation,
+.information {
   display: flex;
-  align-items: center;
+  justify-content: flex-end;
 
-  &-text {
-    line-height: $line-height-secondary;
-    color: $font-color-secondary;
-    font-size: $font-size-xs;
+  .base-link {
+    margin: 0 16px;
+
+    &:last-child {
+      margin-right: 0;
+    }
   }
 }
 
 .information {
-  display: flex;
-  justify-content: flex-end;
   align-items: flex-end;
 
   .base-link {
-    margin: 0 16px;
     line-height: $line-height-secondary;
     font-size: $font-size-xs;
   }
 }
 
-.contacts {
-  display: flex;
-  justify-content: flex-end;
+.copyright,
+.policy {
+  color: $font-color-secondary;
+}
+
+.policy {
+  line-height: $line-height-secondary;
+  font-size: $font-size-xxs;
 }
 </style>

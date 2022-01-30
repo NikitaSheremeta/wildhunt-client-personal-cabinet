@@ -1,17 +1,11 @@
 <template>
   <header class="header">
-    <div class="container-fluid">
+    <div class="container">
       <div class="row">
         <div class="grid">
           <img class="logo" src="../assets/img/logo.svg" alt="Wild Hunt" />
 
-          <div class="download-launcher">
-            <BaseButton tag-name="a" target="_blank" color="secondary">
-              Скачать лаунчер
-            </BaseButton>
-          </div>
-
-          <div class="social-networks">
+          <div v-if="!isAuthorizationPages" class="social-networks">
             <BaseIcon
               v-for="item in socialNetworks"
               :key="item"
@@ -25,13 +19,27 @@
           </div>
 
           <div class="controls">
+            <template v-if="!isAuthorizationPages">
+              <BaseButton
+                tag-name="a"
+                to="/signup"
+                target="_blank"
+                color="secondary"
+              >
+                Регистрация аккаунта
+              </BaseButton>
+
+              <BaseButton to="/login" color="dark"> Вход в аккаунт </BaseButton>
+            </template>
+
             <BaseButton
+              v-if="isLoginLink || isSignupLink"
+              :to="authorizationLinkHrefModifier"
               tag-name="a"
-              to="/login"
               target="_blank"
               color="secondary"
             >
-              Вход в аккаунт
+              {{ authorizationLinkSlotModifier }}
             </BaseButton>
           </div>
         </div>
@@ -50,9 +58,37 @@ export default {
     BaseIcon,
     BaseButton
   },
+  computed: {
+    isAuthorizationPages() {
+      switch (this.$route.path) {
+        case '/login':
+          return true;
+        case '/signup':
+          return true;
+        case '/reset-password':
+          return true;
+        default:
+          return false;
+      }
+    },
+    isLoginLink() {
+      return (
+        this.$route.path === '/signup' || this.$route.path === '/reset-password'
+      );
+    },
+    isSignupLink() {
+      return this.$route.path === '/login';
+    },
+    authorizationLinkHrefModifier() {
+      return this.isSignupLink ? 'signup' : 'login';
+    },
+    authorizationLinkSlotModifier() {
+      return this.isSignupLink ? 'Регистрация аккаунта' : 'Вход в аккаунт';
+    }
+  },
   data() {
     return {
-      socialNetworks: ['vk', 'discord']
+      socialNetworks: ['vk', 'tiktok', 'discord']
     };
   }
 };
@@ -60,19 +96,24 @@ export default {
 
 <style lang="scss" scoped>
 .header {
-  margin-bottom: 8px;
   padding: 24px 0;
   width: 100%;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 240px 1fr 1fr 260px;
+  grid-template-columns: 220px 1fr 4fr;
   width: 100%;
 }
 
+.authorization-page {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .logo {
-  width: 120px;
+  width: 128px;
   cursor: pointer;
   transition: 0.2s;
 
@@ -84,15 +125,23 @@ export default {
 .download-launcher {
   display: flex;
   align-items: center;
+
+  .steve-head {
+    margin-right: 16px;
+    width: 28px;
+  }
+
+  .base-link {
+    margin-top: 6px;
+  }
 }
 
 .social-networks {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
 
   &-icon {
-    margin-left: 24px;
+    margin-left: 32px;
     cursor: pointer;
 
     &:first-child {
@@ -105,11 +154,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-}
-
-@include media-breakpoint-down(md) {
-  .grid {
-    grid-template-columns: 200px 1fr 1fr 220px;
-  }
+  gap: 24px;
 }
 </style>

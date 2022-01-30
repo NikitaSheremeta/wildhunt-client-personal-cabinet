@@ -52,11 +52,11 @@
           </div>
 
           <BaseButton
-            :class="$style['form-help']"
+            :class="$style['form-reset-password']"
             tag-name="a"
             to="reset-password"
-            color="secondary"
             icon-left="question"
+            underline
           >
             Забыли пароль или не можете войти?
           </BaseButton>
@@ -216,7 +216,7 @@ export default {
     gap: 12px;
   }
 
-  &-help {
+  &-reset-password {
     margin-top: 24px;
     font-size: $font-size-xs;
   }
