@@ -1,5 +1,5 @@
 <template>
-  <div class="container" :class="$style.container">
+  <div class="container">
     <div class="row" :class="$style.row">
       <transition name="fade-slide-up">
         <form

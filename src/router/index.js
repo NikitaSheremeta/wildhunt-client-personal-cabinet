@@ -2,7 +2,15 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
   { path: '/', redirect: '/login' },
-  { path: '/:catchAll(.*)', redirect: '/404' },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'Not Found',
+    meta: {
+      title: 'Страница не найдена',
+      layout: 'Base'
+    },
+    component: () => import('../views/404.vue')
+  },
   {
     path: '/login',
     name: 'Login',
