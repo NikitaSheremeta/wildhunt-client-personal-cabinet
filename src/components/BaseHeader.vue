@@ -99,6 +99,7 @@ export default {
 
 <style lang="scss" scoped>
 .header {
+  margin-bottom: 8px;
   padding: 24px 0;
   width: 100%;
 }
@@ -110,7 +111,7 @@ export default {
 }
 
 .logo {
-  width: 124px;
+  width: 116px;
   cursor: pointer;
   transition: 0.2s;
 
