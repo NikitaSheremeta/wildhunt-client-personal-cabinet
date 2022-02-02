@@ -60,47 +60,47 @@ export default {
       navigation: [
         {
           slot: 'Главная',
-          to: ''
+          to: '/'
         },
         {
           slot: 'Магазин',
-          to: ''
+          to: 'shop'
         },
         {
           slot: 'Форум',
-          to: ''
+          to: 'forum'
         },
         {
           slot: 'Новости',
-          to: ''
+          to: 'news'
         },
         {
           slot: 'Wiki',
-          to: ''
+          to: 'wiki'
         },
         {
           slot: 'FAQ',
-          to: ''
+          to: 'faq'
         },
         {
           slot: 'Скачать лаунчер',
-          to: ''
+          to: 'download-launcher'
         }
       ],
       information: [
         {
           slot: 'Техническая поддержка',
-          to: '',
+          to: 'support',
           icon: 'chat-messages'
         },
         {
           slot: 'Пользовательское соглашение',
-          to: '',
+          to: 'terms',
           icon: 'file-contract'
         },
         {
           slot: 'Политика конфиденциальности',
-          to: '',
+          to: 'privacy-policy',
           icon: 'file-lines'
         }
       ]

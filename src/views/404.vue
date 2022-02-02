@@ -9,7 +9,6 @@
             alt="Minecraft Wild Hunt"
           />
           <span>4</span>
-          <i :class="$style['not-found-shadow']"></i>
         </div>
         <p>
           Мы не можем найти нужную вам страницу,
@@ -54,7 +53,6 @@ export default {
     }
 
     img {
-      position: relative;
       margin: 0 -32px 24px -32px;
       width: 128px;
     }
