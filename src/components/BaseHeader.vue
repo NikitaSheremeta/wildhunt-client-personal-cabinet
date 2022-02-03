@@ -10,6 +10,18 @@
             @click="onLogoClick"
           />
 
+          <div class="social-networks">
+            <BaseIcon
+              v-for="item in socialNetworks"
+              :key="item.title"
+              :icon="item.title"
+              width="24"
+              height="24"
+              color="secondary"
+              hover
+            />
+          </div>
+
           <div class="controls">
             <template v-if="!isAuthorizationPages">
               <BaseButton
@@ -54,12 +66,28 @@
 </template>
 
 <script>
+import BaseIcon from './framework/BaseIcon';
 import BaseButton from './framework/BaseButton';
 
 export default {
-  name: 'authorizationHeader',
+  name: 'BaseHeader',
   components: {
+    BaseIcon,
     BaseButton
+  },
+  data() {
+    return {
+      socialNetworks: [
+        {
+          title: 'vk',
+          to: ''
+        },
+        {
+          title: 'discord',
+          to: ''
+        }
+      ]
+    };
   },
   computed: {
     isAuthorizationPages() {
@@ -106,7 +134,8 @@ export default {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, auto);
+  grid-template-columns: 120px auto auto;
+  gap: 48px;
   width: 100%;
 }
 
@@ -117,6 +146,16 @@ export default {
 
   &:hover {
     opacity: 0.56;
+  }
+}
+
+.social-networks {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+
+  .base-icon {
+    cursor: pointer;
   }
 }
 
