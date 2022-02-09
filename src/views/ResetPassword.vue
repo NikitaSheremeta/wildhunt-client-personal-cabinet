@@ -123,14 +123,24 @@ export default {
 
       [this.is.loadingButton, this.is.disableAllFields] = [true, true];
 
-      setTimeout(() => {
-        [this.is.loadingButton, this.is.hideForm] = [false, true];
+      await this.$store
+        .dispatch('FORGOT_PASSWORD', {
+          email: this.login
+        })
+        .then((result) => {
+          [this.is.loadingButton, this.is.hideForm] = [false, true];
 
-        useDebounce(
-          () => (this.is.resetPassword.success = true),
-          magicNumbers.TWO_HUNDRED_MILLISECONDS
-        )();
-      }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS);
+          if (Object.prototype.hasOwnProperty.call(result, 'error')) {
+            this.errorMessage.api = result.error.message;
+
+            return useDebounce(() => (this.is.resetPassword.error = true))();
+          }
+
+          return useDebounce(() => (this.is.resetPassword.success = true))();
+        })
+        .catch(() => {
+          useDebounce(() => (this.is.resetPassword.error = true))();
+        });
     },
     BaseNoticeOnClick() {
       if (this.is.resetPassword.error) {

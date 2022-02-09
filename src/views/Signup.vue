@@ -110,7 +110,11 @@
 
       <transition name="fade-slide-up">
         <template v-if="is.signup.error">
-          <BaseNotice signup-error @click="BaseNoticeOnClick" />
+          <BaseNotice signup-error @click="BaseNoticeOnClick">
+            <template v-if="errorMessage.api">
+              {{ errorMessage.api }}
+            </template>
+          </BaseNotice>
         </template>
       </transition>
     </div>
@@ -158,7 +162,8 @@ export default {
         username: '',
         email: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        api: ''
       },
       is: {
         loading: {
@@ -272,23 +277,34 @@ export default {
 
       [this.is.loading.button, this.is.disableAllFields] = [true, true];
 
-      setTimeout(() => {
-        [this.is.loading.button, this.is.hideForm] = [false, true];
+      const data = {
+        username: this.username,
+        email: this.email,
+        password: this.password
+      };
 
-        useDebounce(
-          () => (this.is.signup.success = true),
-          magicNumbers.TWO_HUNDRED_MILLISECONDS
-        )();
-      }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS);
+      await this.$store
+        .dispatch('SIGNUP', data)
+        .then((result) => {
+          [this.is.loading.button, this.is.hideForm] = [false, true];
+
+          if (Object.prototype.hasOwnProperty.call(result, 'error')) {
+            this.errorMessage.api = result.error.message;
+
+            return useDebounce(() => (this.is.signup.error = true))();
+          }
+
+          return useDebounce(() => (this.is.signup.success = true))();
+        })
+        .catch(() => {
+          useDebounce(() => (this.is.signup.error = true))();
+        });
     },
     BaseNoticeOnClick() {
       if (this.is.signup.error) {
         [this.is.signup.error, this.is.disableAllFields] = [false, false];
 
-        return useDebounce(
-          () => (this.is.hideForm = false),
-          magicNumbers.TWO_HUNDRED_MILLISECONDS
-        )();
+        return useDebounce(() => (this.is.hideForm = false))();
       }
 
       this.$router.push({ path: '/login' });

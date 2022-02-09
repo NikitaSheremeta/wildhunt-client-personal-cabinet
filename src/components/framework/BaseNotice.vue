@@ -8,7 +8,11 @@
       {{ title }}
     </h2>
 
-    <span v-if="configuration.isShowContent" class="content">
+    <span v-if="!!$slots.default" class="content">
+      <slot />
+    </span>
+
+    <span v-else-if="configuration.isShowContent" class="content">
       {{ content }}
     </span>
 

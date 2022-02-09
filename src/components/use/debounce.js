@@ -1,6 +1,9 @@
-const SIX_HUNDRED_MILLISECONDS = 600;
+import { magicNumbers } from '../../utils/magic-numbers';
 
-export function useDebounce(callback, delay = SIX_HUNDRED_MILLISECONDS) {
+export function useDebounce(
+  callback,
+  delay = magicNumbers.TWO_HUNDRED_MILLISECONDS
+) {
   let timeout = null;
 
   return function () {
