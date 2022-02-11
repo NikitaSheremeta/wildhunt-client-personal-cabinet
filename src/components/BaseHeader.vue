@@ -10,17 +10,9 @@
             @click="onLogoClick"
           />
 
-          <div class="social-networks">
-            <BaseIcon
-              v-for="item in socialNetworks"
-              :key="item.title"
-              :icon="item.title"
-              width="24"
-              height="24"
-              color="secondary"
-              hover
-            />
-          </div>
+          <span class="online">
+            На сервере: <span class="online-number">51</span>
+          </span>
 
           <div class="controls">
             <template v-if="!isAuthorizationPages">
@@ -66,28 +58,12 @@
 </template>
 
 <script>
-import BaseIcon from './framework/BaseIcon';
 import BaseButton from './framework/BaseButton';
 
 export default {
   name: 'BaseHeader',
   components: {
-    BaseIcon,
     BaseButton
-  },
-  data() {
-    return {
-      socialNetworks: [
-        {
-          title: 'vk',
-          to: ''
-        },
-        {
-          title: 'discord',
-          to: ''
-        }
-      ]
-    };
   },
   computed: {
     isAuthorizationPages() {
@@ -140,7 +116,7 @@ export default {
 }
 
 .logo {
-  width: 116px;
+  width: 120px;
   cursor: pointer;
   transition: 0.2s;
 
@@ -149,13 +125,13 @@ export default {
   }
 }
 
-.social-networks {
+.online {
   display: flex;
   align-items: center;
-  gap: 24px;
+  color: $font-color-secondary;
 
-  .base-icon {
-    cursor: pointer;
+  &-number {
+    color: $success;
   }
 }
 

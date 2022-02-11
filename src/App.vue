@@ -1,5 +1,7 @@
 <template>
-  <component :is="layout">
+  <template v-if="isLoading"> Загрузка... </template>
+
+  <component v-else :is="layout">
     <router-view />
   </component>
 </template>
@@ -14,6 +16,19 @@ export default {
   computed: {
     layout() {
       return (this.$route.meta.layout || 'Base') + 'Layout';
+    },
+    isLoading() {
+      return this.$store.getters.GET_IS_LOADING;
+    }
+  },
+  watch: {
+    layout: {
+      immediate: true,
+      handler() {
+        if (localStorage.getItem('token')) {
+          this.$store.dispatch('CHECK_AUTH');
+        }
+      }
     }
   }
 };

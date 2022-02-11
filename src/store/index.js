@@ -1,29 +1,35 @@
 import { createStore } from 'vuex';
 import auth from '../api/auth';
+import axios from 'axios';
+import { useDebounce } from '../components/use/debounce';
 
 export default createStore({
   state: {
     user: {},
+    isLoading: false,
     isAuth: false
   },
   getters: {
+    GET_IS_LOADING: (state) => state.isLoading,
+    GET_IS_AUTH: (state) => state.isAuth,
     GET_USER: (state) => state.user
   },
   mutations: {
-    SET_USER: (state, params) => (state.user = params || {}),
-    SET_AUTH: (state, params) => (state.isAuth = params)
+    SET_LOADING: (state, params) => (state.isLoading = params),
+    SET_AUTH: (state, params) => (state.isAuth = params),
+    SET_USER: (state, params) => (state.user = params || {})
   },
   actions: {
     async LOGIN({ commit }, req) {
       try {
         const { data: response } = await auth.login(req.login, req.password);
 
-        localStorage.setItem('token', response.accessToken);
+        localStorage.setItem('token', response.data.accessToken);
 
         commit('SET_AUTH', true);
-        commit('SET_USER', response.user);
+        commit('SET_USER', response.data.user);
 
-        return response;
+        return response.data;
       } catch (err) {
         console.log('[login]: ' + err.message);
       }
@@ -36,12 +42,12 @@ export default createStore({
           req.password
         );
 
-        localStorage.setItem('token', response.accessToken);
+        localStorage.setItem('token', response.data.accessToken);
 
         commit('SET_AUTH', true);
-        commit('SET_USER', response.user);
+        commit('SET_USER', response.data.user);
 
-        return response;
+        return response.data;
       } catch (err) {
         console.log('[signup]: ' + err.message);
       }
@@ -55,7 +61,7 @@ export default createStore({
         commit('SET_AUTH', false);
         commit('SET_USER', {});
 
-        return response;
+        return response.data;
       } catch (err) {
         console.log('[logout]: ' + err.message);
       }
@@ -64,9 +70,29 @@ export default createStore({
       try {
         const { data: response } = await auth.forgotPassword(req.email);
 
-        return response;
+        return response.data;
       } catch (err) {
         console.log('[forgot-password]: ' + err.message);
+      }
+    },
+    async CHECK_AUTH({ commit }) {
+      try {
+        commit('SET_LOADING', true);
+
+        const { data: response } = await axios.get('/lk-api/refresh', {
+          withCredentials: true
+        });
+
+        localStorage.setItem('token', response.data.accessToken);
+
+        commit('SET_AUTH', true);
+        commit('SET_USER', response.user);
+
+        return response.data;
+      } catch (err) {
+        console.log('[check-auth]: ' + err.message);
+      } finally {
+        useDebounce(() => commit('SET_LOADING', false))();
       }
     }
   }

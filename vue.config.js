@@ -12,6 +12,11 @@ module.exports = {
   },
   devServer: {
     proxy: {
+      '/lk-api/refresh': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        pathRewrite: { '/lk-api/refresh': '/api/v1/auth/refresh' }
+      },
       '/lk-api/login': {
         target: 'http://localhost:5000',
         changeOrigin: true,
