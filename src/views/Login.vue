@@ -3,7 +3,7 @@
     <div class="row" :class="$style.row">
       <transition name="fade-slide-up">
         <form
-          v-if="!is.hideForm"
+          v-if="!isHideForm"
           :class="$style['form']"
           @submit.prevent="submitHandler"
         >
@@ -11,21 +11,21 @@
 
           <BaseInput
             :class="$style['form-item']"
-            :disabled="is.disableAllFields"
-            v-model:value="username"
+            :disabled="isDisableAllFields"
+            v-model:value="login"
             type="text"
             placeholder="Логин или электронная почта"
-            @input="v$.username.$reset()"
-            @blur="v$.username.$touch()"
+            @input="v$.login.$reset()"
+            @blur="v$.login.$touch()"
           >
             <template v-if="isUsernameInvalid()" #error>
-              {{ errorMessage.username }}
+              {{ errorMessage.login }}
             </template>
           </BaseInput>
 
           <BaseInput
             :class="$style['form-item']"
-            :disabled="is.disableAllFields"
+            :disabled="isDisableAllFields"
             v-model:value="password"
             password
             type="password"
@@ -40,8 +40,8 @@
 
           <div :class="$style['form-controls']">
             <BaseButton
-              :loading="is.loadingButton"
-              :disabled="is.disableAllFields"
+              :loading="isButtonLoading"
+              :disabled="isDisableAllFields"
             >
               Войти
             </BaseButton>
@@ -64,8 +64,24 @@
       </transition>
 
       <transition name="fade-slide-up">
-        <template v-if="is.login.error">
-          <BaseNotice login-error @click="BaseNoticeOnClick" />
+        <template v-if="isLoginError">
+          <BaseNotice :class="$style.notice" error>
+            <span :class="$style.icon">😵</span>
+
+            <h2 :class="$style.title">Ошибка аунтификации</h2>
+
+            <span :class="$style.content">
+              {{ errorMessage.apiResponse }}
+            </span>
+
+            <BaseButton
+              :class="$style.button"
+              color="danger"
+              @click="BaseNoticeOnClick"
+            >
+              Повторить
+            </BaseButton>
+          </BaseNotice>
         </template>
       </transition>
     </div>
@@ -94,20 +110,17 @@ export default {
   },
   data() {
     return {
-      username: '',
+      login: '',
       password: '',
       errorMessage: {
-        username: '',
-        password: ''
+        login: '',
+        password: '',
+        apiResponse: ''
       },
-      is: {
-        login: {
-          error: false
-        },
-        loadingButton: false,
-        disableAllFields: false,
-        hideForm: false
-      }
+      isButtonLoading: false,
+      isLoginError: false,
+      isDisableAllFields: false,
+      isHideForm: false
     };
   },
   setup() {
@@ -117,7 +130,7 @@ export default {
   },
   validations() {
     return {
-      username: {
+      login: {
         required,
         allowedCharacters,
         minLength: minLength(magicNumbers.MIN_USERNAME_LENGTH),
@@ -133,10 +146,10 @@ export default {
   },
   methods: {
     isUsernameInvalid() {
-      const validator = useLoginUsernameValidator(this.v$.username);
+      const validator = useLoginUsernameValidator(this.v$.login);
 
       if (validator.isInvalid) {
-        this.errorMessage.username = validator.errorMessage;
+        this.errorMessage.login = validator.errorMessage;
 
         return validator.isInvalid;
       }
@@ -161,25 +174,34 @@ export default {
         return false;
       }
 
-      [this.is.loadingButton, this.is.disableAllFields] = [true, true];
+      [this.isButtonLoading, this.isDisableAllFields] = [true, true];
 
-      setTimeout(() => {
-        [this.is.loadingButton, this.is.hideForm] = [false, true];
+      await this.$store
+        .dispatch('LOGIN', {
+          username: this.username,
+          password: this.password
+        })
+        .then((result) => {
+          [this.isButtonLoading, this.isHideForm] = [false, true];
 
-        useDebounce(
-          () => (this.is.login.error = true),
-          magicNumbers.TWO_HUNDRED_MILLISECONDS
-        )();
-      }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS);
+          if (Object.prototype.hasOwnProperty.call(result, 'error')) {
+            this.errorMessage.apiResponse = result.error.message;
+
+            return useDebounce(() => (this.isLoginError = true))();
+          }
+        })
+        .catch(() => {
+          this.errorMessage.apiResponse =
+            'Повторите попытку еще раз или обратитесь в тех. поддержку';
+
+          return useDebounce(() => (this.isLoginError = true))();
+        });
     },
     BaseNoticeOnClick() {
-      if (this.is.login.error) {
-        [this.is.login.error, this.is.disableAllFields] = [false, false];
+      if (this.isLoginError) {
+        [this.isLoginError, this.isDisableAllFields] = [false, false];
 
-        useDebounce(
-          () => (this.is.hideForm = false),
-          magicNumbers.TWO_HUNDRED_MILLISECONDS
-        )();
+        useDebounce(() => (this.isHideForm = false))();
       }
     }
   }
@@ -219,6 +241,31 @@ export default {
   &-reset-password {
     margin-top: 24px;
     font-size: $font-size-xs;
+  }
+}
+
+.notice {
+  .icon {
+    z-index: 1;
+    font-size: $font-size-h1;
+  }
+
+  .title {
+    z-index: 1;
+    padding: 0 24px;
+    font-weight: $font-weight-base;
+    text-align: center;
+  }
+
+  .content {
+    z-index: 1;
+    padding: 0 24px;
+    color: $font-color-secondary;
+    text-align: center;
+  }
+
+  .button {
+    margin-top: 24px;
   }
 }
 </style>

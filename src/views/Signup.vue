@@ -3,7 +3,7 @@
     <div class="row" :class="$style.row">
       <transition name="fade-slide-up">
         <form
-          v-if="!is.hideForm"
+          v-if="!isHideForm"
           :class="$style['form']"
           @submit.prevent="submitHandler"
         >
@@ -11,8 +11,8 @@
 
           <BaseInput
             :class="$style['form-item']"
-            :loading="is.loading.username"
-            :disabled="is.disableAllFields"
+            :loading="isUsernameLoading"
+            :disabled="isDisableAllFields"
             v-model:value="username"
             type="text"
             placeholder="Логин"
@@ -26,7 +26,7 @@
 
           <BaseInput
             :class="$style['form-item']"
-            :disabled="is.disableAllFields"
+            :disabled="isDisableAllFields"
             v-model:value="email"
             type="email"
             placeholder="Электронная почта"
@@ -40,7 +40,7 @@
 
           <BaseInput
             :class="$style['form-item']"
-            :disabled="is.disableAllFields"
+            :disabled="isDisableAllFields"
             v-model:value="password"
             password
             create-password
@@ -56,7 +56,7 @@
 
           <BaseInput
             :class="$style['form-item']"
-            :disabled="is.disableAllFields"
+            :disabled="isDisableAllFields"
             :success="isConfirmPasswordValid"
             v-model:value="confirmPassword"
             repeat-password
@@ -72,8 +72,8 @@
 
           <div :class="$style['form-controls']">
             <BaseButton
-              :loading="is.loading.button"
-              :disabled="!eula || is.disableAllFields"
+              :loading="isButtonLoading"
+              :disabled="!eula || isDisableAllFields"
               full-width
             >
               Зарегистрироваться
@@ -103,17 +103,46 @@
       </transition>
 
       <transition name="fade-slide-up">
-        <template v-if="is.signup.success">
-          <BaseNotice signup-success @click="BaseNoticeOnClick" />
+        <template v-if="isSignupSuccess">
+          <BaseNotice :class="$style.notice" success>
+            <span :class="$style.emoji">🥳</span>
+
+            <h2 :class="$style.title">Вы успешно зарегистрированы!</h2>
+
+            <span :class="$style.content">
+              На указанный почтовый ящик придет письмо, содержащее ссылку для
+              подтверждения адреса
+            </span>
+
+            <BaseButton
+              :class="$style.button"
+              color="success"
+              @click="BaseNoticeOnClick"
+            >
+              Войти в аккаунт
+            </BaseButton>
+          </BaseNotice>
         </template>
       </transition>
 
       <transition name="fade-slide-up">
-        <template v-if="is.signup.error">
-          <BaseNotice signup-error @click="BaseNoticeOnClick">
-            <template v-if="errorMessage.api">
-              {{ errorMessage.api }}
-            </template>
+        <template v-if="isSignupError">
+          <BaseNotice :class="$style.notice" error>
+            <span :class="$style.icon">💩</span>
+
+            <h2 :class="$style.title">Вот это поворот</h2>
+
+            <span :class="$style.content">
+              {{ errorMessage.apiResponse }}
+            </span>
+
+            <BaseButton
+              :class="$style.button"
+              color="danger"
+              @click="BaseNoticeOnClick"
+            >
+              Повторить
+            </BaseButton>
           </BaseNotice>
         </template>
       </transition>
@@ -163,20 +192,14 @@ export default {
         email: '',
         password: '',
         confirmPassword: '',
-        api: ''
+        apiResponse: ''
       },
-      is: {
-        loading: {
-          username: false,
-          button: false
-        },
-        signup: {
-          success: false,
-          error: false
-        },
-        disableAllFields: false,
-        hideForm: false
-      }
+      isUsernameLoading: false,
+      isButtonLoading: false,
+      isSignupError: false,
+      isSignupSuccess: false,
+      isDisableAllFields: false,
+      isHideForm: false
     };
   },
   setup() {
@@ -275,39 +298,40 @@ export default {
         return false;
       }
 
-      [this.is.loading.button, this.is.disableAllFields] = [true, true];
-
-      const data = {
-        username: this.username,
-        email: this.email,
-        password: this.password
-      };
+      [this.isButtonLoading, this.isDisableAllFields] = [true, true];
 
       await this.$store
-        .dispatch('SIGNUP', data)
+        .dispatch('SIGNUP', {
+          username: this.username,
+          email: this.email,
+          password: this.password
+        })
         .then((result) => {
-          [this.is.loading.button, this.is.hideForm] = [false, true];
+          [this.isButtonLoading, this.isHideForm] = [false, true];
 
           if (Object.prototype.hasOwnProperty.call(result, 'error')) {
-            this.errorMessage.api = result.error.message;
+            this.errorMessage.apiResponse = result.error.message;
 
-            return useDebounce(() => (this.is.signup.error = true))();
+            return useDebounce(() => (this.isSignupError = true))();
           }
 
-          return useDebounce(() => (this.is.signup.success = true))();
+          return useDebounce(() => (this.isSignupSuccess = true))();
         })
         .catch(() => {
-          useDebounce(() => (this.is.signup.error = true))();
+          this.errorMessage.apiResponse =
+            'Повторите попытку еще раз или обратитесь в тех. поддержку';
+
+          return useDebounce(() => (this.isSignupError = true))();
         });
     },
     BaseNoticeOnClick() {
-      if (this.is.signup.error) {
-        [this.is.signup.error, this.is.disableAllFields] = [false, false];
+      if (this.isSignupError) {
+        [this.isSignupError, this.isDisableAllFields] = [false, false];
 
-        return useDebounce(() => (this.is.hideForm = false))();
+        return useDebounce(() => (this.isHideForm = false))();
       }
 
-      this.$router.push({ path: '/login' });
+      return this.$router.push({ path: '/login' });
     }
   }
 };
@@ -347,6 +371,31 @@ export default {
       color: $font-color-secondary;
       font-size: $font-size-xs;
     }
+  }
+}
+
+.notice {
+  .icon {
+    z-index: 1;
+    font-size: $font-size-h1;
+  }
+
+  .title {
+    z-index: 1;
+    padding: 0 24px;
+    font-weight: $font-weight-base;
+    text-align: center;
+  }
+
+  .content {
+    z-index: 1;
+    padding: 0 24px;
+    color: $font-color-secondary;
+    text-align: center;
+  }
+
+  .button {
+    margin-top: 24px;
   }
 }
 </style>

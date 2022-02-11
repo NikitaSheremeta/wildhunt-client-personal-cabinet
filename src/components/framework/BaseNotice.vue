@@ -1,105 +1,24 @@
 <template>
   <div :class="computedClasses">
-    <span v-if="configuration.isShowEmoji" class="emoji">
-      {{ emoji }}
-    </span>
-
-    <h2 v-if="configuration.isShowTitle" class="title">
-      {{ title }}
-    </h2>
-
-    <span v-if="!!$slots.default" class="content">
-      <slot />
-    </span>
-
-    <span v-else-if="configuration.isShowContent" class="content">
-      {{ content }}
-    </span>
-
-    <BaseButton
-      v-if="configuration.isShowButton"
-      :color="button.color"
-      class="button"
-    >
-      {{ button.slot }}
-    </BaseButton>
+    <slot />
   </div>
 </template>
 
 <script>
-import BaseButton from './BaseButton';
-
 export default {
   name: 'BaseNotice',
-  components: {
-    BaseButton
-  },
   props: {
     baseClassName: {
       type: String,
       default: 'base-notice'
     },
-    signupSuccess: {
+    success: {
       type: Boolean,
       default: false
     },
-    signupError: {
+    error: {
       type: Boolean,
       default: false
-    },
-    resetPasswordSuccess: {
-      type: Boolean,
-      default: false
-    },
-    resetPasswordError: {
-      type: Boolean,
-      default: false
-    },
-    loginError: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data() {
-    return {
-      configuration: {
-        isShowEmoji: false,
-        isShowTitle: false,
-        isShowContent: false,
-        isShowButton: false
-      },
-      status: {
-        success: false,
-        error: false
-      },
-      emoji: '',
-      title: '',
-      content: '',
-      button: {
-        slot: '',
-        color: null
-      }
-    };
-  },
-  created() {
-    if (this.signupSuccess) {
-      this.signupSuccessModifier();
-    }
-
-    if (this.signupError) {
-      this.signupErrorModifier();
-    }
-
-    if (this.resetPasswordSuccess) {
-      this.resetPasswordSuccessModifier();
-    }
-
-    if (this.resetPasswordError) {
-      this.resetPasswordErrorModifier();
-    }
-
-    if (this.loginError) {
-      this.loginErrorModifier();
     }
   },
   computed: {
@@ -107,82 +26,10 @@ export default {
       return [this.baseClassName, this.successModifier, this.errorModifier];
     },
     successModifier() {
-      return this.status.success ? 'success' : '';
+      return this.success ? 'success' : '';
     },
     errorModifier() {
-      return this.status.error ? 'error' : '';
-    }
-  },
-  methods: {
-    signupSuccessModifier() {
-      for (const key in this.configuration) {
-        this.configuration[key] = true;
-      }
-
-      this.status.success = true;
-
-      this.emoji = '🥳';
-      this.title = 'Вы успешно зарегистрированы!';
-      this.content =
-        'На указанный почтовый ящик придет письмо, содержащее ссылку для подтверждения адреса.';
-      this.button.slot = 'Войти в аккаунт';
-      this.button.color = 'success';
-    },
-    signupErrorModifier() {
-      for (const key in this.configuration) {
-        this.configuration[key] = true;
-      }
-
-      this.status.error = true;
-
-      this.emoji = '💩';
-      this.title = 'Вот это поворот';
-      this.content =
-        'Повторите попытку еще раз или обратитесь в тех. поддержку';
-      this.button.slot = 'Повторить';
-      this.button.color = 'danger';
-    },
-    resetPasswordSuccessModifier() {
-      for (const key in this.configuration) {
-        if (key !== 'isShowButton') {
-          this.configuration[key] = true;
-        }
-      }
-
-      this.status.success = true;
-
-      this.emoji = '🙌';
-      this.title = 'Письмо успешно отправленно!';
-      this.content =
-        'На указанный почтовый ящик придет письмо, содержащее инструкцую по восстановлению пароля';
-    },
-    resetPasswordErrorModifier() {
-      for (const key in this.configuration) {
-        this.configuration[key] = true;
-      }
-
-      this.status.error = true;
-
-      this.emoji = '😞';
-      this.title = 'Ошибка при отправке письма';
-      this.content =
-        'Повторите попытку еще раз или обратитесь в тех. поддержку';
-      this.button.slot = 'Повторить';
-      this.button.color = 'danger';
-    },
-    loginErrorModifier() {
-      for (const key in this.configuration) {
-        this.configuration[key] = true;
-      }
-
-      this.status.error = true;
-
-      this.emoji = '😵';
-      this.title = 'Ошибка аунтификации';
-      this.content =
-        'Повторите попытку еще раз или обратитесь в тех. поддержку';
-      this.button.slot = 'Повторить';
-      this.button.color = 'danger';
+      return this.error ? 'error' : '';
     }
   }
 };
@@ -223,29 +70,6 @@ export default {
     &:before {
       background-color: $danger;
     }
-  }
-
-  .emoji {
-    z-index: 1;
-    font-size: $font-size-h1;
-  }
-
-  .title {
-    z-index: 1;
-    padding: 0 24px;
-    font-weight: $font-weight-base;
-    text-align: center;
-  }
-
-  .content {
-    z-index: 1;
-    padding: 0 24px;
-    color: $font-color-secondary;
-    text-align: center;
-  }
-
-  .button {
-    margin-top: 24px;
   }
 }
 </style>

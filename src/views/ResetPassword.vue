@@ -3,7 +3,7 @@
     <div class="row" :class="$style.row">
       <transition name="fade-slide-up">
         <form
-          v-if="!is.hideForm"
+          v-if="!isHideForm"
           :class="$style.form"
           @submit.prevent="submitHandler"
         >
@@ -17,7 +17,7 @@
 
           <BaseInput
             :class="$style['form-item']"
-            :disabled="is.disableAllFields"
+            :disabled="isDisableAllFields"
             v-model:value="login"
             type="text"
             placeholder="Электронная почта"
@@ -31,8 +31,8 @@
 
           <div :class="$style['form-controls']">
             <BaseButton
-              :loading="is.loadingButton"
-              :disabled="is.disableAllFields"
+              :loading="isButtonLoading"
+              :disabled="isDisableAllFields"
               full-width
             >
               Восстановить
@@ -42,14 +42,47 @@
       </transition>
 
       <transition name="fade-slide-up">
-        <template v-if="is.resetPassword.success">
-          <BaseNotice reset-password-success />
+        <template v-if="isResetPasswordSuccess">
+          <BaseNotice :class="$style.notice" success>
+            <span :class="$style.icon">🙌</span>
+
+            <h2 :class="$style.title">Письмо успешно отправленно!</h2>
+
+            <span :class="$style.content">
+              На указанный почтовый ящик придет письмо, содержащее инструкцую по
+              восстановлению пароля
+            </span>
+
+            <BaseButton
+              :class="$style.button"
+              color="success"
+              @click="BaseNoticeOnClick"
+            >
+              Войти в аккаунт
+            </BaseButton>
+          </BaseNotice>
         </template>
       </transition>
 
       <transition name="fade-slide-up">
-        <template v-if="is.resetPassword.error">
-          <BaseNotice reset-password-error @click="BaseNoticeOnClick" />
+        <template v-if="isResetPasswordError">
+          <BaseNotice :class="$style.notice" error>
+            <span :class="$style.icon">😞</span>
+
+            <h2 :class="$style.title">Что-то пошло не так</h2>
+
+            <span :class="$style.content">
+              {{ errorMessage.apiResponse }}
+            </span>
+
+            <BaseButton
+              :class="$style.button"
+              color="danger"
+              @click="BaseNoticeOnClick"
+            >
+              Повторить
+            </BaseButton>
+          </BaseNotice>
         </template>
       </transition>
     </div>
@@ -64,7 +97,6 @@ import BaseButton from '../components/framework/BaseButton';
 import BaseNotice from '../components/framework/BaseNotice';
 import { useSignupEmailValidator } from '../components/use/validators';
 import { useDebounce } from '../components/use/debounce';
-import { magicNumbers } from '../utils/magic-numbers';
 
 export default {
   components: {
@@ -76,17 +108,14 @@ export default {
     return {
       login: '',
       errorMessage: {
-        login: ''
+        login: '',
+        apiResponse: ''
       },
-      is: {
-        resetPassword: {
-          success: false,
-          error: false
-        },
-        loadingButton: false,
-        disableAllFields: false,
-        hideForm: false
-      }
+      isButtonLoading: false,
+      isResetPasswordError: false,
+      isResetPasswordSuccess: false,
+      isDisableAllFields: false,
+      isHideForm: false
     };
   },
   setup() {
@@ -121,39 +150,38 @@ export default {
         return false;
       }
 
-      [this.is.loadingButton, this.is.disableAllFields] = [true, true];
+      [this.isButtonLoading, this.isDisableAllFields] = [true, true];
 
       await this.$store
         .dispatch('FORGOT_PASSWORD', {
           email: this.login
         })
         .then((result) => {
-          [this.is.loadingButton, this.is.hideForm] = [false, true];
+          [this.isButtonLoading, this.isHideForm] = [false, true];
 
           if (Object.prototype.hasOwnProperty.call(result, 'error')) {
-            this.errorMessage.api = result.error.message;
+            this.errorMessage.apiResponse = result.error.message;
 
-            return useDebounce(() => (this.is.resetPassword.error = true))();
+            return useDebounce(() => (this.isResetPasswordError = true))();
           }
 
-          return useDebounce(() => (this.is.resetPassword.success = true))();
+          return useDebounce(() => (this.isResetPasswordSuccess = true))();
         })
         .catch(() => {
-          useDebounce(() => (this.is.resetPassword.error = true))();
+          this.errorMessage.apiResponse =
+            'Повторите попытку еще раз или обратитесь в тех. поддержку';
+
+          return useDebounce(() => (this.isResetPasswordError = true))();
         });
     },
     BaseNoticeOnClick() {
-      if (this.is.resetPassword.error) {
-        [this.is.resetPassword.error, this.is.disableAllFields] = [
-          false,
-          false
-        ];
+      if (this.isResetPasswordError) {
+        [this.isResetPasswordError, this.isDisableAllFields] = [false, false];
 
-        useDebounce(
-          () => (this.is.hideForm = false),
-          magicNumbers.TWO_HUNDRED_MILLISECONDS
-        )();
+        return useDebounce(() => (this.isHideForm = false))();
       }
+
+      return this.$router.push({ path: '/login' });
     }
   }
 };
@@ -178,6 +206,31 @@ export default {
   }
 
   &-controls {
+    margin-top: 24px;
+  }
+}
+
+.notice {
+  .icon {
+    z-index: 1;
+    font-size: $font-size-h1;
+  }
+
+  .title {
+    z-index: 1;
+    padding: 0 24px;
+    font-weight: $font-weight-base;
+    text-align: center;
+  }
+
+  .content {
+    z-index: 1;
+    padding: 0 24px;
+    color: $font-color-secondary;
+    text-align: center;
+  }
+
+  .button {
     margin-top: 24px;
   }
 }
