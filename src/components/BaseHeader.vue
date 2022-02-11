@@ -10,10 +10,6 @@
             @click="onLogoClick"
           />
 
-          <span class="online">
-            На сервере: <span class="online-number">51</span>
-          </span>
-
           <div class="controls">
             <template v-if="!isAuthorizationPages">
               <BaseButton
@@ -110,7 +106,7 @@ export default {
 
 .grid {
   display: grid;
-  grid-template-columns: 120px auto auto;
+  grid-template-columns: repeat(2, 1fr);
   gap: 48px;
   width: 100%;
 }
@@ -122,16 +118,6 @@ export default {
 
   &:hover {
     opacity: 0.56;
-  }
-}
-
-.online {
-  display: flex;
-  align-items: center;
-  color: $font-color-secondary;
-
-  &-number {
-    color: $success;
   }
 }
 
