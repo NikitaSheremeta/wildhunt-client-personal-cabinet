@@ -15,7 +15,7 @@ module.exports = {
       '/lk-api/login': {
         target: 'http://localhost:5000',
         changeOrigin: true,
-        pathRewrite: { '/lk-api/signup': '/api/v1/auth/login' }
+        pathRewrite: { '/lk-api/login': '/api/v1/auth/login' }
       },
       '/lk-api/signup': {
         target: 'http://localhost:5000',

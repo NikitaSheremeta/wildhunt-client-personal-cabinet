@@ -18,7 +18,7 @@ export default createStore({
       try {
         const { data: response } = await auth.login(req.login, req.password);
 
-        localStorage.setItem('token', response.data.accessToken);
+        localStorage.setItem('token', response.accessToken);
 
         commit('SET_AUTH', true);
         commit('SET_USER', response.user);

@@ -178,7 +178,7 @@ export default {
 
       await this.$store
         .dispatch('LOGIN', {
-          username: this.username,
+          login: this.login,
           password: this.password
         })
         .then((result) => {
