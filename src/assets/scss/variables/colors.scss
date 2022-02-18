@@ -1,0 +1,35 @@
+// Color tones
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #808191;
+$gray-700: #495057;
+$gray-800: #2f323b;
+$gray-900: #282b32;
+
+// Color values
+$white: #fff;
+$blue: #2057D9;
+$indigo: #101A2B;
+$purple: #6c5dd3;
+$pink: #ffa2c0;
+$red: #f82c1a;
+$orange: #ff764c;
+$yellow: #ffcf74;
+$green: #28a745;
+$teal: #6cb066;
+$cyan: #4A90E2;
+$black: #131618;
+
+// Color assignments
+$secondary: $gray-600;
+$disabled-background: darken($gray-900, 1%);
+$disabled-color: $gray-700;
+$primary: $purple;
+$info: $cyan;
+$success: $teal;
+$warning: $yellow;
+$danger: $orange;
+

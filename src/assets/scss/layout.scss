@@ -1,0 +1,72 @@
+body {
+  background-color: #1f2128;
+  line-height: $line-height-base;
+  color: $font-color-base;
+  font-family: $font-family-base;
+  font-weight: $font-weight-base;
+  font-size: $font-size-base;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.content {
+  flex: 1 0 auto;
+}
+
+.footer {
+  flex: 0 0 auto;
+}
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+
+  @include container-initialization();
+
+  &-fluid {
+    padding: 0 48px;
+  }
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@include media-breakpoint-down(xxs) {
+  .container {
+    &-fluid {
+      padding: 0;
+    }
+  }
+
+  .row {
+    padding: 0 24px;
+  }
+}
+
+span {
+  display: inline-block;
+}
+
+.fade-slide-up-enter-active,
+.fade-slide-up-leave-active {
+  transition: 0.2s ease-out;
+}
+
+.fade-slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(64px);
+}
+
+.fade-slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(-64px);
+}
