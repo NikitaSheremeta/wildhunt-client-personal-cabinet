@@ -105,7 +105,7 @@
       <transition name="fade-slide-up">
         <template v-if="isSignupSuccess">
           <BaseNotice :class="$style.notice" success>
-            <span :class="$style.emoji">🥳</span>
+            <span :class="$style.icon">🥳</span>
 
             <h2 :class="$style.title">Вы успешно зарегистрированы!</h2>
 
