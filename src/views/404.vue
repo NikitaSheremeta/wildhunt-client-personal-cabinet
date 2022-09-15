@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <div class="row" :class="$style.row">
-      <div :class="$style['not-found']">
-        <div :class="$style['not-found-code']">
+    <div class="row">
+      <div class="not-found">
+        <div class="not-found-code">
           <span>4</span>
           <img
             src="../assets/img/dancing-parrot.gif"
@@ -30,7 +30,7 @@ export default {
 };
 </script>
 
-<style lang="scss" module>
+<style lang="scss" scoped>
 .row {
   display: flex;
   justify-content: center;

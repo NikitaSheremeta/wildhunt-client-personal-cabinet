@@ -1,5 +1,5 @@
 import { helpers } from '@vuelidate/validators';
-import { validationMessages } from '../../utils/validation-messages';
+import { validationMessages } from '@/utils/validation-messages';
 
 export const allowedCharacters = helpers.regex(
   /^[a-zA-Z0-9~!@#$%^&*()_+-={}\\|;',./<>?":]+$/

@@ -11,41 +11,17 @@
           />
 
           <div class="controls">
-            <template v-if="!isAuthorizationPages">
-              <BaseButton
-                tag-name="a"
-                to="/login"
-                target="_blank"
-                color="secondary"
-              >
-                Вход в аккаунт
-              </BaseButton>
-
-              <BaseButton
-                tag-name="a"
-                to="/signup"
-                target="_blank"
-                color="secondary"
-              >
-                Регистрация аккаунта
-              </BaseButton>
-            </template>
-
             <BaseButton
-              v-if="isLoginLink || isSignupLink"
-              :to="authorizationLinkHrefModifier"
+              v-for="button in defineAuthorizationButtons()"
               tag-name="a"
               target="_blank"
               color="secondary"
+              :key="button.to"
+              :icon-left="button.icon"
+              :to="button.to"
             >
-              {{ authorizationLinkSlotModifier }}
+              {{ button.slot }}
             </BaseButton>
-
-            <div class="menu-button">
-              <span class="menu-button-item"></span>
-              <span class="menu-button-item"></span>
-              <span class="menu-button-item"></span>
-            </div>
           </div>
         </div>
       </div>
@@ -61,37 +37,39 @@ export default {
   components: {
     BaseButton
   },
-  computed: {
-    isAuthorizationPages() {
-      switch (this.$route.path) {
-        case '/login':
-          return true;
-        case '/signup':
-          return true;
-        case '/reset-password':
-          return true;
-        default:
-          return false;
-      }
-    },
-    isLoginLink() {
-      return (
-        this.$route.path === '/signup' || this.$route.path === '/reset-password'
-      );
-    },
-    isSignupLink() {
-      return this.$route.path === '/login';
-    },
-    authorizationLinkHrefModifier() {
-      return this.isSignupLink ? 'signup' : 'login';
-    },
-    authorizationLinkSlotModifier() {
-      return this.isSignupLink ? 'Регистрация аккаунта' : 'Вход в аккаунт';
-    }
+  data() {
+    return {
+      authorizationButtons: [
+        {
+          slot: 'Вход в аккаунт',
+          to: '/login',
+          icon: 'login'
+        },
+        {
+          slot: 'Регистрация аккаунта',
+          to: '/signup',
+          icon: 'login'
+        }
+      ]
+    };
   },
   methods: {
     onLogoClick() {
       this.$router.push({ path: '/' });
+    },
+    defineAuthorizationButtons() {
+      switch (this.$route.path) {
+        case '/login':
+          return this.authorizationButtons.filter(
+            (item) => item.to === '/signup'
+          );
+        case '/signup':
+          return this.authorizationButtons.filter(
+            (item) => item.to === '/login'
+          );
+        default:
+          return this.authorizationButtons;
+      }
     }
   }
 };
@@ -125,37 +103,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 48px;
-}
-
-.menu-button {
-  display: flex;
-  gap: 8px;
-  padding: 16px 8px;
-  cursor: pointer;
-  $this: &;
-
-  &-item {
-    width: 6px;
-    height: 6px;
-    background-color: $secondary;
-    border-radius: 50%;
-    transition: 0.2s ease-out;
-  }
-
-  &:hover {
-    #{$this}-item {
-      background-color: $white;
-      transform: scale(2);
-
-      &:first-child {
-        transform: translateX(12px);
-      }
-
-      &:last-child {
-        transform: translateX(-12px);
-      }
-    }
-  }
+  gap: 32px;
 }
 </style>

@@ -1,4 +1,4 @@
-import { magicNumbers } from '../../utils/magic-numbers';
+import { magicNumbers } from '@/utils/magic-numbers';
 
 export function useDebounce(
   callback,

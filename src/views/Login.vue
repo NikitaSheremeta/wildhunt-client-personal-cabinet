@@ -98,9 +98,9 @@ import {
   allowedCharacters,
   useLoginUsernameValidator,
   useLoginPasswordValidator
-} from '../components/use/validators';
-import { magicNumbers } from '../utils/magic-numbers';
-import { useDebounce } from '../components/use/debounce';
+} from '@/components/use/validators';
+import { magicNumbers } from '@/utils/magic-numbers';
+import { useDebounce } from '@/components/use/debounce';
 
 export default {
   components: {

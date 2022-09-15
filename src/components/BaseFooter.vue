@@ -22,12 +22,7 @@
       </div>
       <div class="row">
         <div class="grid">
-          <span class="policy">
-            Все права защищены. Копирование материалов сайта запрещено.
-            <br />Мы предоставляем ознакомительный и бесплатный вариант игры
-            Minecraft. <br />Приобрести полную весрию можно на сайте
-            Minecraft.net
-          </span>
+          <span class="policy" v-html="policy"></span>
 
           <div class="information">
             <BaseButton
@@ -87,6 +82,8 @@ export default {
           to: 'download-launcher'
         }
       ],
+      policy:
+        'Все права защищены. Копирование материалов сайта запрещено. <br />Мы предоставляем ознакомительный и бесплатный вариант игры Minecraft. <br />Приобрести полную весрию можно на сайте Minecraft.net',
       information: [
         {
           slot: 'Техническая поддержка',
@@ -127,10 +124,6 @@ export default {
     display: grid;
     grid-template-columns: repeat(2, auto);
     width: 100%;
-  }
-
-  &:first-child {
-    margin-bottom: 4px;
   }
 }
 
