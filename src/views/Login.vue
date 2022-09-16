@@ -10,11 +10,11 @@
           <h2 :class="$style['form-title']">Вход в аккаунт</h2>
 
           <BaseInput
-            :class="$style['form-item']"
-            :disabled="isDisableAllFields"
             v-model:value="login"
             type="text"
             placeholder="Логин или электронная почта"
+            :class="$style['form-item']"
+            :disabled="isDisableAllFields"
             @input="v$.login.$reset()"
             @blur="v$.login.$touch()"
           >
@@ -24,12 +24,12 @@
           </BaseInput>
 
           <BaseInput
-            :class="$style['form-item']"
-            :disabled="isDisableAllFields"
             v-model:value="password"
             password
             type="password"
             placeholder="Пароль"
+            :class="$style['form-item']"
+            :disabled="isDisableAllFields"
             @input="v$.password.$reset()"
             @blur="v$.password.$touch()"
           >
@@ -52,11 +52,11 @@
           </div>
 
           <BaseButton
-            :class="$style['form-reset-password']"
             tag-name="a"
             to="reset-password"
             icon-left="question"
             underline
+            :class="$style['form-reset-password']"
           >
             Забыли пароль или не можете войти?
           </BaseButton>

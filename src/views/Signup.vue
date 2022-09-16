@@ -10,12 +10,12 @@
           <h2 :class="$style['form-title']">Регистрация аккаунта</h2>
 
           <BaseInput
-            :class="$style['form-item']"
-            :loading="isUsernameLoading"
-            :disabled="isDisableAllFields"
             v-model:value="username"
             type="text"
             placeholder="Логин"
+            :class="$style['form-item']"
+            :loading="isUsernameLoading"
+            :disabled="isDisableAllFields"
             @input="v$.username.$reset()"
             @blur="v$.username.$touch()"
           >
@@ -25,11 +25,11 @@
           </BaseInput>
 
           <BaseInput
-            :class="$style['form-item']"
-            :disabled="isDisableAllFields"
             v-model:value="email"
             type="email"
             placeholder="Электронная почта"
+            :class="$style['form-item']"
+            :disabled="isDisableAllFields"
             @input="v$.email.$reset()"
             @blur="v$.email.$touch()"
           >
@@ -39,13 +39,13 @@
           </BaseInput>
 
           <BaseInput
-            :class="$style['form-item']"
-            :disabled="isDisableAllFields"
             v-model:value="password"
             password
             create-password
             type="password"
             placeholder="Пароль"
+            :class="$style['form-item']"
+            :disabled="isDisableAllFields"
             @input="v$.password.$touch()"
             @blur="v$.password.$touch()"
           >
@@ -55,13 +55,13 @@
           </BaseInput>
 
           <BaseInput
-            :class="$style['form-item']"
-            :disabled="isDisableAllFields"
-            :success="isConfirmPasswordValid"
             v-model:value="confirmPassword"
             repeat-password
             type="password"
             placeholder="Повторите пароль"
+            :class="$style['form-item']"
+            :disabled="isDisableAllFields"
+            :success="isConfirmPasswordValid"
             @input="v$.confirmPassword.$reset()"
             @blur="v$.confirmPassword.$touch()"
           >

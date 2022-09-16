@@ -75,7 +75,7 @@
   </div>
 </template>
 
-<script scoped>
+<script>
 import BaseIcon from './BaseIcon';
 import { useStrengthPasswordChecker } from '../use/strength-password-checker';
 

@@ -14,9 +14,9 @@
           </p>
 
           <BaseInput
+            v-model:value="login"
             :class="$style['form-item']"
             :disabled="isDisableAllFields"
-            v-model:value="login"
             type="text"
             placeholder="Электронная почта"
             @input="v$.login.$reset()"
@@ -74,8 +74,8 @@
             </span>
 
             <BaseButton
-              :class="$style.button"
               color="danger"
+              :class="$style.button"
               @click="BaseNoticeOnClick"
             >
               Повторить
