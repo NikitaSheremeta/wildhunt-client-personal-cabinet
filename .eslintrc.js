@@ -3,7 +3,7 @@ module.exports = {
   env: {
     node: true
   },
-  extends: ['plugin:vue/vue3-essential', 'eslint:recommended', '@vue/prettier'],
+  extends: ['plugin:vue/vue3-recommended', 'eslint:recommended', '@vue/prettier'],
   parserOptions: {
     parser: 'babel-eslint'
   },
@@ -50,7 +50,7 @@ module.exports = {
     'max-len': [
       'error',
       {
-        code: 80,
+        code: 120,
         ignoreComments: true,
         ignoreStrings: true
       }

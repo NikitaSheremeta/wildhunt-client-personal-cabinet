@@ -2,16 +2,10 @@
   <div class="container">
     <div class="row" :class="$style.row">
       <transition name="fade-slide-up">
-        <form
-          v-if="!isHideForm"
-          :class="$style.form"
-          @submit.prevent="submitHandler"
-        >
+        <form v-if="!isHideForm" :class="$style.form" @submit.prevent="submitHandler">
           <h2 :class="$style['form-title']">Восстановление аккаунта</h2>
 
-          <p :class="$style['form-description']">
-            Укажите электронную почту, которую вы использовали при регистрации.
-          </p>
+          <p :class="$style['form-description']">Укажите электронную почту, которую вы использовали при регистрации.</p>
 
           <BaseInput
             v-model:value="login"
@@ -28,13 +22,7 @@
           </BaseInput>
 
           <div :class="$style['form-controls']">
-            <BaseButton
-              :loading="isButtonLoading"
-              :disabled="isDisableAllFields"
-              full-width
-            >
-              Восстановить
-            </BaseButton>
+            <BaseButton :loading="isButtonLoading" :disabled="isDisableAllFields" full-width> Восстановить </BaseButton>
           </div>
         </form>
       </transition>
@@ -47,17 +35,10 @@
             <h2 :class="$style.title">Письмо успешно отправленно!</h2>
 
             <span :class="$style.content">
-              На указанный почтовый ящик придет письмо, содержащее инструкцую по
-              восстановлению пароля
+              На указанный почтовый ящик придет письмо, содержащее инструкцую по восстановлению пароля
             </span>
 
-            <BaseButton
-              :class="$style.button"
-              color="success"
-              @click="BaseNoticeOnClick"
-            >
-              Войти в аккаунт
-            </BaseButton>
+            <BaseButton :class="$style.button" color="success" @click="BaseNoticeOnClick"> Войти в аккаунт </BaseButton>
           </BaseNotice>
         </template>
       </transition>
@@ -73,13 +54,7 @@
               {{ errorMessage.apiResponse }}
             </span>
 
-            <BaseButton
-              color="danger"
-              :class="$style.button"
-              @click="BaseNoticeOnClick"
-            >
-              Повторить
-            </BaseButton>
+            <BaseButton color="danger" :class="$style.button" @click="BaseNoticeOnClick"> Повторить </BaseButton>
           </BaseNotice>
         </template>
       </transition>
@@ -90,17 +65,21 @@
 <script>
 import useVuelidate from '@vuelidate/core';
 import { required, email } from '@vuelidate/validators';
-import BaseInput from '../components/framework/BaseInput';
-import BaseButton from '../components/framework/BaseButton';
-import BaseNotice from '../components/framework/BaseNotice';
-import { useSignupEmailValidator } from '../components/use/validators';
-import { useDebounce } from '../components/use/debounce';
+import BaseInput from '../components/base/BaseInput';
+import BaseButton from '../components/base/BaseButton';
+import BaseNotice from '../components/base/BaseNotice';
+import { useDebounce } from '../helpers/debounce';
 
 export default {
   components: {
     BaseInput,
     BaseButton,
     BaseNotice
+  },
+  setup() {
+    return {
+      v$: useVuelidate()
+    };
   },
   data() {
     return {
@@ -114,11 +93,6 @@ export default {
       isResetPasswordSuccess: false,
       isDisableAllFields: false,
       isHideForm: false
-    };
-  },
-  setup() {
-    return {
-      v$: useVuelidate()
     };
   },
   validations() {
@@ -166,8 +140,7 @@ export default {
           return useDebounce(() => (this.isResetPasswordSuccess = true))();
         })
         .catch(() => {
-          this.errorMessage.apiResponse =
-            'Повторите попытку еще раз или обратитесь в тех. поддержку';
+          this.errorMessage.apiResponse = 'Повторите попытку еще раз или обратитесь в тех. поддержку';
 
           return useDebounce(() => (this.isResetPasswordError = true))();
         });

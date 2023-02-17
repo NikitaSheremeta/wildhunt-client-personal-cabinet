@@ -1,228 +1,135 @@
 <template>
   <div class="container">
-    <div class="row" :class="$style.row">
+    <div class="row">
       <transition name="fade-slide-up">
-        <form
-          v-if="!isHideForm"
-          :class="$style['form']"
-          @submit.prevent="submitHandler"
-        >
-          <h2 :class="$style['form-title']">Вход в аккаунт</h2>
+        <form v-if="!flags.isHideForm" class="form" @submit.prevent="onSubmitForm">
+          <h2 class="form__title" v-text="labels.LOGIN_VIEW.TITLE" />
 
           <BaseInput
-            v-model:value="login"
+            v-model="data.username"
+            class="form__field"
             type="text"
-            placeholder="Логин или электронная почта"
-            :class="$style['form-item']"
-            :disabled="isDisableAllFields"
-            @input="v$.login.$reset()"
-            @blur="v$.login.$touch()"
-          >
-            <template v-if="isUsernameInvalid()" #error>
-              {{ errorMessage.login }}
-            </template>
-          </BaseInput>
+            :placeholder="labels.LOGIN_VIEW.USER_NAME"
+            :disabled="flags.isDisabled"
+            :rules="rules.username"
+          />
 
           <BaseInput
-            v-model:value="password"
-            password
+            v-model="data.password"
+            class="form__field"
             type="password"
-            placeholder="Пароль"
-            :class="$style['form-item']"
-            :disabled="isDisableAllFields"
-            @input="v$.password.$reset()"
-            @blur="v$.password.$touch()"
-          >
-            <template v-if="isPasswordInvalid()" #error>
-              {{ errorMessage.password }}
-            </template>
-          </BaseInput>
+            :placeholder="labels.LOGIN_VIEW.PASSWORD"
+            :disabled="flags.isDisabled"
+            :rules="rules.password"
+          />
 
-          <div :class="$style['form-controls']">
+          <div class="form__actions">
             <BaseButton
-              :loading="isButtonLoading"
-              :disabled="isDisableAllFields"
-            >
-              Войти
-            </BaseButton>
+              type="submit"
+              :label="labels.LOGIN_VIEW.LOGIN"
+              :disabled="flags.isDisabled"
+              :loading="flags.isLoading"
+            />
 
-            <BaseButton color="success" to="signup" @click.prevent>
-              Регистрация
-            </BaseButton>
+            <BaseButton to="signup" theme="success" :label="labels.LOGIN_VIEW.SIGN_UP" :disabled="flags.isDisabled" />
           </div>
 
-          <BaseButton
-            tag-name="a"
-            to="reset-password"
+          <BaseLink
+            class="form__reset-password"
+            href="reset-password"
+            color="secondary"
             icon-left="question"
-            underline
-            :class="$style['form-reset-password']"
-          >
-            Забыли пароль или не можете войти?
-          </BaseButton>
+            :label="labels.LOGIN_VIEW.RESET_PASSWORD"
+          />
         </form>
-      </transition>
-
-      <transition name="fade-slide-up">
-        <template v-if="isLoginError">
-          <BaseNotice :class="$style.notice" error>
-            <span :class="$style.icon">😵</span>
-
-            <h2 :class="$style.title">Ошибка аунтификации</h2>
-
-            <span :class="$style.content">
-              {{ errorMessage.apiResponse }}
-            </span>
-
-            <BaseButton
-              :class="$style.button"
-              color="danger"
-              @click="BaseNoticeOnClick"
-            >
-              Повторить
-            </BaseButton>
-          </BaseNotice>
-        </template>
       </transition>
     </div>
   </div>
 </template>
 
 <script>
-import useVuelidate from '@vuelidate/core';
-import { required, minLength, maxLength } from '@vuelidate/validators';
-import BaseInput from '../components/framework/BaseInput';
-import BaseButton from '../components/framework/BaseButton';
-import BaseNotice from '../components/framework/BaseNotice';
-import {
-  allowedCharacters,
-  useLoginUsernameValidator,
-  useLoginPasswordValidator
-} from '@/components/use/validators';
+import { reactive } from 'vue';
+import { useStore } from 'vuex';
+import BaseInput from '@/components/base/BaseInput';
+import BaseButton from '@/components/base/BaseButton';
+import BaseLink from '@/components/base/BaseLink';
+import { required, minLength, maxLength } from '@/helpers/validators';
+import { debounce } from '@/helpers/debounce';
+import { validationMessages } from '@/utils/validation-messages';
 import { magicNumbers } from '@/utils/magic-numbers';
-import { useDebounce } from '@/components/use/debounce';
+import { labels } from '@/utils/labels';
 
 export default {
   components: {
     BaseInput,
     BaseButton,
-    BaseNotice
-  },
-  data() {
-    return {
-      login: '',
-      password: '',
-      errorMessage: {
-        login: '',
-        password: '',
-        apiResponse: ''
-      },
-      isButtonLoading: false,
-      isLoginError: false,
-      isDisableAllFields: false,
-      isHideForm: false
-    };
+    BaseLink
   },
   setup() {
-    return {
-      v$: useVuelidate({ $lazy: true })
-    };
-  },
-  validations() {
-    return {
-      login: {
-        required,
-        allowedCharacters,
-        minLength: minLength(magicNumbers.MIN_USERNAME_LENGTH),
-        maxLength: maxLength(magicNumbers.MAX_USERNAME_LENGTH)
+    const store = useStore();
+
+    const data = reactive({
+      username: '',
+      password: ''
+    });
+
+    const flags = reactive({
+      isLoading: false,
+      isDisabled: false,
+      isHideForm: false
+    });
+
+    const rules = {
+      username: {
+        required: required(validationMessages.LOGIN.REQUIRED_LOGIN_PAGE),
+        minLength: minLength(magicNumbers.LOGIN.MIN_LENGTH, validationMessages.LOGIN.MIN_LENGTH),
+        maxLength: maxLength(magicNumbers.LOGIN.MAX_LENGTH, validationMessages.LOGIN.MAX_LENGTH)
       },
       password: {
-        required,
-        allowedCharacters,
-        minLength: minLength(magicNumbers.MIN_PASSWORD_LENGTH),
-        maxLength: maxLength(magicNumbers.MAX_PASSWORD_LENGTH)
+        required: required(validationMessages.PASSWORD.REQUIRED_LOGIN_PAGE),
+        minLength: minLength(magicNumbers.PASSWORD.MIN_LENGTH, validationMessages.PASSWORD.MIN_LENGTH),
+        maxLength: maxLength(magicNumbers.PASSWORD.MAX_LENGTH, validationMessages.PASSWORD.MAX_LENGTH)
       }
     };
-  },
-  methods: {
-    isUsernameInvalid() {
-      const validator = useLoginUsernameValidator(this.v$.login);
 
-      if (validator.isInvalid) {
-        this.errorMessage.login = validator.errorMessage;
+    const onSubmitForm = async () => {
+      flags.isLoading = true;
+      flags.isDisabled = true;
 
-        return validator.isInvalid;
-      }
-
-      return validator.isInvalid;
-    },
-    isPasswordInvalid() {
-      const validator = useLoginPasswordValidator(this.v$.password);
-
-      if (validator.isInvalid) {
-        this.errorMessage.password = validator.errorMessage;
-
-        return validator.isInvalid;
-      }
-
-      return validator.isInvalid;
-    },
-    async submitHandler() {
-      const isFormValid = await this.v$.$validate();
-
-      if (!isFormValid) {
-        return false;
-      }
-
-      [this.isButtonLoading, this.isDisableAllFields] = [true, true];
-
-      await this.$store
-        .dispatch('LOGIN', {
-          login: this.login,
-          password: this.password
-        })
+      await store
+        .dispatch('LOGIN', data)
         .then((result) => {
-          [this.isButtonLoading, this.isHideForm] = [false, true];
+          flags.isHideForm = true;
 
           if (Object.prototype.hasOwnProperty.call(result, 'error')) {
-            this.errorMessage.apiResponse = result.error.message;
-
-            return useDebounce(() => (this.isLoginError = true))();
+            debounce(() => console.log(result))();
           }
         })
-        .catch(() => {
-          this.errorMessage.apiResponse =
-            'Повторите попытку еще раз или обратитесь в тех. поддержку';
+        .catch((error) => debounce(() => console.log(error))())
+        .finally(() => (flags.isLoading = false));
+    };
 
-          return useDebounce(() => (this.isLoginError = true))();
-        });
-    },
-    BaseNoticeOnClick() {
-      if (this.isLoginError) {
-        [this.isLoginError, this.isDisableAllFields] = [false, false];
-
-        useDebounce(() => (this.isHideForm = false))();
-      }
-    }
+    return {
+      data,
+      flags,
+      rules,
+      labels,
+      onSubmitForm
+    };
   }
 };
 </script>
 
-<style lang="scss" module>
-.row {
-  display: flex;
-  justify-content: center;
-}
-
+<style lang="scss" scoped>
 .form {
   width: 320px;
 
-  &-title {
+  &__title {
     margin-top: 0;
     font-weight: $font-weight-base;
   }
 
-  &-item {
+  &__field {
     margin-bottom: 16px;
 
     &:last-child {
@@ -230,7 +137,7 @@ export default {
     }
   }
 
-  &-controls {
+  &__actions {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -238,34 +145,9 @@ export default {
     gap: 12px;
   }
 
-  &-reset-password {
-    margin-top: 24px;
+  &__reset-password {
+    margin-top: 16px;
     font-size: $font-size-xs;
-  }
-}
-
-.notice {
-  .icon {
-    z-index: 1;
-    font-size: $font-size-h1;
-  }
-
-  .title {
-    z-index: 1;
-    padding: 0 24px;
-    font-weight: $font-weight-base;
-    text-align: center;
-  }
-
-  .content {
-    z-index: 1;
-    padding: 0 24px;
-    color: $font-color-secondary;
-    text-align: center;
-  }
-
-  .button {
-    margin-top: 24px;
   }
 }
 </style>

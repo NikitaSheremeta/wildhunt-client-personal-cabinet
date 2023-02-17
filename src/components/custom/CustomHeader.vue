@@ -3,25 +3,16 @@
     <div class="container">
       <div class="row">
         <div class="grid">
-          <img
-            class="logo"
-            src="../assets/img/logo.svg"
-            alt="Wild Hunt"
-            @click="onLogoClick"
-          />
+          <img class="logo" src="../../assets/img/logo.svg" alt="Wild Hunt" @click="onLogoClick" />
 
           <div class="controls">
-            <BaseButton
-              v-for="button in defineAuthorizationButtons()"
-              tag-name="a"
-              target="_blank"
-              color="secondary"
+            <BaseLink
+              v-for="button in authorizationButtons"
               :key="button.to"
-              :icon-left="button.icon"
-              :to="button.to"
-            >
-              {{ button.slot }}
-            </BaseButton>
+              color="secondary"
+              :label="button.label"
+              :href="button.to"
+            />
           </div>
         </div>
       </div>
@@ -30,25 +21,23 @@
 </template>
 
 <script>
-import BaseButton from './framework/BaseButton';
+import BaseLink from '@/components/base/BaseLink';
 
 export default {
   name: 'BaseHeader',
   components: {
-    BaseButton
+    BaseLink
   },
   data() {
     return {
       authorizationButtons: [
         {
-          slot: 'Вход в аккаунт',
-          to: '/login',
-          icon: 'login'
+          label: 'Вход в аккаунт',
+          to: '/login'
         },
         {
-          slot: 'Регистрация аккаунта',
-          to: '/signup',
-          icon: 'login'
+          label: 'Регистрация аккаунта',
+          to: '/signup'
         }
       ]
     };
@@ -60,13 +49,9 @@ export default {
     defineAuthorizationButtons() {
       switch (this.$route.path) {
         case '/login':
-          return this.authorizationButtons.filter(
-            (item) => item.to === '/signup'
-          );
+          return this.authorizationButtons.filter((item) => item.to === '/signup');
         case '/signup':
-          return this.authorizationButtons.filter(
-            (item) => item.to === '/login'
-          );
+          return this.authorizationButtons.filter((item) => item.to === '/login');
         default:
           return this.authorizationButtons;
       }

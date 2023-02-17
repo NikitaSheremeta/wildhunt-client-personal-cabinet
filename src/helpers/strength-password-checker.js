@@ -1,10 +1,3 @@
-export function useStrengthPasswordChecker(password) {
-  const score = createStrengthPasswordScore(password);
-  const strengthChecker = createStrengthPasswordChecker(password, score);
-
-  return { ...strengthChecker };
-}
-
 function createStrengthPasswordScore(password) {
   let score = 0;
 
@@ -59,4 +52,11 @@ function createStrengthPasswordChecker(password, score) {
       notice: 'Надежный пароль, только не забудьте его'
     };
   }
+}
+
+export function strengthPasswordChecker(password) {
+  const score = createStrengthPasswordScore(password);
+  const strengthChecker = createStrengthPasswordChecker(password, score);
+
+  return { ...strengthChecker };
 }

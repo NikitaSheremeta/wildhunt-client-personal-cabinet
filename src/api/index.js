@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { magicNumbers } from '../utils/magic-numbers';
+import { magicNumbers } from '@/utils/magic-numbers';
 
 const $api = axios.create({ withCredentials: true });
 
@@ -16,11 +16,7 @@ $api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (
-      error.response.status === magicNumbers.UNAUTHORIZED &&
-      error.config &&
-      !error.config.isRetry
-    ) {
+    if (error.response.status === magicNumbers.UNAUTHORIZED && error.config && !error.config.isRetry) {
       originalRequest.isRetry = true;
 
       try {

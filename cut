@@ -1,0 +1,71 @@
+      <transition name="fade-slide-up">
+        <template v-if="isSignupSuccess">
+          <BaseNotice :class="$style.notice" success>
+            <span :class="$style.icon">🥳</span>
+
+            <h2 :class="$style.title">Вы успешно зарегистрированы!</h2>
+
+            <span :class="$style.content">
+              На указанный почтовый ящик придет письмо, содержащее ссылку для
+              подтверждения адреса
+            </span>
+
+            <BaseButton
+              :class="$style.button"
+              color="success"
+              @click="BaseNoticeOnClick"
+            >
+              Войти в аккаунт
+            </BaseButton>
+          </BaseNotice>
+        </template>
+      </transition>
+
+      <transition name="fade-slide-up">
+        <template v-if="isSignupError">
+          <BaseNotice :class="$style.notice" error>
+            <span :class="$style.icon">💩</span>
+
+            <h2 :class="$style.title">Вот это поворот</h2>
+
+            <span :class="$style.content">
+              {{ errorMessage.apiResponse }}
+            </span>
+
+            <BaseButton
+              :class="$style.button"
+              color="danger"
+              @click="BaseNoticeOnClick"
+            >
+              Повторить
+            </BaseButton>
+          </BaseNotice>
+        </template>
+      </transition>
+
+
+
+
+.notice {
+  .icon {
+    z-index: 1;
+    font-size: $font-size-h1;
+  }
+
+  .title {
+    z-index: 1;
+    padding: 0 24px;
+    font-weight: $font-weight-base;
+    text-align: center;
+  }
+
+  .content {
+    z-index: 1;
+    padding: 0 24px;
+    color: $font-color-secondary;
+    text-align: center;
+  }
+
+  .button {
+    margin-top: 24px;
+  }

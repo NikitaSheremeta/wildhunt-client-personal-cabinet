@@ -39,6 +39,7 @@ body {
 .row {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 @include media-breakpoint-down(xxs) {

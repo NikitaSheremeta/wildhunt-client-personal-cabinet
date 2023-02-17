@@ -1,357 +1,179 @@
 <template>
   <div class="container">
-    <div class="row" :class="$style.row">
+    <div class="row">
       <transition name="fade-slide-up">
-        <form
-          v-if="!isHideForm"
-          :class="$style['form']"
-          @submit.prevent="submitHandler"
-        >
-          <h2 :class="$style['form-title']">Регистрация аккаунта</h2>
+        <form v-if="!flags.isHideForm" class="form" @submit.prevent="onSubmitForm">
+          <h2 class="form__title" v-text="labels.SIGN_UP_VIEW.TITLE" />
 
           <BaseInput
-            v-model:value="username"
+            v-model="data.username"
+            class="form__field"
             type="text"
-            placeholder="Логин"
-            :class="$style['form-item']"
-            :loading="isUsernameLoading"
-            :disabled="isDisableAllFields"
-            @input="v$.username.$reset()"
-            @blur="v$.username.$touch()"
-          >
-            <template v-if="isUsernameInvalid()" #error>
-              {{ errorMessage.username }}
-            </template>
-          </BaseInput>
+            :placeholder="labels.SIGN_UP_VIEW.USER_NAME"
+            :loading="flags.isLoading"
+            :disabled="flags.isDisabled"
+            :rules="rules.username"
+          />
 
           <BaseInput
-            v-model:value="email"
+            v-model="data.email"
+            class="form__field"
             type="email"
-            placeholder="Электронная почта"
-            :class="$style['form-item']"
-            :disabled="isDisableAllFields"
-            @input="v$.email.$reset()"
-            @blur="v$.email.$touch()"
-          >
-            <template v-if="isEmailInvalid()" #error>
-              {{ errorMessage.email }}
-            </template>
-          </BaseInput>
+            :placeholder="labels.SIGN_UP_VIEW.EMAIL"
+            :disabled="flags.isDisabled"
+            :rules="rules.email"
+          />
 
-          <BaseInput
-            v-model:value="password"
-            password
-            create-password
-            type="password"
-            placeholder="Пароль"
-            :class="$style['form-item']"
-            :disabled="isDisableAllFields"
-            @input="v$.password.$touch()"
-            @blur="v$.password.$touch()"
-          >
-            <template v-if="isPasswordInvalid()" #error>
-              {{ errorMessage.password }}
-            </template>
-          </BaseInput>
+          <BasePassword
+            v-model="data.password"
+            class="form__field"
+            create
+            :placeholder="labels.SIGN_UP_VIEW.PASSWORD"
+            :disabled="flags.isDisabled"
+            :rules="rules.password"
+          />
 
-          <BaseInput
-            v-model:value="confirmPassword"
-            repeat-password
-            type="password"
-            placeholder="Повторите пароль"
-            :class="$style['form-item']"
-            :disabled="isDisableAllFields"
-            :success="isConfirmPasswordValid"
-            @input="v$.confirmPassword.$reset()"
-            @blur="v$.confirmPassword.$touch()"
-          >
-            <template v-if="isConfirmPasswordInvalid()" #error>
-              {{ errorMessage.confirmPassword }}
-            </template>
-          </BaseInput>
+          <BasePassword
+            v-model="state.repeatPassword"
+            class="form__field"
+            repeat
+            :placeholder="labels.SIGN_UP_VIEW.REPEAT_PASSWORD"
+            :disabled="flags.isDisabled"
+            :rules="rules.repeatPassword"
+          />
 
-          <div :class="$style['form-controls']">
+          <div class="form__actions">
             <BaseButton
-              :loading="isButtonLoading"
-              :disabled="!eula || isDisableAllFields"
               full-width
-            >
-              Зарегистрироваться
-            </BaseButton>
+              :label="labels.SIGN_UP_VIEW.SIGN_UP"
+              :loading="flags.isLoading"
+              :disabled="!state.eula || flags.isDisabled"
+            />
           </div>
 
-          <div :class="$style['form-eula']">
-            <BaseCheckbox v-model:checked="eula">
-              Я принимаю
-              <BaseButton tag-name="a" target="_blank" to="terms" underline>
-                пользовательское соглашение
-              </BaseButton>
+          <div class="form__eula">
+            <BaseCheckbox v-model="state.eula" color="secondary" :label="labels.SIGN_UP_VIEW.EULA">
+              <BaseLink underline href="terms" target="_blank" color="secondary" :label="labels.SIGN_UP_VIEW.TERMS" />
 
               <br />и
 
-              <BaseButton
-                tag-name="a"
-                target="_blank"
-                to="privacy-policy"
+              <BaseLink
                 underline
-              >
-                политику конфиденциальности
-              </BaseButton>
+                href="privacy-policy"
+                target="_blank"
+                color="secondary"
+                :label="labels.SIGN_UP_VIEW.PRIVACY_POLICY"
+              />
             </BaseCheckbox>
           </div>
         </form>
-      </transition>
-
-      <transition name="fade-slide-up">
-        <template v-if="isSignupSuccess">
-          <BaseNotice :class="$style.notice" success>
-            <span :class="$style.icon">🥳</span>
-
-            <h2 :class="$style.title">Вы успешно зарегистрированы!</h2>
-
-            <span :class="$style.content">
-              На указанный почтовый ящик придет письмо, содержащее ссылку для
-              подтверждения адреса
-            </span>
-
-            <BaseButton
-              :class="$style.button"
-              color="success"
-              @click="BaseNoticeOnClick"
-            >
-              Войти в аккаунт
-            </BaseButton>
-          </BaseNotice>
-        </template>
-      </transition>
-
-      <transition name="fade-slide-up">
-        <template v-if="isSignupError">
-          <BaseNotice :class="$style.notice" error>
-            <span :class="$style.icon">💩</span>
-
-            <h2 :class="$style.title">Вот это поворот</h2>
-
-            <span :class="$style.content">
-              {{ errorMessage.apiResponse }}
-            </span>
-
-            <BaseButton
-              :class="$style.button"
-              color="danger"
-              @click="BaseNoticeOnClick"
-            >
-              Повторить
-            </BaseButton>
-          </BaseNotice>
-        </template>
       </transition>
     </div>
   </div>
 </template>
 
-<script>
-import useVuelidate from '@vuelidate/core';
-import {
-  required,
-  email,
-  minLength,
-  maxLength,
-  sameAs
-} from '@vuelidate/validators';
-import BaseInput from '../components/framework/BaseInput';
-import BaseButton from '../components/framework/BaseButton';
-import BaseCheckbox from '../components/framework/BaseCheckbox';
-import BaseNotice from '../components/framework/BaseNotice';
-import { useDebounce } from '../components/use/debounce';
-import {
-  allowedCharacters,
-  useSignupUsernameValidator,
-  useSignupEmailValidator,
-  useSignupPasswordValidator,
-  useSignupConfirmPasswordValidator
-} from '../components/use/validators';
-import { magicNumbers } from '../utils/magic-numbers';
+<script type="module">
+import { reactive } from 'vue';
+import { useStore } from 'vuex';
+import BaseInput from '@/components/base/BaseInput';
+import BasePassword from '@/components/base/BasePassword';
+import BaseButton from '@/components/base/BaseButton';
+import BaseCheckbox from '@/components/base/BaseCheckbox';
+import BaseLink from '@/components/base/BaseLink';
+import { required, minLength, maxLength, email, sameAs } from '@/helpers/validators';
+import { debounce } from '@/helpers/debounce';
+import { validationMessages } from '@/utils/validation-messages';
+import { magicNumbers } from '@/utils/magic-numbers';
+import { labels } from '@/utils/labels';
 
 export default {
   components: {
     BaseInput,
+    BasePassword,
     BaseButton,
     BaseCheckbox,
-    BaseNotice
-  },
-  data() {
-    return {
-      username: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      eula: true,
-      errorMessage: {
-        username: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        apiResponse: ''
-      },
-      isUsernameLoading: false,
-      isButtonLoading: false,
-      isSignupError: false,
-      isSignupSuccess: false,
-      isDisableAllFields: false,
-      isHideForm: false
-    };
+    BaseLink
   },
   setup() {
-    return {
-      v$: useVuelidate({ $lazy: true })
-    };
-  },
-  validations() {
-    return {
+    const store = useStore();
+
+    const data = reactive({
+      username: '',
+      email: '',
+      password: ''
+    });
+
+    const state = reactive({
+      repeatPassword: '',
+      eula: true
+    });
+
+    const flags = reactive({
+      isLoading: false,
+      isDisabled: false,
+      isHideForm: false
+    });
+
+    const rules = {
       username: {
-        required,
-        allowedCharacters,
-        minLength: minLength(magicNumbers.MIN_USERNAME_LENGTH),
-        maxLength: maxLength(magicNumbers.MAX_USERNAME_LENGTH)
+        required: required(validationMessages.LOGIN.REQUIRED),
+        minLength: minLength(magicNumbers.LOGIN.MIN_LENGTH, validationMessages.LOGIN.MIN_LENGTH),
+        maxLength: maxLength(magicNumbers.LOGIN.MAX_LENGTH, validationMessages.LOGIN.MAX_LENGTH)
       },
       email: {
-        required,
-        email
+        required: required(validationMessages.EMAIL.REQUIRED),
+        email: email(validationMessages.EMAIL.INCORRECT)
       },
       password: {
-        required,
-        allowedCharacters,
-        minLength: minLength(magicNumbers.MIN_PASSWORD_LENGTH),
-        maxLength: maxLength(magicNumbers.MAX_PASSWORD_LENGTH)
+        required: required(validationMessages.PASSWORD.REQUIRED_LOGIN_PAGE),
+        minLength: minLength(magicNumbers.PASSWORD.MIN_LENGTH, validationMessages.PASSWORD.MIN_LENGTH),
+        maxLength: maxLength(magicNumbers.PASSWORD.MAX_LENGTH, validationMessages.PASSWORD.MAX_LENGTH)
       },
-      confirmPassword: {
-        required,
-        sameAs: sameAs(this.password)
+      repeatPassword: {
+        required: required(validationMessages.CONFIRM_PASSWORD.REQUIRED),
+        sameAs: sameAs(data.password, validationMessages.CONFIRM_PASSWORD.SAME_AS)
       }
     };
-  },
-  computed: {
-    isConfirmPasswordValid() {
-      return (
-        this.confirmPassword.length !== 0 &&
-        this.password === this.confirmPassword
-      );
-    }
-  },
-  watch: {
-    username: useDebounce(function () {
-      this.v$.username.$touch();
-    }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)
-  },
-  methods: {
-    isUsernameInvalid() {
-      const validator = useSignupUsernameValidator(this.v$.username);
 
-      if (validator.isInvalid) {
-        this.errorMessage.username = validator.errorMessage;
+    const onSubmitForm = async () => {
+      flags.isLoading = true;
+      flags.isDisabled = true;
 
-        return validator.isInvalid;
-      }
-
-      return validator.isInvalid;
-    },
-    isEmailInvalid() {
-      const validator = useSignupEmailValidator(this.v$.email);
-
-      if (validator.isInvalid) {
-        this.errorMessage.email = validator.errorMessage;
-
-        return validator.isInvalid;
-      }
-
-      return validator.isInvalid;
-    },
-    isPasswordInvalid() {
-      const validator = useSignupPasswordValidator(this.v$.password);
-
-      if (validator.isInvalid) {
-        this.errorMessage.password = validator.errorMessage;
-
-        return validator.isInvalid;
-      }
-
-      return validator.isInvalid;
-    },
-    isConfirmPasswordInvalid() {
-      const validator = useSignupConfirmPasswordValidator(
-        this.v$.confirmPassword
-      );
-
-      if (validator.isInvalid) {
-        this.errorMessage.confirmPassword = validator.errorMessage;
-
-        return validator.isInvalid;
-      }
-
-      return validator.isInvalid;
-    },
-    async submitHandler() {
-      const isFormValid = await this.v$.$validate();
-
-      if (!isFormValid) {
-        return false;
-      }
-
-      [this.isButtonLoading, this.isDisableAllFields] = [true, true];
-
-      await this.$store
-        .dispatch('SIGNUP', {
-          username: this.username,
-          email: this.email,
-          password: this.password
-        })
+      await store
+        .dispatch('SIGNUP', data)
         .then((result) => {
-          [this.isButtonLoading, this.isHideForm] = [false, true];
+          // flags.isHideForm = true;
 
           if (Object.prototype.hasOwnProperty.call(result, 'error')) {
-            this.errorMessage.apiResponse = result.error.message;
-
-            return useDebounce(() => (this.isSignupError = true))();
+            debounce(() => console.log(result))();
           }
-
-          return useDebounce(() => (this.isSignupSuccess = true))();
         })
-        .catch(() => {
-          this.errorMessage.apiResponse =
-            'Повторите попытку еще раз или обратитесь в тех. поддержку';
+        .catch((error) => debounce(() => console.log(error))())
+        .finally(() => (flags.isLoading = false));
+    };
 
-          return useDebounce(() => (this.isSignupError = true))();
-        });
-    },
-    BaseNoticeOnClick() {
-      if (this.isSignupError) {
-        [this.isSignupError, this.isDisableAllFields] = [false, false];
-
-        return useDebounce(() => (this.isHideForm = false))();
-      }
-
-      return this.$router.push({ path: '/login' });
-    }
+    return {
+      data,
+      state,
+      flags,
+      rules,
+      labels,
+      onSubmitForm
+    };
   }
 };
 </script>
 
-<style lang="scss" module>
-.row {
-  display: flex;
-  justify-content: center;
-}
-
+<style lang="scss" scoped>
 .form {
   width: 320px;
 
-  &-title {
+  &__title {
     margin-top: 0;
     font-weight: $font-weight-base;
   }
 
-  &-item {
+  &__field {
     margin-bottom: 16px;
 
     &:last-child {
@@ -359,43 +181,12 @@ export default {
     }
   }
 
-  &-controls {
+  &__actions {
     margin-top: 24px;
   }
 
-  &-eula {
-    margin-top: 24px;
-
-    > span {
-      margin-bottom: 12px;
-      color: $font-color-secondary;
-      font-size: $font-size-xs;
-    }
-  }
-}
-
-.notice {
-  .icon {
-    z-index: 1;
-    font-size: $font-size-h1;
-  }
-
-  .title {
-    z-index: 1;
-    padding: 0 24px;
-    font-weight: $font-weight-base;
-    text-align: center;
-  }
-
-  .content {
-    z-index: 1;
-    padding: 0 24px;
-    color: $font-color-secondary;
-    text-align: center;
-  }
-
-  .button {
-    margin-top: 24px;
+  &__eula {
+    margin-top: 16px;
   }
 }
 </style>

@@ -1,0 +1,253 @@
+<template>
+  <div :class="['base-input', classes]">
+    <div class="wrapper">
+      <input
+        v-model="input.value"
+        class="field"
+        :type="type"
+        :placeholder="placeholder"
+        :disabled="disabled"
+        :autofocus="autofocus"
+        v-on="listeners"
+      />
+
+      <div class="icon">
+        <slot name="icon"></slot>
+
+        <BaseIcon v-if="loading" icon="preloader" color="secondary" spin />
+
+        <BaseIcon v-if="icon" :icon="icon" color="secondary" />
+
+        <BaseIcon v-if="input.touched && !input.valid" icon="exclamation" color="danger" />
+      </div>
+    </div>
+
+    <slot name="extension"></slot>
+
+    <span v-if="state.notice" class="notice" v-text="state.notice" />
+  </div>
+</template>
+
+<script type="module">
+import { computed, reactive, watch } from 'vue';
+import BaseIcon from '@/components/base/BaseIcon';
+import { useInputValidation } from '@/hooks/useInputValidation';
+import { debounce } from '@/helpers/debounce';
+import { magicNumbers } from '@/utils/magic-numbers';
+
+export default {
+  name: 'BaseInput',
+  components: {
+    BaseIcon
+  },
+  props: {
+    type: {
+      type: String,
+      default: 'text'
+    },
+    placeholder: {
+      type: [String, null],
+      default: null
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    autofocus: {
+      type: Boolean,
+      default: false
+    },
+    icon: {
+      type: [String, null],
+      default: null
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    rules: {
+      type: [Object, null],
+      default: null
+    }
+  },
+  emits: ['update:modelValue'],
+  setup(props, context) {
+    const state = reactive({
+      notice: ''
+    });
+
+    const input = useInputValidation({
+      value: '',
+      rules: props.rules
+    });
+
+    const classes = computed(() => {
+      return [
+        props.disabled ? 'disabled' : '',
+        input.touched && input.valid ? 'valid' : '',
+        input.touched && !input.valid ? 'invalid' : ''
+      ];
+    });
+
+    const listeners = computed(() => {
+      return {
+        input: (event) => {
+          const value = event.target.value;
+
+          state.notice = '';
+
+          input.reset();
+
+          input.value = value;
+
+          context.emit('update:modelValue', value);
+        },
+        blur: () => {
+          input.blur();
+
+          if (props.rules && Object.values(input.errors).length) {
+            state.notice = Object.values(input.errors)[0];
+          }
+        }
+      };
+    });
+
+    watch(
+      () => input.value,
+      debounce(() => {
+        input.blur();
+
+        if (props.rules && Object.values(input.errors).length) {
+          state.notice = Object.values(input.errors)[0];
+        }
+      }, magicNumbers.THREE_THOUSAND_MILLISECONDS)
+    );
+
+    return {
+      state,
+      input,
+      classes,
+      listeners
+    };
+  }
+};
+</script>
+
+<style lang="scss">
+$colors: (
+  primary: (
+    background-color: $gray-800,
+    color: $font-color-base,
+    placeholder-color: $font-color-secondary,
+    hover-placeholder-color: $gray-700
+  )
+);
+
+.base-input {
+  display: block;
+  position: relative;
+  width: 100%;
+  font-family: $font-family-base;
+  font-weight: $font-weight-base;
+  font-style: normal;
+
+  .wrapper {
+    display: flex;
+    position: relative;
+    width: 100%;
+
+    .field {
+      display: block;
+      padding: 6px 24px;
+      width: 100%;
+      min-width: 0;
+      height: 40px;
+      background-color: map-get($colors, primary, background-color);
+      border: none;
+      border-radius: 12px;
+      color: map-get($colors, primary, color);
+      font-family: inherit;
+      font-size: $font-size-base;
+      font-style: inherit;
+
+      @include placeholder() {
+        line-height: 1;
+        color: map-get($colors, primary, placeholder-color);
+        font-family: inherit;
+        font-size: inherit;
+        transition: 0.2s;
+      }
+
+      &:focus {
+        box-shadow: none;
+        outline: none;
+      }
+
+      &:focus::-webkit-input-placeholder {
+        color: map-get($colors, primary, hover-placeholder-color);
+      }
+
+      &:disabled {
+        background-color: $disabled-background;
+        color: $disabled-color;
+
+        @include placeholder() {
+          color: $disabled-color;
+        }
+
+        &:focus {
+          cursor: default;
+        }
+
+        + .icon {
+          .base-icon {
+            fill: $disabled-color;
+            stroke: $disabled-color;
+            cursor: default;
+          }
+        }
+      }
+
+      &[type='password']:not(:placeholder-shown) {
+        font-weight: $font-weight-bold;
+        letter-spacing: -2px;
+      }
+    }
+
+    .icon {
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      align-self: center;
+      position: absolute;
+      gap: 8px;
+      right: 16px;
+    }
+  }
+
+  .notice {
+    margin-top: 8px;
+    color: $font-color-secondary;
+    font-size: $font-size-xs;
+    user-select: none;
+  }
+
+  &.invalid {
+    .notice {
+      color: $danger;
+    }
+  }
+
+  &.valid {
+    .notice {
+      color: $success;
+    }
+  }
+
+  &.disabled {
+    .notice {
+      color: $disabled-color;
+    }
+  }
+}
+</style>

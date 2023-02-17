@@ -5,16 +5,15 @@
         <div class="not-found-code">
           <span class="not-found-code__number">4</span>
 
-          <img
-            class="not-found-code__image"
-            src="../assets/img/dancing-parrot.gif"
-            alt="Minecraft Wild Hunt"
-          />
+          <img class="not-found-code__image" src="@/assets/img/dancing-parrot.gif" alt="Minecraft Wild Hunt" />
 
           <span class="not-found-code__number">4</span>
         </div>
 
-        <p class="not-found__description" v-html="pageDescription"></p>
+        <p class="not-found__description">
+          Мы не можем найти нужную вам страницу,
+          <br />но не расстраивайтесь, вот вам танцующий попугай :)
+        </p>
 
         <BaseButton @click="$router.go(-1)"> Вернуться назад </BaseButton>
       </div>
@@ -23,17 +22,11 @@
 </template>
 
 <script>
-import BaseButton from '../components/framework/BaseButton';
+import BaseButton from '@/components/base/BaseButton';
 
 export default {
   components: {
     BaseButton
-  },
-  data() {
-    return {
-      pageDescription:
-        'Мы не можем найти нужную вам страницу,\n <br />но не расстраивайтесь, вот вам танцующий попугай :)'
-    };
   }
 };
 </script>
