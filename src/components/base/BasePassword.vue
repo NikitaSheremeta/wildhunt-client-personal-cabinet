@@ -1,6 +1,13 @@
 <template>
-  <div :class="['base-password']">
-    <BaseInput :type="state.type" :placeholder="placeholder" :disabled="disabled" :rules="rules" @input="onInput">
+  <div :class="['base-password', classes]">
+    <BaseInput
+      ref="input"
+      :type="state.type"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      :rules="rules"
+      @input="onInput"
+    >
       <template #icon>
         <BaseIcon
           v-if="!repeat"
@@ -8,27 +15,28 @@
           height="22"
           color="secondary"
           :icon="state.type === 'password' ? 'eye' : 'eye-slash'"
-          @click="onIconClick"
+          @click="onClick"
         />
       </template>
 
-      <template #extension>
-        <div v-if="create" class="strength-password-checker">
-          <div class="meter">
-            <span class="meter__item"></span>
-            <span class="meter__item"></span>
-            <span class="meter__item"></span>
-          </div>
+      <template v-if="create" #extension>
+        <div class="meter">
+          <span class="meter__item"></span>
+          <span class="meter__item"></span>
+          <span class="meter__item"></span>
         </div>
+
+        <span v-if="password.notice" class="notice" v-text="password.notice" />
       </template>
     </BaseInput>
   </div>
 </template>
 
 <script>
-import { reactive } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import BaseInput from '@/components/base/BaseInput';
 import BaseIcon from '@/components/base/BaseIcon';
+import { usePassword } from '@/hooks/usePassword';
 
 export default {
   name: 'BasePassword',
@@ -60,21 +68,29 @@ export default {
   },
   emits: ['update:modelValue'],
   setup(props, context) {
-    const state = reactive({
-      type: 'password'
-    });
+    const state = reactive({ type: 'password' });
+
+    const input = ref(null);
+
+    const password = usePassword({ value: '' });
+
+    const classes = computed(() => [password.status]);
 
     const onInput = (event) => {
-      context.emit('update:modelValue', event.target.value);
+      const value = event.target.value;
+
+      context.emit('update:modelValue', value);
+
+      input.value.input.valid ? (password.value = value) : password.reset();
     };
 
-    const onIconClick = () => {
+    const onClick = () => {
       if (!props.disabled) {
         state.type = state.type === 'password' ? 'text' : 'password';
       }
     };
 
-    return { state, onInput, onIconClick };
+    return { state, input, password, classes, onInput, onClick };
   }
 };
 </script>
@@ -84,9 +100,7 @@ export default {
   .base-icon {
     cursor: pointer;
   }
-}
 
-.strength-password-checker {
   .meter {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -102,16 +116,21 @@ export default {
     }
   }
 
+  .notice {
+    margin-top: 8px;
+    color: $font-color-secondary;
+    font-size: $font-size-xs;
+    user-select: none;
+  }
+
   &.danger {
     .notice {
       color: $danger;
     }
 
-    .meter {
-      &__item {
-        &:first-child {
-          background-color: $danger;
-        }
+    .meter__item {
+      &:first-child {
+        background-color: $danger;
       }
     }
   }
@@ -121,11 +140,9 @@ export default {
       color: $warning;
     }
 
-    .meter {
-      &__item {
-        &:nth-child(-n + 2) {
-          background-color: $warning;
-        }
+    .meter__item {
+      &:nth-child(-n + 2) {
+        background-color: $warning;
       }
     }
   }
@@ -135,10 +152,8 @@ export default {
       color: $success;
     }
 
-    .meter {
-      &__item {
-        background-color: $success;
-      }
+    .meter__item {
+      background-color: $success;
     }
   }
 }

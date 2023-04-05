@@ -18,20 +18,20 @@
 
         <BaseIcon v-if="icon" :icon="icon" color="secondary" />
 
-        <BaseIcon v-if="input.touched && !input.valid" icon="exclamation" color="danger" />
+        <BaseIcon v-if="state.validationMessage" icon="exclamation" color="danger" />
       </div>
     </div>
 
     <slot name="extension"></slot>
 
-    <span v-if="state.notice" class="notice" v-text="state.notice" />
+    <span v-if="state.validationMessage" class="validation-message" v-text="state.validationMessage" />
   </div>
 </template>
 
 <script type="module">
 import { computed, reactive, watch } from 'vue';
 import BaseIcon from '@/components/base/BaseIcon';
-import { useInputValidation } from '@/hooks/useInputValidation';
+import { useInput } from '@/hooks/useInput';
 import { debounce } from '@/helpers/debounce';
 import { magicNumbers } from '@/utils/magic-numbers';
 
@@ -43,6 +43,7 @@ export default {
   props: {
     type: {
       type: String,
+      required: true,
       default: 'text'
     },
     placeholder: {
@@ -51,7 +52,7 @@ export default {
     },
     disabled: {
       type: Boolean,
-      default: false
+      required: false
     },
     autofocus: {
       type: Boolean,
@@ -72,41 +73,35 @@ export default {
   },
   emits: ['update:modelValue'],
   setup(props, context) {
-    const state = reactive({
-      notice: ''
-    });
+    const state = reactive({ validationMessage: '' });
 
-    const input = useInputValidation({
+    const input = useInput({
       value: '',
       rules: props.rules
     });
 
-    const classes = computed(() => {
-      return [
-        props.disabled ? 'disabled' : '',
-        input.touched && input.valid ? 'valid' : '',
-        input.touched && !input.valid ? 'invalid' : ''
-      ];
-    });
+    const classes = computed(() => [
+      props.disabled ? 'disabled' : '',
+      input.touched && input.valid ? 'valid' : '',
+      input.touched && !input.valid ? 'invalid' : ''
+    ]);
 
     const listeners = computed(() => {
       return {
         input: (event) => {
           const value = event.target.value;
 
-          state.notice = '';
-
-          input.reset();
+          context.emit('update:modelValue', value);
 
           input.value = value;
 
-          context.emit('update:modelValue', value);
+          state.validationMessage = '';
         },
         blur: () => {
           input.blur();
 
-          if (props.rules && Object.values(input.errors).length) {
-            state.notice = Object.values(input.errors)[0];
+          if (props.rules && !input.valid) {
+            state.validationMessage = Object.values(input.errors)[0];
           }
         }
       };
@@ -118,9 +113,9 @@ export default {
         input.blur();
 
         if (props.rules && Object.values(input.errors).length) {
-          state.notice = Object.values(input.errors)[0];
+          state.validationMessage = Object.values(input.errors)[0];
         }
-      }, magicNumbers.THREE_THOUSAND_MILLISECONDS)
+      }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)
     );
 
     return {
@@ -225,28 +220,21 @@ $colors: (
     }
   }
 
-  .notice {
+  .validation-message {
     margin-top: 8px;
-    color: $font-color-secondary;
     font-size: $font-size-xs;
     user-select: none;
   }
 
   &.invalid {
-    .notice {
+    .validation-message {
       color: $danger;
     }
   }
 
   &.valid {
-    .notice {
+    .validation-message {
       color: $success;
-    }
-  }
-
-  &.disabled {
-    .notice {
-      color: $disabled-color;
     }
   }
 }

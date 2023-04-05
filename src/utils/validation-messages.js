@@ -4,7 +4,7 @@ export const validationMessages = {
   LOGIN: {
     ALLOWED_CHARACTERS: 'Логин содержит запрещенные символы',
     REQUIRED: 'Необходимо придумать логин',
-    REQUIRED_LOGIN_PAGE: 'Необходимо указать логин или электронную почту',
+    REQUIRED_LOGIN_PAGE: 'Необходимо ввести логин или электронную почту',
     MIN_LENGTH: `Логин должен быть не менее ${magicNumbers.LOGIN.MIN_LENGTH} символов`,
     MAX_LENGTH: `Логин должен быть не более ${magicNumbers.LOGIN.MAX_LENGTH} символов`
   },

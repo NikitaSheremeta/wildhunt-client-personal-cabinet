@@ -37,10 +37,11 @@ dist
 # components
 src/components/base/BaseIcon.vue
 
-# helpers
-src/helpers/strength-password-checker.js
+# hooks
+src/hooks/usePassword.js
 
 # utils
 src/utils/regular-expressions.js
 
+#
 src/views/ResetPassword.vue

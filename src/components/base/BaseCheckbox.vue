@@ -7,7 +7,9 @@
         <BaseIcon icon="check" />
       </span>
 
-      <span v-if="!!$slots.default || label" class="label" v-text="label">
+      <span v-if="!!$slots.default || label" class="label">
+        {{ label }}
+
         <slot />
       </span>
     </span>
