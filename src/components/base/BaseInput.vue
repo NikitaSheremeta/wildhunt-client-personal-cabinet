@@ -12,19 +12,21 @@
       />
 
       <div class="icon">
-        <slot name="icon"></slot>
+        <slot v-if="!!$slots.icon" name="icon"></slot>
 
         <BaseIcon v-if="loading" icon="preloader" color="secondary" spin />
 
         <BaseIcon v-if="icon" :icon="icon" color="secondary" />
-
-        <BaseIcon v-if="state.validationMessage" icon="exclamation" color="danger" />
       </div>
     </div>
 
-    <slot name="extension"></slot>
+    <slot v-if="!!$slots.extension" name="extension"></slot>
 
-    <span v-if="state.validationMessage" class="validation-message" v-text="state.validationMessage" />
+    <span
+      v-if="validationNotice && state.validationMessage"
+      class="validation-message"
+      v-text="state.validationMessage"
+    />
   </div>
 </template>
 
@@ -69,9 +71,17 @@ export default {
     rules: {
       type: [Object, null],
       default: null
+    },
+    debounceValidation: {
+      type: Boolean,
+      default: true
+    },
+    validationNotice: {
+      type: Boolean,
+      default: true
     }
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'blur'],
   setup(props, context) {
     const state = reactive({ validationMessage: '' });
 
@@ -98,25 +108,27 @@ export default {
           state.validationMessage = '';
         },
         blur: () => {
-          input.blur();
+          context.emit('blur');
 
-          if (props.rules && !input.valid) {
-            state.validationMessage = Object.values(input.errors)[0];
-          }
+          validationHandle();
         }
       };
     });
 
-    watch(
-      () => input.value,
-      debounce(() => {
-        input.blur();
+    if (props.debounceValidation) {
+      watch(
+        () => input.value,
+        debounce(() => validationHandle(), magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)
+      );
+    }
 
-        if (props.rules && Object.values(input.errors).length) {
-          state.validationMessage = Object.values(input.errors)[0];
-        }
-      }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)
-    );
+    const validationHandle = () => {
+      input.blur();
+
+      if (props.rules && !input.valid) {
+        state.validationMessage = input.error;
+      }
+    };
 
     return {
       state,

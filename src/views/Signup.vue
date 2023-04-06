@@ -22,6 +22,7 @@
             :placeholder="labels.SIGN_UP_VIEW.EMAIL"
             :disabled="flags.isDisabled"
             :rules="rules.email"
+            :debounce-validation="false"
           />
 
           <BasePassword
@@ -36,7 +37,6 @@
           <BasePassword
             v-model="state.repeatPassword"
             class="form__field"
-            repeat
             :placeholder="labels.SIGN_UP_VIEW.REPEAT_PASSWORD"
             :disabled="flags.isDisabled"
             :rules="rules.repeatPassword"

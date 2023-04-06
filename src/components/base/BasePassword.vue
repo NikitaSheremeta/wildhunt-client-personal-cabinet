@@ -6,11 +6,13 @@
       :placeholder="placeholder"
       :disabled="disabled"
       :rules="rules"
+      :debounce-validation="create"
+      :validation-notice="!create"
       @input="onInput"
+      @blur="onBlur"
     >
-      <template #icon>
+      <template v-if="create" #icon>
         <BaseIcon
-          v-if="!repeat"
           width="22"
           height="22"
           color="secondary"
@@ -49,10 +51,6 @@ export default {
       type: Boolean,
       default: false
     },
-    repeat: {
-      type: Boolean,
-      default: false
-    },
     placeholder: {
       type: [String, null],
       default: null
@@ -81,7 +79,11 @@ export default {
 
       context.emit('update:modelValue', value);
 
-      input.value.input.valid ? (password.value = value) : password.reset();
+      if (input.value.input.valid) {
+        password.value = value;
+      }
+
+      passwordHookHandle();
     };
 
     const onClick = () => {
@@ -90,7 +92,18 @@ export default {
       }
     };
 
-    return { state, input, password, classes, onInput, onClick };
+    const onBlur = () => {
+      passwordHookHandle();
+    };
+
+    const passwordHookHandle = () => {
+      if (!input.value.input.valid) {
+        password.status = 'invalid';
+        password.notice = input.value.input.error;
+      }
+    };
+
+    return { state, input, password, classes, onInput, onBlur, onClick };
   }
 };
 </script>
@@ -121,6 +134,12 @@ export default {
     color: $font-color-secondary;
     font-size: $font-size-xs;
     user-select: none;
+  }
+
+  &.invalid {
+    .notice {
+      color: $danger;
+    }
   }
 
   &.danger {

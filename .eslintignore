@@ -37,11 +37,5 @@ dist
 # components
 src/components/base/BaseIcon.vue
 
-# hooks
-src/hooks/usePassword.js
-
 # utils
 src/utils/regular-expressions.js
-
-#
-src/views/ResetPassword.vue

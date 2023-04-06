@@ -4,9 +4,10 @@ import { objectSorting } from '@/helpers/object-sorting';
 export function useInput(properties) {
   const data = reactive({
     value: properties.value,
-    valid: true,
+    valid: false,
     touched: false,
     errors: {},
+    error: '',
     reset: () => {
       data.touched = false;
     },
@@ -31,6 +32,8 @@ export function useInput(properties) {
     });
 
     data.errors = objectSorting(data.errors, ['required', 'minLength', 'maxLength', 'email', 'sameAs']);
+
+    data.error = Object.values(data.errors)[0];
   };
 
   reassign(data.value);
