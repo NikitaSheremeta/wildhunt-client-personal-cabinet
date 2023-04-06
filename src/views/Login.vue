@@ -40,6 +40,7 @@
             color="secondary"
             icon-left="question"
             :label="labels.LOGIN_VIEW.RESET_PASSWORD"
+            :disabled="flags.isDisabled"
           />
         </form>
       </transition>
@@ -99,7 +100,7 @@ export default {
       await store
         .dispatch('LOGIN', data)
         .then((result) => {
-          flags.isHideForm = true;
+          // flags.isHideForm = true;
 
           if (Object.prototype.hasOwnProperty.call(result, 'error')) {
             debounce(() => console.log(result))();

@@ -1,208 +1,129 @@
 <template>
   <div class="container">
-    <div class="row" :class="$style.row">
+    <div class="row">
       <transition name="fade-slide-up">
-        <form v-if="!isHideForm" :class="$style.form" @submit.prevent="submitHandler">
-          <h2 :class="$style['form-title']">Восстановление аккаунта</h2>
+        <form v-if="!flags.isHideForm" class="form" @submit.prevent="onSubmitForm">
+          <h2 class="form__title" v-text="labels.RESET_PASSWORD_VIEW.TITLE" />
 
-          <p :class="$style['form-description']">Укажите электронную почту, которую вы использовали при регистрации.</p>
+          <p class="form__description" v-text="labels.RESET_PASSWORD_VIEW.DESCRIPTION" />
 
           <BaseInput
-            v-model:value="login"
-            :class="$style['form-item']"
-            :disabled="isDisableAllFields"
+            v-model="data.email"
+            class="form__field"
             type="text"
-            placeholder="Электронная почта"
-            @input="v$.login.$reset()"
-            @blur="v$.login.$touch()"
-          >
-            <template v-if="isLoginInvalid()" #error>
-              {{ errorMessage.login }}
-            </template>
-          </BaseInput>
+            :placeholder="labels.RESET_PASSWORD_VIEW.EMAIL"
+            :disabled="flags.isDisabled"
+            :rules="rules.email"
+          />
 
-          <div :class="$style['form-controls']">
-            <BaseButton :loading="isButtonLoading" :disabled="isDisableAllFields" full-width> Восстановить </BaseButton>
+          <div class="form__actions">
+            <BaseButton
+              full-width
+              type="submit"
+              :label="labels.RESET_PASSWORD_VIEW.SUBMIT"
+              :disabled="flags.isDisabled"
+              :loading="flags.isLoading"
+            />
           </div>
+
+          <BaseLink
+            class="form__account-recover"
+            href="support"
+            color="secondary"
+            icon-left="question"
+            :label="labels.RESET_PASSWORD_VIEW.ACCOUNT_RECOVER"
+            :disabled="flags.isDisabled"
+          />
         </form>
-      </transition>
-
-      <transition name="fade-slide-up">
-        <template v-if="isResetPasswordSuccess">
-          <BaseNotice :class="$style.notice" success>
-            <span :class="$style.icon">🙌</span>
-
-            <h2 :class="$style.title">Письмо успешно отправленно!</h2>
-
-            <span :class="$style.content">
-              На указанный почтовый ящик придет письмо, содержащее инструкцую по восстановлению пароля
-            </span>
-
-            <BaseButton :class="$style.button" color="success" @click="BaseNoticeOnClick"> Войти в аккаунт </BaseButton>
-          </BaseNotice>
-        </template>
-      </transition>
-
-      <transition name="fade-slide-up">
-        <template v-if="isResetPasswordError">
-          <BaseNotice :class="$style.notice" error>
-            <span :class="$style.icon">😞</span>
-
-            <h2 :class="$style.title">Что-то пошло не так</h2>
-
-            <span :class="$style.content">
-              {{ errorMessage.apiResponse }}
-            </span>
-
-            <BaseButton color="danger" :class="$style.button" @click="BaseNoticeOnClick"> Повторить </BaseButton>
-          </BaseNotice>
-        </template>
       </transition>
     </div>
   </div>
 </template>
 
 <script>
-import useVuelidate from '@vuelidate/core';
-import { required, email } from '@vuelidate/validators';
-import BaseInput from '../components/base/BaseInput';
-import BaseButton from '../components/base/BaseButton';
-import BaseNotice from '../components/base/BaseNotice';
-import { useDebounce } from '../helpers/debounce';
+import { reactive } from 'vue';
+import { useStore } from 'vuex';
+import BaseInput from '@/components/base/BaseInput';
+import BaseButton from '@/components/base/BaseButton';
+import BaseLink from '@/components/base/BaseLink';
+import { labels } from '@/utils/labels';
+import { email, required } from '@/helpers/validators';
+import { debounce } from '@/helpers/debounce';
+import { validationMessages } from '@/utils/validation-messages';
 
 export default {
   components: {
     BaseInput,
     BaseButton,
-    BaseNotice
+    BaseLink
   },
   setup() {
-    return {
-      v$: useVuelidate()
-    };
-  },
-  data() {
-    return {
-      login: '',
-      errorMessage: {
-        login: '',
-        apiResponse: ''
-      },
-      isButtonLoading: false,
-      isResetPasswordError: false,
-      isResetPasswordSuccess: false,
-      isDisableAllFields: false,
+    const store = useStore();
+
+    const data = reactive({ email: '' });
+
+    const flags = reactive({
+      isLoading: false,
+      isDisabled: false,
       isHideForm: false
-    };
-  },
-  validations() {
-    return {
-      login: {
-        required,
-        email
+    });
+
+    const rules = {
+      email: {
+        required: required(validationMessages.EMAIL.REQUIRED),
+        email: email(validationMessages.EMAIL.INCORRECT)
       }
     };
-  },
-  methods: {
-    isLoginInvalid() {
-      const validator = useSignupEmailValidator(this.v$.login);
 
-      if (validator.isInvalid) {
-        this.errorMessage.login = validator.errorMessage;
+    const onSubmitForm = async () => {
+      flags.isLoading = true;
+      flags.isDisabled = true;
 
-        return validator.isInvalid;
-      }
-
-      return validator.isInvalid;
-    },
-    async submitHandler() {
-      const isFormValid = await this.v$.$validate();
-
-      if (!isFormValid) {
-        return false;
-      }
-
-      [this.isButtonLoading, this.isDisableAllFields] = [true, true];
-
-      await this.$store
-        .dispatch('FORGOT_PASSWORD', {
-          email: this.login
-        })
+      await store
+        .dispatch('FORGOT_PASSWORD', data)
         .then((result) => {
-          [this.isButtonLoading, this.isHideForm] = [false, true];
+          // flags.isHideForm = true;
 
           if (Object.prototype.hasOwnProperty.call(result, 'error')) {
-            this.errorMessage.apiResponse = result.error.message;
-
-            return useDebounce(() => (this.isResetPasswordError = true))();
+            debounce(() => console.log(result))();
           }
-
-          return useDebounce(() => (this.isResetPasswordSuccess = true))();
         })
-        .catch(() => {
-          this.errorMessage.apiResponse = 'Повторите попытку еще раз или обратитесь в тех. поддержку';
+        .catch((error) => debounce(() => console.log(error))())
+        .finally(() => (flags.isLoading = false));
+    };
 
-          return useDebounce(() => (this.isResetPasswordError = true))();
-        });
-    },
-    BaseNoticeOnClick() {
-      if (this.isResetPasswordError) {
-        [this.isResetPasswordError, this.isDisableAllFields] = [false, false];
-
-        return useDebounce(() => (this.isHideForm = false))();
-      }
-
-      return this.$router.push({ path: '/login' });
-    }
+    return {
+      data,
+      flags,
+      rules,
+      labels,
+      onSubmitForm
+    };
   }
 };
 </script>
 
-<style lang="scss" module>
-.row {
-  display: flex;
-  justify-content: center;
-}
-
+<style lang="scss" scoped>
 .form {
   width: 320px;
 
-  &-title {
-    margin-top: 0;
+  &__title {
+    margin: 0;
     font-weight: $font-weight-base;
   }
 
-  &-description {
+  &__description {
+    margin-top: 8px;
     color: $font-color-secondary;
   }
 
-  &-controls {
+  &__actions {
     margin-top: 24px;
   }
-}
 
-.notice {
-  .icon {
-    z-index: 1;
-    font-size: $font-size-h1;
-  }
-
-  .title {
-    z-index: 1;
-    padding: 0 24px;
-    font-weight: $font-weight-base;
-    text-align: center;
-  }
-
-  .content {
-    z-index: 1;
-    padding: 0 24px;
-    color: $font-color-secondary;
-    text-align: center;
-  }
-
-  .button {
-    margin-top: 24px;
+  &__account-recover {
+    margin-top: 16px;
+    font-size: $font-size-xs;
   }
 }
 </style>

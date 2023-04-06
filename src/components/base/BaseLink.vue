@@ -123,6 +123,11 @@ $color-palette: (
   &.disabled {
     pointer-events: none;
     color: map-get($color-palette, disabled, color);
+
+    .base-icon {
+      fill: map-get($color-palette, disabled, color);
+      stroke: map-get($color-palette, disabled, color);
+    }
   }
 
   &.underline {
