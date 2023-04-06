@@ -1,6 +1,6 @@
 <template>
   <label :class="['base-checkbox', classes]">
-    <input class="field" type="checkbox" :checked="modelValue" v-on="listeners" />
+    <input class="field" type="checkbox" :checked="modelValue" :disabled="disabled" @change="onChange" />
 
     <span class="wrapper">
       <span class="check-icon">
@@ -37,35 +37,28 @@ export default {
     label: {
       type: [String, null],
       default: null
+    },
+    disabled: {
+      type: Boolean,
+      required: false
     }
   },
   emits: ['update:modelValue'],
   setup(props, context) {
-    const classes = computed(() => [props.color ? props.color : '']);
+    const classes = computed(() => [props.disabled ? 'disabled' : '', props.color ? props.color : '']);
 
-    const listeners = computed(() => {
-      return {
-        change: (event) => {
-          context.emit('update:modelValue', event.target.checked);
-        }
-      };
-    });
+    const onChange = (event) => {
+      const value = event.target.value;
 
-    return { classes, listeners };
+      context.emit('update:modelValue', value);
+    };
+
+    return { classes, onChange };
   }
 };
 </script>
 
 <style lang="scss" scoped>
-$color-palette: (
-  primary: (
-    color: $font-color-base
-  ),
-  secondary: (
-    color: $font-color-secondary
-  )
-);
-
 .base-checkbox {
   user-select: none;
   line-height: $line-height-secondary;
@@ -119,11 +112,29 @@ $color-palette: (
         }
       }
     }
+
+    &:disabled + .wrapper {
+      .check-icon {
+        background-color: $disabled-background;
+      }
+
+      .base-icon {
+        fill: $disabled-color;
+      }
+    }
   }
 
   &.secondary {
     .label {
-      color: map-get($color-palette, secondary, color);
+      color: $font-color-secondary;
+    }
+  }
+
+  &.disabled {
+    pointer-events: none;
+
+    .label {
+      color: $disabled-color;
     }
   }
 }

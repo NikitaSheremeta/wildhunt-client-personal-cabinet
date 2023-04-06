@@ -52,8 +52,20 @@
           </div>
 
           <div class="form__eula">
-            <BaseCheckbox v-model="state.eula" color="secondary" :label="labels.SIGN_UP_VIEW.EULA">
-              <BaseLink underline href="terms" target="_blank" color="secondary" :label="labels.SIGN_UP_VIEW.TERMS" />
+            <BaseCheckbox
+              v-model="state.eula"
+              color="secondary"
+              :label="labels.SIGN_UP_VIEW.EULA"
+              :disabled="flags.isDisabled"
+            >
+              <BaseLink
+                underline
+                href="terms"
+                target="_blank"
+                color="secondary"
+                :label="labels.SIGN_UP_VIEW.TERMS"
+                :disabled="flags.isDisabled"
+              />
 
               <br />и
 
@@ -63,6 +75,7 @@
                 target="_blank"
                 color="secondary"
                 :label="labels.SIGN_UP_VIEW.PRIVACY_POLICY"
+                :disabled="flags.isDisabled"
               />
             </BaseCheckbox>
           </div>

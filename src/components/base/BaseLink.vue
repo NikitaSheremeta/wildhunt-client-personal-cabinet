@@ -72,6 +72,9 @@ $color-palette: (
   ),
   secondary: (
     color: $font-color-secondary
+  ),
+  disabled: (
+    color: $disabled-color
   )
 );
 
@@ -115,6 +118,11 @@ $color-palette: (
         stroke: map-get($color-palette, primary, color);
       }
     }
+  }
+
+  &.disabled {
+    pointer-events: none;
+    color: map-get($color-palette, disabled, color);
   }
 
   &.underline {

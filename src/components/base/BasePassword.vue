@@ -72,7 +72,7 @@ export default {
 
     const password = usePassword({ value: '' });
 
-    const classes = computed(() => [password.status]);
+    const classes = computed(() => [props.disabled ? 'disabled' : '', password.status]);
 
     const onInput = (event) => {
       const value = event.target.value;
@@ -173,6 +173,16 @@ export default {
 
     .meter__item {
       background-color: $success;
+    }
+  }
+
+  &.disabled {
+    .notice {
+      color: $disabled-color;
+    }
+
+    .meter__item {
+      background-color: $disabled-background;
     }
   }
 }
