@@ -7,5 +7,3 @@ export const minLength = (number, validationMessage) => (value) => value.length 
 export const maxLength = (number, validationMessage) => (value) => value.length <= number ? '' : validationMessage;
 
 export const email = (validationMessage) => (value) => value.match(regularExpressions.email) ? '' : validationMessage;
-
-export const sameAs = (equalTo, validationMessage) => (value) => equalTo.value === value ? '' : validationMessage;

@@ -8,9 +8,6 @@ export function useInput(properties) {
     touched: false,
     errors: {},
     error: '',
-    reset: () => {
-      data.touched = false;
-    },
     blur: () => {
       data.touched = true;
     }

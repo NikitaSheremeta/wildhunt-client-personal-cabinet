@@ -17,6 +17,8 @@
         <BaseIcon v-if="loading" icon="preloader" color="secondary" spin />
 
         <BaseIcon v-if="icon" :icon="icon" color="secondary" />
+
+        <BaseIcon v-if="input.valid" icon="check" color="success" />
       </div>
     </div>
 
@@ -49,8 +51,8 @@ export default {
       default: 'text'
     },
     placeholder: {
-      type: [String, null],
-      default: null
+      type: String,
+      default: ''
     },
     disabled: {
       type: Boolean,
@@ -61,8 +63,8 @@ export default {
       default: false
     },
     icon: {
-      type: [String, null],
-      default: null
+      type: String,
+      default: ''
     },
     loading: {
       type: Boolean,

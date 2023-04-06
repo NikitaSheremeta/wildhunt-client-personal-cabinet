@@ -34,14 +34,6 @@
             :rules="rules.password"
           />
 
-          <BasePassword
-            v-model="state.repeatPassword"
-            class="form__field"
-            :placeholder="labels.SIGN_UP_VIEW.REPEAT_PASSWORD"
-            :disabled="flags.isDisabled"
-            :rules="rules.repeatPassword"
-          />
-
           <div class="form__actions">
             <BaseButton
               full-width
@@ -93,7 +85,7 @@ import BasePassword from '@/components/base/BasePassword';
 import BaseButton from '@/components/base/BaseButton';
 import BaseCheckbox from '@/components/base/BaseCheckbox';
 import BaseLink from '@/components/base/BaseLink';
-import { required, minLength, maxLength, email, sameAs } from '@/helpers/validators';
+import { required, minLength, maxLength, email } from '@/helpers/validators';
 import { debounce } from '@/helpers/debounce';
 import { validationMessages } from '@/utils/validation-messages';
 import { magicNumbers } from '@/utils/magic-numbers';
@@ -116,10 +108,7 @@ export default {
       password: ''
     });
 
-    const state = reactive({
-      repeatPassword: '',
-      eula: true
-    });
+    const state = reactive({ eula: true });
 
     const flags = reactive({
       isLoading: false,
@@ -143,8 +132,7 @@ export default {
         maxLength: maxLength(magicNumbers.PASSWORD.MAX_LENGTH, validationMessages.PASSWORD.MAX_LENGTH)
       },
       repeatPassword: {
-        required: required(validationMessages.CONFIRM_PASSWORD.REQUIRED),
-        sameAs: sameAs(data.password, validationMessages.CONFIRM_PASSWORD.SAME_AS)
+        required: required(validationMessages.CONFIRM_PASSWORD.REQUIRED)
       }
     };
 
@@ -171,6 +159,7 @@ export default {
       flags,
       rules,
       labels,
+      validationMessages,
       onSubmitForm
     };
   }
@@ -192,10 +181,6 @@ export default {
     &:last-child {
       margin-bottom: 0;
     }
-  }
-
-  &__actions {
-    margin-top: 24px;
   }
 
   &__eula {
