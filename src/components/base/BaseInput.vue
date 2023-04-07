@@ -14,11 +14,11 @@
       <div class="icon">
         <slot v-if="!!$slots.icon" name="icon"></slot>
 
-        <BaseIcon v-if="loading" icon="preloader" color="secondary" spin />
-
         <BaseIcon v-if="icon" :icon="icon" color="secondary" />
 
         <BaseIcon v-if="input.valid" icon="check" color="success" />
+
+        <BaseIcon v-if="state.validationMessage" icon="exclamation" color="danger" />
       </div>
     </div>
 
@@ -65,10 +65,6 @@ export default {
     icon: {
       type: String,
       default: ''
-    },
-    loading: {
-      type: Boolean,
-      default: false
     },
     rules: {
       type: [Object, null],

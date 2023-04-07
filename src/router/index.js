@@ -19,7 +19,7 @@ const routes = [
       title: labels.ROUTER.LOGIN,
       layout: 'Base'
     },
-    component: () => import('../views/Login.vue')
+    component: () => import('../views/login/Login.vue')
   },
   {
     path: '/signup',
@@ -28,7 +28,7 @@ const routes = [
       title: labels.ROUTER.SIGN_UP,
       layout: 'Base'
     },
-    component: () => import('../views/Signup.vue')
+    component: () => import('../views/signup/Signup.vue')
   },
   {
     path: '/reset-password',
@@ -37,7 +37,7 @@ const routes = [
       title: labels.ROUTER.RESET_PASSWORD,
       layout: 'Base'
     },
-    component: () => import('../views/ResetPassword.vue')
+    component: () => import('../views/resetPassword/ResetPassword.vue')
   },
   {
     path: '/shop',
