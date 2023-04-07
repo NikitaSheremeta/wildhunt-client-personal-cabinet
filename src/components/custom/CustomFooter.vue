@@ -8,38 +8,34 @@
           </span>
 
           <div class="navigation">
-            <BaseButton
+            <BaseLink
               v-for="item in navigation"
-              :key="item.slot"
-              :to="item.to"
-              tag-name="a"
+              :key="item.label"
               color="secondary"
-            >
-              {{ item.slot }}
-            </BaseButton>
+              :label="item.label"
+              :href="item.to"
+            />
           </div>
         </div>
       </div>
+
       <div class="row">
         <div class="grid">
           <span class="policy">
             Все права защищены. Копирование материалов сайта запрещено.
-            <br />Мы предоставляем ознакомительный и бесплатный вариант игры
-            Minecraft. <br />Приобрести полную весрию можно на сайте
-            Minecraft.net
+            <br />Мы предоставляем ознакомительный и бесплатный вариант игры Minecraft. <br />Приобрести полную весрию
+            можно на сайте Minecraft.net'
           </span>
 
           <div class="information">
-            <BaseButton
+            <BaseLink
               v-for="item in information"
-              :key="item.slot"
-              :to="item.to"
-              :icon-left="item.icon"
-              tag-name="a"
+              :key="item.label"
               color="secondary"
-            >
-              {{ item.slot }}
-            </BaseButton>
+              :label="item.label"
+              :href="item.to"
+              :icon-left="item.icon"
+            />
           </div>
         </div>
       </div>
@@ -48,58 +44,58 @@
 </template>
 
 <script>
-import BaseButton from './framework/BaseButton';
+import BaseLink from '@/components/base/BaseLink';
 
 export default {
   name: 'BaseFooter',
   components: {
-    BaseButton
+    BaseLink
   },
   data() {
     return {
       navigation: [
         {
-          slot: 'Главная',
+          label: 'Главная',
           to: '/'
         },
         {
-          slot: 'Магазин',
+          label: 'Магазин',
           to: 'shop'
         },
         {
-          slot: 'Форум',
+          label: 'Форум',
           to: 'forum'
         },
         {
-          slot: 'Новости',
+          label: 'Новости',
           to: 'news'
         },
         {
-          slot: 'Wiki',
+          label: 'Wiki',
           to: 'wiki'
         },
         {
-          slot: 'FAQ',
+          label: 'FAQ',
           to: 'faq'
         },
         {
-          slot: 'Скачать лаунчер',
+          label: 'Скачать лаунчер',
           to: 'download-launcher'
         }
       ],
       information: [
         {
-          slot: 'Техническая поддержка',
+          label: 'Техническая поддержка',
           to: 'support',
           icon: 'chat-messages'
         },
         {
-          slot: 'Пользовательское соглашение',
+          label: 'Пользовательское соглашение',
           to: 'terms',
           icon: 'file-contract'
         },
         {
-          slot: 'Политика конфиденциальности',
+          label: 'Политика конфиденциальности',
           to: 'privacy-policy',
           icon: 'file-lines'
         }
@@ -117,7 +113,7 @@ export default {
 <style lang="scss" scoped>
 .footer {
   margin-top: 88px;
-  padding: 24px 0;
+  padding: 32px 0;
   width: 100%;
   background-color: $gray-900;
 }
@@ -127,10 +123,6 @@ export default {
     display: grid;
     grid-template-columns: repeat(2, auto);
     width: 100%;
-  }
-
-  &:first-child {
-    margin-bottom: 4px;
   }
 }
 

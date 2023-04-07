@@ -1,19 +1,20 @@
 <template>
   <div class="container">
-    <div class="row" :class="$style.row">
-      <div :class="$style['not-found']">
-        <div :class="$style['not-found-code']">
-          <span>4</span>
-          <img
-            src="../assets/img/dancing-parrot.gif"
-            alt="Minecraft Wild Hunt"
-          />
-          <span>4</span>
+    <div class="row">
+      <div class="not-found">
+        <div class="not-found-code">
+          <span class="not-found-code__number">4</span>
+
+          <img class="not-found-code__image" src="@/assets/img/dancing-parrot.gif" alt="Minecraft Wild Hunt" />
+
+          <span class="not-found-code__number">4</span>
         </div>
-        <p>
+
+        <p class="not-found__description">
           Мы не можем найти нужную вам страницу,
           <br />но не расстраивайтесь, вот вам танцующий попугай :)
         </p>
+
         <BaseButton @click="$router.go(-1)"> Вернуться назад </BaseButton>
       </div>
     </div>
@@ -21,7 +22,7 @@
 </template>
 
 <script>
-import BaseButton from '../components/framework/BaseButton';
+import BaseButton from '@/components/base/BaseButton';
 
 export default {
   components: {
@@ -30,7 +31,7 @@ export default {
 };
 </script>
 
-<style lang="scss" module>
+<style lang="scss" scoped>
 .row {
   display: flex;
   justify-content: center;
@@ -46,19 +47,19 @@ export default {
     align-items: center;
     justify-content: center;
 
-    span {
+    &__number {
       line-height: 1;
       font-size: 156px;
       font-weight: $font-weight-bold;
     }
 
-    img {
+    &__image {
       margin: 0 -32px 24px -32px;
       width: 128px;
     }
   }
 
-  p {
+  &__description {
     margin-top: 8px;
     margin-bottom: 24px;
     text-align: center;

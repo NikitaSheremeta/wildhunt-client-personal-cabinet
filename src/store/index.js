@@ -1,7 +1,7 @@
 import { createStore } from 'vuex';
-import auth from '../api/auth';
 import axios from 'axios';
-import { useDebounce } from '../components/use/debounce';
+import auth from '@/api/auth';
+import { debounce } from '@/helpers/debounce';
 
 export default createStore({
   state: {
@@ -36,11 +36,7 @@ export default createStore({
     },
     async SIGNUP({ commit }, req) {
       try {
-        const { data: response } = await auth.signup(
-          req.username,
-          req.email,
-          req.password
-        );
+        const { data: response } = await auth.signup(req.username, req.email, req.password);
 
         localStorage.setItem('token', response.data.accessToken);
 
@@ -92,7 +88,7 @@ export default createStore({
       } catch (err) {
         console.log('[check-auth]: ' + err.message);
       } finally {
-        useDebounce(() => commit('SET_LOADING', false))();
+        debounce(() => commit('SET_LOADING', false))();
       }
     }
   }

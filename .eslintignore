@@ -34,8 +34,8 @@ build/*
 # Nuxt generate
 dist
 
-# SVG icons
-src/components/framework/BaseIcon.vue
+# components
+src/components/base/BaseIcon.vue
 
-# Strength password checker
-src/components/use/strength-password-checker.js
+# utils
+src/utils/regular-expressions.js

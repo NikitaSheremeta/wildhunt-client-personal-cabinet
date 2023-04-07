@@ -1,16 +1,14 @@
 <template>
   <div class="container">
-    <div class="row" :class="$style.row">
-      <div :class="$style['wip']">
-        <img
-          :class="$style['wip-image']"
-          src="../assets/img/wolf-and-cat.gif"
-          alt="Minecraft Wild Hunt"
-        />
-        <p>
-          Данный раздел находится в разработке,
-          <br />но не расстраивайтесь, в скором времени он появится!
+    <div class="row">
+      <div class="work-in-progress">
+        <img class="work-in-progress__image" src="@/assets/img/wolf-and-cat.gif" alt="Minecraft Wild Hunt" />
+
+        <p class="work-in-progress__description">
+          'Данный раздел находится в разработке,
+          <br />но не расстраивайтесь, в скором времени он появится!'
         </p>
+
         <BaseButton @click="$router.go(-1)"> Вернуться назад </BaseButton>
       </div>
     </div>
@@ -18,7 +16,7 @@
 </template>
 
 <script>
-import BaseButton from '../components/framework/BaseButton';
+import BaseButton from '@/components/base/BaseButton';
 
 export default {
   components: {
@@ -27,22 +25,22 @@ export default {
 };
 </script>
 
-<style lang="scss" module>
+<style lang="scss" scoped>
 .row {
   display: flex;
   justify-content: center;
 }
 
-.wip {
+.work-in-progress {
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  &-image {
+  &__image {
     width: 288px;
   }
 
-  p {
+  &__description {
     margin-top: 8px;
     margin-bottom: 24px;
     text-align: center;

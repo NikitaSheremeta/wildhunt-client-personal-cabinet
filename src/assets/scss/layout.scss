@@ -1,5 +1,5 @@
 body {
-  background-color: #1f2128;
+  background-color: $midnight;
   line-height: $line-height-base;
   color: $font-color-base;
   font-family: $font-family-base;
@@ -17,6 +17,7 @@ body {
 
 .content {
   flex: 1 0 auto;
+  margin-top: 16px;
 }
 
 .footer {
@@ -38,6 +39,7 @@ body {
 .row {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 @include media-breakpoint-down(xxs) {

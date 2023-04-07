@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import BaseHeader from '../components/BaseHeader';
-import BaseFooter from '../components/BaseFooter';
+import BaseHeader from '../components/custom/CustomHeader';
+import BaseFooter from '../components/custom/CustomFooter';
 
 export default {
   components: {
