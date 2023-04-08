@@ -1,10 +1,5 @@
 <template>
   <div :class="['base-captcha']">
-    <h2
-      class="title"
-      v-text="labels.CAPTCHA.TITLE"
-    />
-
     <div
       ref="code"
       class="code"
@@ -18,7 +13,7 @@
           v-for="(cell, cellIndex) in state.numberMarkups[number]"
           :key="cellIndex"
           :class="['cell', cell ? 'active' : '']"
-          v-text="cell"
+          v-text="valueRandomNumbers(10, null)"
         />
       </div>
     </div>
@@ -27,6 +22,7 @@
       ref="input"
       class="input"
       type="captcha"
+      autofocus
       :placeholder="labels.CAPTCHA.PLACEHOLDER"
       :rules="rules.captcha"
       @input="onInput"
@@ -34,7 +30,7 @@
     >
       <template #icon>
         <BaseIcon
-          class="icon"
+          class="redo-icon"
           icon="redo"
           color="secondary"
           @click="onClickRedoIcon"
@@ -53,7 +49,7 @@ import { valueRandomNumbers, arrayRandomNumbers } from '@/helpers/random-numbers
 import { labels } from '@/utils/labels';
 import { validationMessages } from '@/utils/validation-messages';
 
-const MINIMUM_VALUE = 2;
+const MINIMUM_VALUE = 3;
 const MAXIMUM_VALUE = 10;
 const CAPTCHA_NUMBERS_LENGTH = 8;
 
@@ -186,7 +182,8 @@ export default {
       labels,
       onInput,
       onKeydownDelete,
-      onClickRedoIcon
+      onClickRedoIcon,
+      valueRandomNumbers
     };
   }
 };
@@ -238,7 +235,7 @@ export default {
   .input {
     margin-top: 24px;
 
-    .icon {
+    .redo-icon {
       cursor: pointer;
     }
   }

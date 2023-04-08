@@ -5,8 +5,6 @@
       v-text="labels.SIGN_UP_VIEW.TITLE"
     />
 
-    <BaseCaptcha />
-
     <BaseInput
       v-model="data.username"
       class="form__field"
@@ -82,7 +80,6 @@
 import { reactive } from 'vue';
 import BaseInput from '@/components/base/BaseInput';
 import BasePassword from '@/components/base/BasePassword';
-import BaseCaptcha from '@/components/base/BaseCaptcha';
 import BaseButton from '@/components/base/BaseButton';
 import BaseCheckbox from '@/components/base/BaseCheckbox';
 import BaseLink from '@/components/base/BaseLink';
@@ -95,7 +92,6 @@ export default {
   components: {
     BaseInput,
     BasePassword,
-    BaseCaptcha,
     BaseButton,
     BaseCheckbox,
     BaseLink

@@ -20,7 +20,6 @@ export const labels = {
     SUCCESS: 'Надежный пароль, только не забудьте его'
   },
   CAPTCHA: {
-    TITLE: 'Каптча!',
     PLACEHOLDER: 'Введите код',
   },
   LOGIN_VIEW: {

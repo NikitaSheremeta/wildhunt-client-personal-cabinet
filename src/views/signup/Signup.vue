@@ -1,15 +1,20 @@
 <template>
   <div class="container">
     <div class="row">
-      <BaseCaptcha />
-
       <transition name="fade-slide-up">
         <SignupForm
-          v-if="!state.shouldDisplaySignupForm"
+          v-if="state.shouldDisplaySignupForm"
           v-model="data.formData"
           :is-loading="flags.isLoading"
           :is-disabled="flags.isDisabled"
           @submit.prevent="onSubmitSignupForm"
+        />
+      </transition>
+
+      <transition name="fade-slide-up">
+        <BaseCaptcha
+          v-if="state.shouldDisplayCaptcha"
+          v-model="flags.isCaptchaValid"
         />
       </transition>
 
@@ -58,16 +63,17 @@ export default {
 
     const data = reactive({
       signupFormData: {},
-      confirmFormData: {}
+      confirmationFormData: {}
     });
 
     const state = reactive({
       shouldDisplaySignupForm: true,
-      shouldDisplayCodeForm: false,
+      shouldDisplayCaptcha: false,
       shouldDisplayNotice: false
     });
 
     const flags = reactive({
+      isCaptchaValid: false,
       isLoading: false,
       isDisabled: false
     });
@@ -83,7 +89,8 @@ export default {
             state.shouldDisplaySignupForm = false;
 
             debounce(() => {
-              state.shouldDisplayNotice = true;
+              // state.shouldDisplayNotice = true;
+              state.shouldDisplayCaptcha = true;
             })();
 
             if (Object.prototype.hasOwnProperty.call(result, 'error')) {

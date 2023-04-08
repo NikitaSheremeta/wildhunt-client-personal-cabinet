@@ -2,7 +2,7 @@
   <button
     :class="['base-button', classes]"
     :disabled="disabled"
-    v-on="onClick"
+    @click="onClick"
   >
     <BaseIcon
       v-if="loading"
