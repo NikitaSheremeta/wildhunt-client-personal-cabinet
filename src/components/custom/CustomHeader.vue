@@ -3,7 +3,12 @@
     <div class="container">
       <div class="row">
         <div class="grid">
-          <img class="logo" src="../../assets/img/logo.svg" alt="Wild Hunt" @click="onLogoClick" />
+          <img
+            class="logo"
+            src="@/assets/img/logo.svg"
+            alt="Wild Hunt"
+            @click="onLogoClick"
+          >
 
           <div class="controls">
             <BaseLink
@@ -46,16 +51,16 @@ export default {
     onLogoClick() {
       this.$router.push({ path: '/' });
     },
-    defineAuthorizationButtons() {
-      switch (this.$route.path) {
-        case '/login':
-          return this.authorizationButtons.filter((item) => item.to === '/signup');
-        case '/signup':
-          return this.authorizationButtons.filter((item) => item.to === '/login');
-        default:
-          return this.authorizationButtons;
-      }
-    }
+    // defineAuthorizationButtons() {
+    //   switch (this.$route.path) {
+    //     case '/login':
+    //       return this.authorizationButtons.filter((item) => item.to === '/signup');
+    //     case '/signup':
+    //       return this.authorizationButtons.filter((item) => item.to === '/login');
+    //     default:
+    //       return this.authorizationButtons;
+    //   }
+    // }
   }
 };
 </script>

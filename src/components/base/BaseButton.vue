@@ -1,8 +1,21 @@
 <template>
-  <button :class="['base-button', classes]" :disabled="disabled" v-on="listeners">
-    <BaseIcon v-if="loading" spin icon="preloader" width="20" height="20" />
+  <button
+    :class="['base-button', classes]"
+    :disabled="disabled"
+    v-on="onClick"
+  >
+    <BaseIcon
+      v-if="loading"
+      spin
+      icon="preloader"
+      width="20"
+      height="20"
+    />
 
-    <span v-if="label" v-text="label" />
+    <span
+      v-if="label"
+      v-text="label"
+    />
   </button>
 </template>
 
@@ -52,17 +65,13 @@ export default {
       props.loading ? 'loading' : ''
     ]);
 
-    const listeners = computed(() => {
-      return {
-        click: () => {
-          if (props.to !== null) {
-            router.push(props.to);
-          }
-        }
-      };
-    });
+    const onClick = () => {
+      if (props.to !== null) {
+        router.push(props.to);
+      }
+    };
 
-    return { classes, listeners };
+    return { classes, onClick };
   }
 };
 </script>

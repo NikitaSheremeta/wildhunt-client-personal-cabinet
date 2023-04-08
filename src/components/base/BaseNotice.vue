@@ -1,13 +1,25 @@
 <template>
   <div :class="['base-notice', classes]">
     <div class="wrapper">
-      <span class="icon" v-text="icon" />
+      <span
+        class="icon"
+        v-text="icon"
+      />
 
-      <h2 class="title" v-text="title" />
+      <h2
+        class="title"
+        v-text="title"
+      />
 
-      <p class="description" v-text="description" />
+      <p
+        class="description"
+        v-text="description"
+      />
 
-      <div v-if="!!$slots.extension" class="extension">
+      <div
+        v-if="!!$slots.extension"
+        class="extension"
+      >
         <slot name="extension" />
       </div>
     </div>
@@ -41,7 +53,10 @@ export default {
     }
   },
   setup(props) {
-    const classes = computed(() => [props.success ? 'success' : '', props.error ? 'error' : '']);
+    const classes = computed(() => [
+      props.success ? 'success' : '',
+      props.error ? 'error' : ''
+    ]);
 
     return { classes };
   }

@@ -89,7 +89,7 @@ module.exports = {
     ],
     semi: ['error', 'always'],
     'space-before-blocks': ['error', 'always'],
-    'multiline-ternary': ['error', 'always'],
+    'multiline-ternary': ['error', 'always-multiline'],
     'prefer-const': ['error'],
     complexity: [
       'error',

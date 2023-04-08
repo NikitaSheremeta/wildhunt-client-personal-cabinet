@@ -2,7 +2,7 @@
   <div :class="['base-captcha']">
     <h2
       class="title"
-      v-text="'Каптча!'"
+      v-text="labels.CAPTCHA.TITLE"
     />
 
     <div
@@ -27,7 +27,7 @@
       ref="input"
       class="input"
       type="captcha"
-      :placeholder="'Введите код'"
+      :placeholder="labels.CAPTCHA.PLACEHOLDER"
       :rules="rules.captcha"
       @input="onInput"
       @keydown="onKeydownDelete"
@@ -37,7 +37,7 @@
           class="icon"
           icon="redo"
           color="secondary"
-          @click="onClick"
+          @click="onClickRedoIcon"
         />
       </template>
     </BaseInput>
@@ -49,7 +49,9 @@ import { computed, onMounted, reactive, ref } from 'vue';
 import BaseInput from '@/components/base/BaseInput';
 import BaseIcon from '@/components/base/BaseIcon';
 import { required, sameAs } from '@/helpers/validators';
-import { randomNumber, randomNumbers } from '@/helpers/random-number';
+import { valueRandomNumbers, arrayRandomNumbers } from '@/helpers/random-numbers';
+import { labels } from '@/utils/labels';
+import { validationMessages } from '@/utils/validation-messages';
 
 const MINIMUM_VALUE = 2;
 const MAXIMUM_VALUE = 10;
@@ -71,7 +73,7 @@ export default {
 
     const state = reactive({
       input: '',
-      code: randomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE),
+      code: arrayRandomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE),
       numberMarkups: [
         [1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1],
         [0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1],
@@ -88,10 +90,10 @@ export default {
 
     const rules = {
       captcha: {
-        required: required('Необходимо ввести код'),
+        required: required(validationMessages.CAPTCHA.REQUIRED),
         sameAs: sameAs(
           computed(() => captchaResult.value),
-          'Введенный код неверен'
+          validationMessages.CAPTCHA.INCORRECT
         )
       }
     };
@@ -113,7 +115,7 @@ export default {
     const setRandomOpacity = () => {
       cellsSelection((cell) => {
         if (Object.values(cell.classList).indexOf('active') > -1) {
-          cell.style.opacity = `0.${randomNumber(MINIMUM_VALUE, MAXIMUM_VALUE)}`;
+          cell.style.opacity = `0.${valueRandomNumbers(MINIMUM_VALUE, MAXIMUM_VALUE)}`;
         }
       });
     };
@@ -141,7 +143,7 @@ export default {
       const value = event.target.value;
 
       if (value.length) {
-        const index = value.length - 1;
+        const index = event.target.selectionStart - 1;
 
         const setCSSClass = (CSSClass) => {
           for (const element of code.value.children[index].children) {
@@ -169,14 +171,23 @@ export default {
       }
     };
 
-    const onClick = () => {
-      state.code = randomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE);
+    const onClickRedoIcon = () => {
+      state.code = arrayRandomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE);
 
       setRandomOpacity();
       resetCaptcha();
     };
 
-    return { code, input, state, rules, onInput, onKeydownDelete, onClick };
+    return {
+      code,
+      input,
+      state,
+      rules,
+      labels,
+      onInput,
+      onKeydownDelete,
+      onClickRedoIcon
+    };
   }
 };
 </script>

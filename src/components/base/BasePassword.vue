@@ -11,7 +11,10 @@
       @input="onInput"
       @blur="onBlur"
     >
-      <template v-if="create" #icon>
+      <template
+        v-if="create"
+        #icon
+      >
         <BaseIcon
           width="22"
           height="22"
@@ -21,14 +24,21 @@
         />
       </template>
 
-      <template v-if="create" #extension>
+      <template
+        v-if="create"
+        #extension
+      >
         <div class="meter">
-          <span class="meter__item"></span>
-          <span class="meter__item"></span>
-          <span class="meter__item"></span>
+          <span class="meter__item" />
+          <span class="meter__item" />
+          <span class="meter__item" />
         </div>
 
-        <span v-if="password.notice" class="notice" v-text="password.notice" />
+        <span
+          v-if="password.notice"
+          class="notice"
+          v-text="password.notice"
+        />
       </template>
     </BaseInput>
   </div>
@@ -72,7 +82,10 @@ export default {
 
     const password = usePassword({ value: '' });
 
-    const classes = computed(() => [props.disabled ? 'disabled' : '', password.status]);
+    const classes = computed(() => [
+      props.disabled ? 'disabled' : '',
+      password.status
+    ]);
 
     const onInput = (event) => {
       const value = event.target.value;

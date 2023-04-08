@@ -22,5 +22,9 @@ export const validationMessages = {
   EMAIL: {
     REQUIRED: 'Введите электронную почту',
     INCORRECT: 'Неправильный адрес электронной почты'
+  },
+  CAPTCHA: {
+    REQUIRED: 'Необходимо ввести код',
+    INCORRECT: 'Введенный код неверен'
   }
 };

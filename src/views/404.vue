@@ -5,17 +5,25 @@
         <div class="not-found-code">
           <span class="not-found-code__number">4</span>
 
-          <img class="not-found-code__image" src="@/assets/img/dancing-parrot.gif" alt="Minecraft Wild Hunt" />
+          <img
+            class="not-found-code__image"
+            src="@/assets/img/dancing-parrot.gif"
+            alt="Minecraft Wild Hunt"
+          >
 
           <span class="not-found-code__number">4</span>
         </div>
 
-        <p class="not-found__description">
-          Мы не можем найти нужную вам страницу,
-          <br />но не расстраивайтесь, вот вам танцующий попугай :)
-        </p>
+        <!-- eslint-disable vue/no-v-html -->
+        <p
+          class="not-found__description"
+          v-html="labels.NOT_FOUND.DESCRIPTION"
+        />
 
-        <BaseButton @click="$router.go(-1)"> Вернуться назад </BaseButton>
+        <BaseButton
+          :label="labels.NOT_FOUND.GO_BACK"
+          @click="$router.go(-1)"
+        />
       </div>
     </div>
   </div>
@@ -23,10 +31,13 @@
 
 <script>
 import BaseButton from '@/components/base/BaseButton';
-
+import { labels } from '@/utils/labels';
 export default {
   components: {
     BaseButton
+  },
+  setup() {
+    return { labels };
   }
 };
 </script>

@@ -1,6 +1,9 @@
 <template>
   <form class="form">
-    <h2 class="form__title" v-text="labels.SIGN_UP_VIEW.TITLE" />
+    <h2
+      class="form__title"
+      v-text="labels.SIGN_UP_VIEW.TITLE"
+    />
 
     <BaseCaptcha />
 
@@ -45,7 +48,12 @@
     </div>
 
     <div class="form__eula">
-      <BaseCheckbox v-model="state.eula" color="secondary" :label="labels.SIGN_UP_VIEW.EULA" :disabled="isDisabled">
+      <BaseCheckbox
+        v-model="state.eula"
+        color="secondary"
+        :label="labels.SIGN_UP_VIEW.EULA"
+        :disabled="isDisabled"
+      >
         <BaseLink
           underline
           href="terms"
@@ -55,7 +63,7 @@
           :disabled="isDisabled"
         />
 
-        <br />и
+        <br>и
 
         <BaseLink
           underline
@@ -74,20 +82,20 @@
 import { reactive } from 'vue';
 import BaseInput from '@/components/base/BaseInput';
 import BasePassword from '@/components/base/BasePassword';
+import BaseCaptcha from '@/components/base/BaseCaptcha';
 import BaseButton from '@/components/base/BaseButton';
 import BaseCheckbox from '@/components/base/BaseCheckbox';
 import BaseLink from '@/components/base/BaseLink';
-import { labels } from '@/utils/labels';
 import { email, maxLength, minLength, required } from '@/helpers/validators';
+import { labels } from '@/utils/labels';
 import { validationMessages } from '@/utils/validation-messages';
 import { magicNumbers } from '@/utils/magic-numbers';
-import BaseCaptcha from '@/components/base/BaseCaptcha';
 
 export default {
   components: {
-    BaseCaptcha,
     BaseInput,
     BasePassword,
+    BaseCaptcha,
     BaseButton,
     BaseCheckbox,
     BaseLink

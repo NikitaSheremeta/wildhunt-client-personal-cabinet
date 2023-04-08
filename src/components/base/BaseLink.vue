@@ -1,10 +1,23 @@
 <template>
-  <a :class="['base-link', classes]" :href="href" :target="target">
-    <BaseIcon v-if="iconLeft" :icon="iconLeft" />
+  <a
+    :class="['base-link', classes]"
+    :href="href"
+    :target="target"
+  >
+    <BaseIcon
+      v-if="iconLeft"
+      :icon="iconLeft"
+    />
 
-    <span v-if="label" v-text="label" />
+    <span
+      v-if="label"
+      v-text="label"
+    />
 
-    <BaseIcon v-if="iconRight" :icon="iconRight" />
+    <BaseIcon
+      v-if="iconRight"
+      :icon="iconRight"
+    />
   </a>
 </template>
 

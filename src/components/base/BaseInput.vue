@@ -9,20 +9,38 @@
         :disabled="disabled"
         :autofocus="autofocus"
         v-on="listeners"
-      />
+      >
 
       <div class="icon">
-        <slot v-if="!!$slots.icon" name="icon"></slot>
+        <slot
+          v-if="!!$slots.icon"
+          name="icon"
+        />
 
-        <BaseIcon v-if="icon" :icon="icon" color="secondary" />
+        <BaseIcon
+          v-if="icon"
+          :icon="icon"
+          color="secondary"
+        />
 
-        <BaseIcon v-if="rules && input.valid && input.touched" icon="check" color="success" />
+        <BaseIcon
+          v-if="rules && input.valid && input.touched"
+          icon="check"
+          color="success"
+        />
 
-        <BaseIcon v-if="state.validationMessage" icon="exclamation" color="danger" />
+        <BaseIcon
+          v-if="state.validationMessage"
+          icon="exclamation"
+          color="danger"
+        />
       </div>
     </div>
 
-    <slot v-if="!!$slots.extension" name="extension"></slot>
+    <slot
+      v-if="!!$slots.extension"
+      name="extension"
+    />
 
     <span
       v-if="validationNotice && state.validationMessage"

@@ -2,10 +2,20 @@
   <div class="container">
     <div class="row">
       <transition name="fade-slide-up">
-        <form v-if="!flags.isHideForm" class="form" @submit.prevent="onSubmitForm">
-          <h2 class="form__title" v-text="labels.RESET_PASSWORD_VIEW.TITLE" />
+        <form
+          v-if="!flags.isHideForm"
+          class="form"
+          @submit.prevent="onSubmitForm"
+        >
+          <h2
+            class="form__title"
+            v-text="labels.RESET_PASSWORD_VIEW.TITLE"
+          />
 
-          <p class="form__description" v-text="labels.RESET_PASSWORD_VIEW.DESCRIPTION" />
+          <p
+            class="form__description"
+            v-text="labels.RESET_PASSWORD_VIEW.DESCRIPTION"
+          />
 
           <BaseInput
             v-model="data.email"
@@ -46,9 +56,9 @@ import { useStore } from 'vuex';
 import BaseInput from '@/components/base/BaseInput';
 import BaseButton from '@/components/base/BaseButton';
 import BaseLink from '@/components/base/BaseLink';
-import { labels } from '@/utils/labels';
 import { email, required } from '@/helpers/validators';
 import { debounce } from '@/helpers/debounce';
+import { labels } from '@/utils/labels';
 import { validationMessages } from '@/utils/validation-messages';
 
 export default {
