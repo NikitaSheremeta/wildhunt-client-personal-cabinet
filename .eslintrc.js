@@ -3,7 +3,7 @@ module.exports = {
   env: {
     node: true
   },
-  extends: ['plugin:vue/vue3-recommended', 'eslint:recommended', '@vue/prettier'],
+  extends: ['plugin:vue/vue3-recommended', 'eslint:recommended',],
   parserOptions: {
     parser: 'babel-eslint'
   },
@@ -89,6 +89,7 @@ module.exports = {
     ],
     semi: ['error', 'always'],
     'space-before-blocks': ['error', 'always'],
+    'multiline-ternary': ['error', 'always'],
     'prefer-const': ['error'],
     complexity: [
       'error',
@@ -100,6 +101,6 @@ module.exports = {
     'no-else-return': ['error'],
     'no-empty-function': ['error'],
     'no-implicit-coercion': ['error'],
-    'no-implicit-globals': ['error']
+    'no-implicit-globals': ['error'],
   }
 };

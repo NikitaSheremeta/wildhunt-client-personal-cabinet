@@ -1,14 +1,23 @@
 <template>
   <div :class="['base-captcha']">
-    <h2 class="title" v-text="'Каптча!'" />
+    <h2
+      class="title"
+      v-text="'Каптча!'"
+    />
 
-    <div ref="codeItem" class="code">
-      <div v-for="(item, itemIndex) in state.captchaCode" :key="itemIndex" class="code__item">
+    <div
+      ref="code"
+      class="code"
+    >
+      <div
+        v-for="(number, numberIndex) in state.code"
+        :key="numberIndex"
+        class="number"
+      >
         <div
-          v-for="(cell, cellIndex) in state.numberMarkups[item]"
+          v-for="(cell, cellIndex) in state.numberMarkups[number]"
           :key="cellIndex"
-          :class="['code__item-cell', cell ? 'active' : '']"
-          :style="randomOpacity()"
+          :class="['cell', cell ? 'active' : '']"
           v-text="cell"
         />
       </div>
@@ -16,15 +25,20 @@
 
     <BaseInput
       ref="input"
-      class="field"
+      class="input"
       type="captcha"
-      autofocus
       :placeholder="'Введите код'"
       :rules="rules.captcha"
       @input="onInput"
+      @keydown="onKeydownDelete"
     >
       <template #icon>
-        <BaseIcon class="field__icon" icon="redo" color="secondary" @click="onIconClick" />
+        <BaseIcon
+          class="icon"
+          icon="redo"
+          color="secondary"
+          @click="onClick"
+        />
       </template>
     </BaseInput>
   </div>
@@ -35,11 +49,11 @@ import { computed, onMounted, reactive, ref } from 'vue';
 import BaseInput from '@/components/base/BaseInput';
 import BaseIcon from '@/components/base/BaseIcon';
 import { required, sameAs } from '@/helpers/validators';
-import { randomNumber } from '@/helpers/random-number';
+import { randomNumber, randomNumbers } from '@/helpers/random-number';
 
-const MINIMUM_VALUE = 1;
+const MINIMUM_VALUE = 2;
 const MAXIMUM_VALUE = 10;
-const CAPTCHA_NUMBERS_QUANTITY = 8;
+const CAPTCHA_NUMBERS_LENGTH = 8;
 
 export default {
   name: 'BaseCaptcha',
@@ -52,8 +66,12 @@ export default {
   },
   emits: ['update:modelValue'],
   setup(props, context) {
+    const code = ref(null);
+    const input = ref(null);
+
     const state = reactive({
-      captchaCode: [],
+      input: '',
+      code: randomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE),
       numberMarkups: [
         [1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1],
         [0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1],
@@ -68,9 +86,6 @@ export default {
       ]
     });
 
-    const codeItem = ref(null);
-    const input = ref(null);
-
     const rules = {
       captcha: {
         required: required('Необходимо ввести код'),
@@ -81,55 +96,87 @@ export default {
       }
     };
 
+    const captchaResult = computed(() => state.code.join(''));
+
     onMounted(() => {
-      randomNumbers();
+      setRandomOpacity();
     });
 
-    const randomNumbers = () => {
-      state.captchaCode = [];
-
-      for (let i = 0; i < CAPTCHA_NUMBERS_QUANTITY; i++) {
-        state.captchaCode.push(randomNumber(MAXIMUM_VALUE));
+    const cellsSelection = (callback) => {
+      for (const number of code.value.children) {
+        for (const cell of number.children) {
+          callback(cell);
+        }
       }
     };
 
-    const randomOpacity = () => `opacity: 0.${randomNumber(MINIMUM_VALUE, MAXIMUM_VALUE)}`;
+    const setRandomOpacity = () => {
+      cellsSelection((cell) => {
+        if (Object.values(cell.classList).indexOf('active') > -1) {
+          cell.style.opacity = `0.${randomNumber(MINIMUM_VALUE, MAXIMUM_VALUE)}`;
+        }
+      });
+    };
 
-    const captchaResult = computed(() => state.captchaCode.join(''));
+    const removeCSSClasses = (cell) => {
+      Object.keys(cell.classList).find((key) => {
+        if (cell.classList[key] === 'error') {
+          cell.classList.remove('error');
+        }
+
+        if (cell.classList[key] === 'success') {
+          cell.classList.remove('success');
+        }
+      });
+    };
+
+    const resetCaptcha = () => {
+      input.value.input.value = '';
+
+      cellsSelection((cell) => removeCSSClasses(cell));
+    };
+
 
     const onInput = (event) => {
       const value = event.target.value;
 
-      const array = [];
+      if (value.length) {
+        const index = value.length - 1;
 
-      for (let i = 0; i < value.length; i++) {
-        array.push(Number(value[i]));
+        const setCSSClass = (CSSClass) => {
+          for (const element of code.value.children[index].children) {
+            if (Object.values(element.classList).indexOf('active') > -1) {
+              element.classList.add(CSSClass);
+            }
+          }
+        };
+
+        Number(value.slice(-1)) === state.code[index] ?
+          setCSSClass('success') :
+          setCSSClass('error');
       }
-
-      array.forEach((item, index) => {
-        if (item === state.captchaCode[index]) {
-          for (const element of codeItem.value.children[index].children) {
-            if (Object.values(element.classList).indexOf('active') > -1) {
-              element.classList.value += ' success';
-            }
-          }
-        } else {
-          for (const element of codeItem.value.children[index].children) {
-            if (Object.values(element.classList).indexOf('active') > -1) {
-              element.classList.value += ' error';
-            }
-          }
-        }
-      });
 
       context.emit('update:modelValue', value === captchaResult.value);
     };
 
-    const onIconClick = () => {
-      randomNumbers();
+    const onKeydownDelete = (event) => {
+      const value = event.target.value;
+
+      if (value.length && (event.key === 'Backspace' || event.key === 'Delete')) {
+        for (const cell of code.value.children[value.length - 1].children) {
+          removeCSSClasses(cell);
+        }
+      }
     };
 
-    return { state, input, rules, codeItem, randomOpacity, onInput, onIconClick };
+    const onClick = () => {
+      state.code = randomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE);
+
+      setRandomOpacity();
+      resetCaptcha();
+    };
+
+    return { code, input, state, rules, onInput, onKeydownDelete, onClick };
   }
 };
 </script>
@@ -151,12 +198,12 @@ export default {
     margin-top: 24px;
     font-size: $font-size-xs;
 
-    &__item {
+    .number {
       z-index: 9;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
 
-      &-cell {
+      .cell {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -177,10 +224,10 @@ export default {
     }
   }
 
-  .field {
+  .input {
     margin-top: 24px;
 
-    &__icon {
+    .icon {
       cursor: pointer;
     }
   }
