@@ -16,7 +16,7 @@
 
         <BaseIcon v-if="icon" :icon="icon" color="secondary" />
 
-        <BaseIcon v-if="input.valid" icon="check" color="success" />
+        <BaseIcon v-if="rules && input.valid && input.touched" icon="check" color="success" />
 
         <BaseIcon v-if="state.validationMessage" icon="exclamation" color="danger" />
       </div>
@@ -54,13 +54,13 @@ export default {
       type: String,
       default: ''
     },
-    disabled: {
-      type: Boolean,
-      required: false
-    },
     autofocus: {
       type: Boolean,
       default: false
+    },
+    disabled: {
+      type: Boolean,
+      required: false
     },
     icon: {
       type: String,
@@ -113,7 +113,7 @@ export default {
       };
     });
 
-    if (props.debounceValidation) {
+    if (props.debounceValidation && props.type !== 'captcha') {
       watch(
         () => input.value,
         debounce(() => validationHandle(), magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)

@@ -2,6 +2,8 @@
   <form class="form">
     <h2 class="form__title" v-text="labels.SIGN_UP_VIEW.TITLE" />
 
+    <BaseCaptcha />
+
     <BaseInput
       v-model="data.username"
       class="form__field"
@@ -79,9 +81,11 @@ import { labels } from '@/utils/labels';
 import { email, maxLength, minLength, required } from '@/helpers/validators';
 import { validationMessages } from '@/utils/validation-messages';
 import { magicNumbers } from '@/utils/magic-numbers';
+import BaseCaptcha from '@/components/base/BaseCaptcha';
 
 export default {
   components: {
+    BaseCaptcha,
     BaseInput,
     BasePassword,
     BaseButton,

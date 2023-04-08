@@ -1,9 +1,11 @@
 <template>
   <div class="container">
     <div class="row">
+      <BaseCaptcha />
+
       <transition name="fade-slide-up">
         <SignupForm
-          v-if="state.shouldDisplaySignupForm"
+          v-if="!state.shouldDisplaySignupForm"
           v-model="data.formData"
           :is-loading="flags.isLoading"
           :is-disabled="flags.isDisabled"
@@ -36,8 +38,9 @@
 import { reactive } from 'vue';
 import { useStore } from 'vuex';
 import SignupForm from '@/views/signup/signupForm/SignupForm';
-import BaseButton from '@/components/base/BaseButton';
+import BaseCaptcha from '@/components/base/BaseCaptcha';
 import BaseNotice from '@/components/base/BaseNotice';
+import BaseButton from '@/components/base/BaseButton';
 import { debounce } from '@/helpers/debounce';
 import { validationMessages } from '@/utils/validation-messages';
 import { magicNumbers } from '@/utils/magic-numbers';
@@ -46,8 +49,9 @@ import { labels } from '@/utils/labels';
 export default {
   components: {
     SignupForm,
-    BaseButton,
-    BaseNotice
+    BaseCaptcha,
+    BaseNotice,
+    BaseButton
   },
   setup() {
     const store = useStore();
