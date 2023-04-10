@@ -116,42 +116,37 @@ export default {
       });
     };
 
-    const removeCSSClasses = (cell) => {
-      Object.keys(cell.classList).find((key) => {
-        if (cell.classList[key] === 'error') {
+    const addCSSClasses = (number) => {
+      for (const cell of code.value.children[number].children) {
+        if (Object.values(cell.classList).indexOf('active') > -1) {
+          const valuesArray = input.value.input.value.split('');
+
+          Number(valuesArray[number]) === state.code[number] ?
+            cell.classList.add('success') :
+            cell.classList.add('error');
+        }
+      }
+    };
+
+    const removeCSSClasses = (number) => {
+      for (const cell of code.value.children[number].children) {
+        if (Object.values(cell.classList).indexOf('error') > -1) {
           cell.classList.remove('error');
         }
 
-        if (cell.classList[key] === 'success') {
+        if (Object.values(cell.classList).indexOf('success') > -1) {
           cell.classList.remove('success');
         }
-      });
+      }
     };
-
-    const resetCaptcha = () => {
-      input.value.input.value = '';
-
-      cellsSelection((cell) => removeCSSClasses(cell));
-    };
-
 
     const onInput = (event) => {
       const value = event.target.value;
 
       if (value.length) {
-        const index = event.target.selectionStart - 1;
-
-        const setCSSClass = (CSSClass) => {
-          for (const element of code.value.children[index].children) {
-            if (Object.values(element.classList).indexOf('active') > -1) {
-              element.classList.add(CSSClass);
-            }
-          }
-        };
-
-        Number(value.slice(-1)) === state.code[index] ?
-          setCSSClass('success') :
-          setCSSClass('error');
+        for (let i = 0; i < value.length; i++) {
+          addCSSClasses(i);
+        }
       }
 
       context.emit('update:modelValue', value === captchaResult.value);
@@ -160,18 +155,20 @@ export default {
     const onKeydownDelete = (event) => {
       const value = event.target.value;
 
-      if (value.length && (event.key === 'Backspace' || event.key === 'Delete')) {
-        for (const cell of code.value.children[value.length - 1].children) {
-          removeCSSClasses(cell);
+      if (value.length) {
+        if (event.target.selectionStart > 0 && (event.key === 'Backspace' || event.key === 'Delete')) {
+          for (let i = 0; i < value.length; i++) {
+            removeCSSClasses(i);
+          }
         }
       }
     };
 
     const onClickRedoIcon = () => {
+      input.value.input.value = '';
       state.code = arrayRandomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE);
 
       setRandomOpacity();
-      resetCaptcha();
     };
 
     return {

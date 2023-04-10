@@ -3,7 +3,7 @@
     <div class="row">
       <transition name="fade-slide-up">
         <SignupForm
-          v-if="state.shouldDisplaySignupForm"
+          v-if="!state.shouldDisplaySignupForm"
           v-model="data.formData"
           :is-loading="flags.isLoading"
           :is-disabled="flags.isDisabled"
@@ -13,7 +13,7 @@
 
       <transition name="fade-slide-up">
         <BaseCaptcha
-          v-if="state.shouldDisplayCaptcha"
+          v-if="!state.shouldDisplayCaptcha"
           v-model="flags.isCaptchaValid"
         />
       </transition>
