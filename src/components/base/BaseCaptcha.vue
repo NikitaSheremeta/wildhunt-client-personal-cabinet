@@ -13,7 +13,7 @@
           v-for="(cell, cellIndex) in state.numberMarkups[number]"
           :key="cellIndex"
           :class="['cell', cell ? 'active' : '']"
-          v-text="valueRandomNumbers(10, null)"
+          v-text="cell"
         />
       </div>
     </div>
@@ -25,7 +25,7 @@
       autofocus
       :placeholder="labels.CAPTCHA.PLACEHOLDER"
       :rules="rules.captcha"
-      @input="onInput"
+      @input="onInput($event, 'input')"
       @keydown="onKeydownDelete"
     >
       <template #icon>
@@ -44,12 +44,13 @@
 import { computed, onMounted, reactive, ref } from 'vue';
 import BaseInput from '@/components/base/BaseInput';
 import BaseIcon from '@/components/base/BaseIcon';
-import { required, sameAs } from '@/helpers/validators';
+import { maxLength, minLength, required, sameAs } from '@/helpers/validators';
 import { valueRandomNumbers, arrayRandomNumbers } from '@/helpers/random-numbers';
-import { labels } from '@/utils/labels';
 import { validationMessages } from '@/utils/validation-messages';
+import { magicNumbers } from '@/utils/magic-numbers';
+import { labels } from '@/utils/labels';
 
-const MINIMUM_VALUE = 3;
+const MINIMUM_VALUE = 2;
 const MAXIMUM_VALUE = 10;
 const CAPTCHA_NUMBERS_LENGTH = 8;
 
@@ -87,6 +88,8 @@ export default {
     const rules = {
       captcha: {
         required: required(validationMessages.CAPTCHA.REQUIRED),
+        minLength: minLength(magicNumbers.CAPTCHA.MIN_LENGTH, validationMessages.CAPTCHA.MIN_LENGTH),
+        maxLength: maxLength(magicNumbers.CAPTCHA.MAX_LENGTH, validationMessages.CAPTCHA.MAX_LENGTH),
         sameAs: sameAs(
           computed(() => captchaResult.value),
           validationMessages.CAPTCHA.INCORRECT
@@ -100,7 +103,7 @@ export default {
       setRandomOpacity();
     });
 
-    const cellsSelection = (callback) => {
+    const cellSelection = (callback) => {
       for (const number of code.value.children) {
         for (const cell of number.children) {
           callback(cell);
@@ -109,7 +112,7 @@ export default {
     };
 
     const setRandomOpacity = () => {
-      cellsSelection((cell) => {
+      cellSelection((cell) => {
         if (Object.values(cell.classList).indexOf('active') > -1) {
           cell.style.opacity = `0.${valueRandomNumbers(MINIMUM_VALUE, MAXIMUM_VALUE)}`;
         }
@@ -140,11 +143,23 @@ export default {
       }
     };
 
+    const restCaptcha = () => {
+      for (let i = 0; i < input.value.input.value.length; i++) {
+        removeCSSClasses(i);
+      }
+
+      setRandomOpacity();
+
+      state.code = arrayRandomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE);
+      input.value.input.value = '';
+    };
+
     const onInput = (event) => {
       const value = event.target.value;
 
       if (value.length) {
         for (let i = 0; i < value.length; i++) {
+          removeCSSClasses(i);
           addCSSClasses(i);
         }
       }
@@ -165,10 +180,7 @@ export default {
     };
 
     const onClickRedoIcon = () => {
-      input.value.input.value = '';
-      state.code = arrayRandomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE);
-
-      setRandomOpacity();
+      restCaptcha();
     };
 
     return {
@@ -179,8 +191,7 @@ export default {
       labels,
       onInput,
       onKeydownDelete,
-      onClickRedoIcon,
-      valueRandomNumbers
+      onClickRedoIcon
     };
   }
 };
