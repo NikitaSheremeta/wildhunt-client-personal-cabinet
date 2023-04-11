@@ -10,7 +10,7 @@ const routes = [
       title: labels.ROUTER.NOT_FOUND,
       layout: 'Base'
     },
-    component: () => import('../views/404.vue')
+    component: () => import('@/views/404.vue')
   },
   {
     path: '/login',
@@ -19,7 +19,7 @@ const routes = [
       title: labels.ROUTER.LOGIN,
       layout: 'Base'
     },
-    component: () => import('../views/login/Login.vue')
+    component: () => import('@/views/login/Login.vue')
   },
   {
     path: '/signup',
@@ -28,7 +28,7 @@ const routes = [
       title: labels.ROUTER.SIGN_UP,
       layout: 'Base'
     },
-    component: () => import('../views/signup/Signup.vue')
+    component: () => import('@/views/signup/Signup.vue')
   },
   {
     path: '/reset-password',
@@ -37,7 +37,7 @@ const routes = [
       title: labels.ROUTER.RESET_PASSWORD,
       layout: 'Base'
     },
-    component: () => import('../views/resetPassword/ResetPassword.vue')
+    component: () => import('@/views/resetPassword/ResetPassword.vue')
   },
   {
     path: '/shop',
@@ -46,7 +46,7 @@ const routes = [
       title: labels.ROUTER.SHOP,
       layout: 'Base'
     },
-    component: () => import('../views/WIP.vue')
+    component: () => import('@/views/WIP.vue')
   },
   {
     path: '/forum',
@@ -55,7 +55,7 @@ const routes = [
       title: labels.ROUTER.FORUM,
       layout: 'Base'
     },
-    component: () => import('../views/WIP.vue')
+    component: () => import('@/views/WIP.vue')
   },
   {
     path: '/news',
@@ -64,7 +64,7 @@ const routes = [
       title: labels.ROUTER.NEWS,
       layout: 'Base'
     },
-    component: () => import('../views/WIP.vue')
+    component: () => import('@/views/WIP.vue')
   },
   {
     path: '/wiki',
@@ -73,7 +73,7 @@ const routes = [
       title: labels.ROUTER.WIKI,
       layout: 'Base'
     },
-    component: () => import('../views/WIP.vue')
+    component: () => import('@/views/WIP.vue')
   },
   {
     path: '/faq',
@@ -82,7 +82,7 @@ const routes = [
       title: labels.ROUTER.FAQ,
       layout: 'Base'
     },
-    component: () => import('../views/WIP.vue')
+    component: () => import('@/views/WIP.vue')
   },
   {
     path: '/download-launcher',
@@ -91,7 +91,7 @@ const routes = [
       title: labels.ROUTER.DOWNLOAD_LAUNCHER,
       layout: 'Base'
     },
-    component: () => import('../views/WIP.vue')
+    component: () => import('@/views/WIP.vue')
   },
   {
     path: '/support',
@@ -100,7 +100,7 @@ const routes = [
       title: labels.ROUTER.SUPPORT,
       layout: 'Base'
     },
-    component: () => import('../views/WIP.vue')
+    component: () => import('@/views/WIP.vue')
   },
   {
     path: '/terms',
@@ -109,7 +109,7 @@ const routes = [
       title: labels.ROUTER.TERMS,
       layout: 'Base'
     },
-    component: () => import('../views/WIP.vue')
+    component: () => import('@/views/WIP.vue')
   },
   {
     path: '/privacy-policy',
@@ -118,7 +118,7 @@ const routes = [
       title: labels.ROUTER.PRIVACY_POLICY,
       layout: 'Base'
     },
-    component: () => import('../views/WIP.vue')
+    component: () => import('@/views/WIP.vue')
   }
 ];
 
