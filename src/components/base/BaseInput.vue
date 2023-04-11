@@ -134,7 +134,9 @@ export default {
       };
     });
 
-    const onIconMouseDown = (event) => event.preventDefault();
+    const onIconMouseDown = (event) => {
+      event.preventDefault();
+    };
 
     if (props.debounceValidation && props.type !== 'captcha') {
       watch(

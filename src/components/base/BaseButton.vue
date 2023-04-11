@@ -31,12 +31,12 @@ export default {
   },
   props: {
     label: {
-      type: [String, null],
-      default: null
+      type: String,
+      default: ''
     },
     to: {
-      type: [String, null],
-      default: null
+      type: String,
+      default: ''
     },
     fullWidth: {
       type: Boolean,
@@ -66,7 +66,7 @@ export default {
     ]);
 
     const onClick = () => {
-      if (props.to !== null) {
+      if (props.to) {
         router.push(props.to);
       }
     };

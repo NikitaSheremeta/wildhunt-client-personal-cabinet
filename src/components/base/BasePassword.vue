@@ -8,8 +8,7 @@
       :rules="rules"
       :debounce-validation="create"
       :validation-notice="!create"
-      @input="onInput"
-      @blur="onBlur"
+      v-on="inputListeners"
     >
       <template
         v-if="create"
@@ -20,7 +19,7 @@
           height="22"
           color="secondary"
           :icon="state.type === 'password' ? 'eye' : 'eye-slash'"
-          @click="onClick"
+          @click="onIconClick"
         />
       </template>
 
@@ -62,23 +61,23 @@ export default {
       default: false
     },
     placeholder: {
-      type: [String, null],
-      default: null
+      type: String,
+      default: ''
     },
     disabled: {
       type: Boolean,
       default: false
     },
     rules: {
-      type: Object,
-      default: () => ({})
+      type: [Object, null],
+      default: null
     }
   },
   emits: ['update:modelValue'],
   setup(props, context) {
-    const state = reactive({ type: 'password' });
-
     const input = ref(null);
+
+    const state = reactive({ type: 'password' });
 
     const password = usePassword({ value: '' });
 
@@ -87,26 +86,29 @@ export default {
       password.status
     ]);
 
-    const onInput = (event) => {
-      const value = event.target.value;
+    const inputListeners = computed(() => {
+      return {
+        input: (event) => {
+          const value = event.target.value;
 
-      context.emit('update:modelValue', value);
+          context.emit('update:modelValue', value);
 
-      if (input.value.input.valid) {
-        password.value = value;
-      }
+          if (input.value.input.valid) {
+            password.value = value;
+          }
 
-      passwordHookHandle();
-    };
+          passwordHookHandle();
+        },
+        blur: () => {
+          passwordHookHandle();
+        }
+      };
+    });
 
-    const onClick = () => {
+    const onIconClick = () => {
       if (!props.disabled) {
         state.type = state.type === 'password' ? 'text' : 'password';
       }
-    };
-
-    const onBlur = () => {
-      passwordHookHandle();
     };
 
     const passwordHookHandle = () => {
@@ -116,7 +118,14 @@ export default {
       }
     };
 
-    return { state, input, password, classes, onInput, onBlur, onClick };
+    return {
+      input,
+      state,
+      password,
+      classes,
+      inputListeners,
+      onIconClick
+    };
   }
 };
 </script>

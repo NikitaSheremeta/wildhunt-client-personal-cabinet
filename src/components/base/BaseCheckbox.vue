@@ -44,8 +44,8 @@ export default {
       default: 'primary'
     },
     label: {
-      type: [String, null],
-      default: null
+      type: String,
+      default: ''
     },
     disabled: {
       type: Boolean,

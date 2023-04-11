@@ -32,16 +32,16 @@ export default {
   },
   props: {
     label: {
-      type: [String, null],
-      default: null
+      type: String,
+      default: ''
     },
     href: {
-      type: [String, null],
-      default: null
+      type: String,
+      default: ''
     },
     target: {
-      type: [String, null],
-      default: null
+      type: String,
+      default: ''
     },
     underline: {
       type: Boolean,
@@ -56,12 +56,12 @@ export default {
       default: false
     },
     iconLeft: {
-      type: [String, null],
-      default: null
+      type: String,
+      default: ''
     },
     iconRight: {
-      type: [String, null],
-      default: null
+      type: String,
+      default: ''
     }
   },
   setup(props) {
