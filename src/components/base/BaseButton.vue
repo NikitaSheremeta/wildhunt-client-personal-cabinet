@@ -12,6 +12,12 @@
       height="20"
     />
 
+    <BaseIcon
+      v-if="icon"
+      color="secondary"
+      :icon="icon"
+    />
+
     <span
       v-if="label"
       v-text="label"
@@ -42,6 +48,14 @@ export default {
       type: Boolean,
       default: false
     },
+    iconButton: {
+      type: Boolean,
+      default: false
+    },
+    icon: {
+      type: String,
+      default: ''
+    },
     theme: {
       type: String,
       default: 'primary'
@@ -61,6 +75,7 @@ export default {
     const classes = computed(() => [
       props.theme ? props.theme : '',
       props.fullWidth ? 'full-width' : '',
+      props.iconButton ? 'icon-button' : '',
       props.disabled ? 'disabled' : '',
       props.loading ? 'loading' : ''
     ]);
@@ -84,9 +99,9 @@ $theme-palette: (
     active-background: lighten($primary, 6%)
   ),
   dark: (
-    background-color: $black,
-    hover-background: darken($black, 6%),
-    active-background: lighten($black, 6%)
+    background-color: $gray-800,
+    hover-background: $black,
+    active-background: $black,
   ),
   success: (
     background-color: $success,
@@ -173,6 +188,23 @@ $theme-palette: (
 
   &.full-width {
     width: 100%;
+  }
+
+  &.icon-button {
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+
+    .base-icon {
+      transition: 0.2s;
+    }
+
+    &:hover {
+      .base-icon {
+        fill: $white;
+      }
+    }
   }
 
   &.disabled {

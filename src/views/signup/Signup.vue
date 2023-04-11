@@ -15,6 +15,7 @@
         <BaseCaptcha
           v-if="state.shouldDisplayCaptcha"
           v-model="flags.isCaptchaValid"
+          @close="onCloseCaptcha"
         />
       </transition>
 
@@ -110,13 +111,24 @@ export default {
         );
     };
 
+    const onCloseCaptcha = () => {
+      state.shouldDisplayCaptcha = false;
+
+      debounce(() => {
+        state.shouldDisplaySignupForm = true;
+        flags.isLoading = false;
+        flags.isDisabled = false;
+      })();
+    };
+
     return {
       data,
       state,
       flags,
       labels,
       validationMessages,
-      onSubmitSignupForm
+      onSubmitSignupForm,
+      onCloseCaptcha,
     };
   }
 };

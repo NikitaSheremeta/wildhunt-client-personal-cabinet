@@ -1,9 +1,20 @@
 <template>
   <div :class="['base-captcha']">
-    <h2
-      class="title"
-      v-text="labels.CAPTCHA.TITLE"
-    />
+    <div class="top-bar">
+      <h2
+        class="title"
+        v-text="labels.CAPTCHA.TITLE"
+      />
+
+      <BaseButton
+        class="button"
+        icon-button
+        icon="cross"
+        theme="dark"
+        @click="onClickButton"
+        @mousedown="onMouseDownButton"
+      />
+    </div>
 
     <div
       ref="code"
@@ -30,7 +41,7 @@
       autofocus
       :placeholder="labels.CAPTCHA.PLACEHOLDER"
       :rules="rules.captcha"
-      @input="onInput($event, 'input')"
+      @input="onInput"
       @keydown="onKeydownDelete"
     >
       <template #icon>
@@ -47,6 +58,7 @@
 
 <script>
 import { computed, onMounted, reactive, ref } from 'vue';
+import BaseButton from '@/components/base/BaseButton';
 import BaseInput from '@/components/base/BaseInput';
 import BaseIcon from '@/components/base/BaseIcon';
 import { maxLength, minLength, required, sameAs } from '@/helpers/validators';
@@ -62,13 +74,14 @@ const CAPTCHA_NUMBERS_LENGTH = 8;
 export default {
   name: 'BaseCaptcha',
   components: {
+    BaseButton,
     BaseInput,
     BaseIcon
   },
   component: {
     BaseInput
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'close'],
   setup(props, context) {
     const code = ref(null);
     const input = ref(null);
@@ -108,7 +121,7 @@ export default {
       setRandomOpacity();
     });
 
-    const cellSelection = (callback) => {
+    const allCellsSelection = (callback) => {
       for (const number of code.value.children) {
         for (const cell of number.children) {
           callback(cell);
@@ -117,7 +130,7 @@ export default {
     };
 
     const setRandomOpacity = () => {
-      cellSelection((cell) => {
+      allCellsSelection((cell) => {
         if (Object.values(cell.classList).indexOf('active') > -1) {
           cell.style.opacity = `0.${valueRandomNumbers(MINIMUM_VALUE, MAXIMUM_VALUE)}`;
         }
@@ -159,6 +172,14 @@ export default {
       input.value.input.value = '';
     };
 
+    const onClickButton = () => {
+      context.emit('close');
+    };
+
+    const onMouseDownButton = (event) => {
+      event.preventDefault();
+    };
+
     const onInput = (event) => {
       const value = event.target.value;
 
@@ -194,6 +215,8 @@ export default {
       state,
       rules,
       labels,
+      onClickButton,
+      onMouseDownButton,
       onInput,
       onKeydownDelete,
       onClickRedoIcon
@@ -206,9 +229,16 @@ export default {
 .base-captcha {
   width: 320px;
 
-  .title {
-    margin-top: 0;
-    font-weight: $font-weight-base;
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+
+    .title {
+      margin: 0;
+      font-weight: $font-weight-base;
+    }
   }
 
   .code {
