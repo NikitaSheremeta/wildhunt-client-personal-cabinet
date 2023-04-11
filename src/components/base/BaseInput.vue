@@ -8,6 +8,7 @@
         :placeholder="placeholder"
         :disabled="disabled"
         :autofocus="autofocus"
+        :autocomplete="autocomplete"
         v-on="inputListeners"
       >
 
@@ -53,7 +54,7 @@
   </div>
 </template>
 
-<script type="module">
+<script>
 import { computed, reactive, watch } from 'vue';
 import BaseIcon from '@/components/base/BaseIcon';
 import { useInput } from '@/hooks/useInput';
@@ -76,6 +77,10 @@ export default {
       default: ''
     },
     autofocus: {
+      type: Boolean,
+      default: false
+    },
+    autocomplete: {
       type: Boolean,
       default: false
     },
