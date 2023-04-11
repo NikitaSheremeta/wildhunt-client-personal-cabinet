@@ -33,9 +33,3 @@ build
 build/*
 # Nuxt generate
 dist
-
-# components
-src/components/base/BaseIcon.vue
-
-# utils
-src/utils/regular-expressions.js

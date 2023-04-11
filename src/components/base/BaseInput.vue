@@ -21,8 +21,8 @@
         />
 
         <BaseIcon
-          v-if="iconName"
-          :icon="iconName"
+          v-if="icon"
+          :icon="icon"
           color="secondary"
         />
 
@@ -83,7 +83,7 @@ export default {
       type: Boolean,
       required: false
     },
-    iconName: {
+    icon: {
       type: String,
       default: ''
     },

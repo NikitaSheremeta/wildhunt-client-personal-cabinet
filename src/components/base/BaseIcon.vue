@@ -1,8 +1,8 @@
-<!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) -->
+<!--eslint-disable-->
 <template>
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    :class="computedClasses"
+    :class="['base-icon', classes]"
     :aria-labelledby="icon"
     :width="width"
     :height="height"
@@ -124,6 +124,8 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+
 export default {
   name: 'BaseIcon',
   props: {
@@ -150,32 +152,21 @@ export default {
     spin: {
       type: Boolean,
       default: false
-    },
-    baseClassName: {
-      type: String,
-      default: 'base-icon'
     }
   },
-  computed: {
-    computedClasses() {
-      return [this.baseClassName, this.colorModifier, this.preloaderModifier, this.hoverModifier];
-    },
-    isExclamation() {
-      return this.icon === 'exclamation';
-    },
-    colorModifier() {
-      return this.color !== '' ? this.color : '';
-    },
-    hoverModifier() {
-      return this.hover ? 'hover' : '';
-    },
-    preloaderModifier() {
-      return this.spin ? 'preloader' : '';
-    },
-    viewBoxModifier() {
-      return this.isExclamation ? '0 0 8 50' : `0 0 54 54`;
-    }
-  }
+  setup(props) {
+    const classes = computed(() => [
+      props.color !== '' ? props.color : '',
+      props.hover ? 'hover' : '',
+      props.spin ? 'preloader' : ''
+    ]);
+
+    const isExclamation = computed(() => props.icon === 'exclamation');
+
+    const viewBoxModifier = computed(() => isExclamation.value ? '0 0 8 50' : '0 0 54 54');
+
+    return { classes, isExclamation, viewBoxModifier };
+  },
 };
 </script>
 
