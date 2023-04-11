@@ -8,18 +8,21 @@
         :placeholder="placeholder"
         :disabled="disabled"
         :autofocus="autofocus"
-        v-on="listeners"
+        v-on="inputListeners"
       >
 
-      <div class="icon">
+      <div
+        class="icon"
+        @mousedown="onIconMouseDown"
+      >
         <slot
           v-if="!!$slots.icon"
           name="icon"
         />
 
         <BaseIcon
-          v-if="icon"
-          :icon="icon"
+          v-if="iconName"
+          :icon="iconName"
           color="secondary"
         />
 
@@ -30,7 +33,7 @@
         />
 
         <BaseIcon
-          v-if="state.validationMessage"
+          v-if="rules && !input.valid && input.touched"
           icon="exclamation"
           color="danger"
         />
@@ -80,7 +83,7 @@ export default {
       type: Boolean,
       required: false
     },
-    icon: {
+    iconName: {
       type: String,
       default: ''
     },
@@ -112,7 +115,7 @@ export default {
       input.touched && !input.valid ? 'invalid' : ''
     ]);
 
-    const listeners = computed(() => {
+    const inputListeners = computed(() => {
       return {
         input: (event) => {
           const value = event.target.value;
@@ -130,6 +133,8 @@ export default {
         }
       };
     });
+
+    const onIconMouseDown = (event) => event.preventDefault();
 
     if (props.debounceValidation && props.type !== 'captcha') {
       watch(
@@ -150,7 +155,8 @@ export default {
       state,
       input,
       classes,
-      listeners
+      inputListeners,
+      onIconMouseDown
     };
   }
 };

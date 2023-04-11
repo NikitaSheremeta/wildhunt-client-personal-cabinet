@@ -1,5 +1,10 @@
 <template>
   <div :class="['base-captcha']">
+    <h2
+      class="title"
+      v-text="labels.CAPTCHA.TITLE"
+    />
+
     <div
       ref="code"
       class="code"
@@ -70,7 +75,7 @@ export default {
 
     const state = reactive({
       input: '',
-      code: arrayRandomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE),
+      code: [...arrayRandomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE)],
       numberMarkups: [
         [1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1],
         [0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1],
@@ -202,7 +207,7 @@ export default {
   width: 320px;
 
   .title {
-    margin: 0;
+    margin-top: 0;
     font-weight: $font-weight-base;
   }
 
@@ -211,8 +216,9 @@ export default {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 8px;
-    margin-top: 24px;
+    margin-bottom: 24px;
     font-size: $font-size-xs;
+    user-select: none;
 
     .number {
       z-index: 9;
@@ -241,8 +247,6 @@ export default {
   }
 
   .input {
-    margin-top: 24px;
-
     .redo-icon {
       cursor: pointer;
     }
