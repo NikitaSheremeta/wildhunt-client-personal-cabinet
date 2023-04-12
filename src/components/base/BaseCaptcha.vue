@@ -37,7 +37,7 @@
     <BaseInput
       v-model="state.input"
       class="input"
-      name="captcha"
+      type="number"
       autofocus
       :placeholder="labels.CAPTCHA.PLACEHOLDER"
       :max-length="8"

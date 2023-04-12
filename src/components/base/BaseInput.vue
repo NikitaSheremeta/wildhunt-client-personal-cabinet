@@ -60,7 +60,8 @@ import BaseIcon from '@/components/base/BaseIcon';
 import { useInput } from '@/hooks/useInput';
 import { debounce } from '@/helpers/debounce';
 import { magicNumbers } from '@/utils/magic-numbers';
-import { regularExpressions } from '@/utils/regular-expressions';
+
+const ALLOWED_KEYS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
 export default {
   name: 'BaseInput',
@@ -114,8 +115,8 @@ export default {
     }
   },
   emits: ['update:modelValue', 'blur'],
-  setup(props, context) {
-    const state = reactive({ validationMessage: '' });
+  setup: function (props, context) {
+    const state = reactive({validationMessage: ''});
 
     const input = useInput({
       value: '',
@@ -128,23 +129,10 @@ export default {
       input.touched && !input.valid ? 'invalid' : ''
     ]);
 
-    const isValueNumber = computed(() => {
-      switch (props.name) {
-        case 'captcha':
-          return true;
-        default:
-          return false;
-      }
-    });
-
     const inputListeners = computed(() => {
       return {
         input: (event) => {
           let value = event.target.value;
-
-          if (isValueNumber.value) {
-            value = value.replace(regularExpressions.onlyNumbers,'');
-          }
 
           if (props.maxLength && props.maxLength < value.length) {
             value = value.substring(0, props.maxLength);
@@ -155,6 +143,13 @@ export default {
           state.validationMessage = '';
 
           context.emit('update:modelValue', value);
+        },
+        keypress: (event) => {
+          if (props.type === 'number') {
+            if (!ALLOWED_KEYS.includes(event.key)) {
+              event.preventDefault();
+            }
+          }
         },
         blur: () => {
           context.emit('blur');
