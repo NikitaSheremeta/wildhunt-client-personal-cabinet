@@ -3,7 +3,7 @@ module.exports = {
   env: {
     node: true
   },
-  extends: ['plugin:vue/vue3-recommended', 'eslint:recommended',],
+  extends: ['plugin:vue/vue3-recommended', 'eslint:recommended'],
   parserOptions: {
     parser: 'babel-eslint'
   },
@@ -101,6 +101,6 @@ module.exports = {
     'no-else-return': ['error'],
     'no-empty-function': ['error'],
     'no-implicit-coercion': ['error'],
-    'no-implicit-globals': ['error'],
+    'no-implicit-globals': ['error']
   }
 };

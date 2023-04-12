@@ -60,6 +60,7 @@ import BaseIcon from '@/components/base/BaseIcon';
 import { useInput } from '@/hooks/useInput';
 import { debounce } from '@/helpers/debounce';
 import { magicNumbers } from '@/utils/magic-numbers';
+import { regularExpressions } from '@/utils/regular-expressions';
 
 export default {
   name: 'BaseInput',
@@ -142,7 +143,7 @@ export default {
           let value = event.target.value;
 
           if (isValueNumber.value) {
-            value = value.replace(/\D/g,'');
+            value = value.replace(regularExpressions.onlyNumbers,'');
           }
 
           if (props.maxLength && props.maxLength < value.length) {

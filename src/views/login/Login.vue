@@ -2,8 +2,15 @@
   <div class="container">
     <div class="row">
       <transition name="fade-slide-up">
-        <form v-if="!flags.isHideForm" class="form" @submit.prevent="onSubmitForm">
-          <h2 class="form__title" v-text="labels.LOGIN_VIEW.TITLE" />
+        <form
+          v-if="!flags.isHideForm"
+          class="form"
+          @submit.prevent="onSubmitForm"
+        >
+          <h2
+            class="form__title"
+            v-text="labels.LOGIN_VIEW.TITLE"
+          />
 
           <BaseInput
             v-model="data.username"
@@ -31,7 +38,12 @@
               :loading="flags.isLoading"
             />
 
-            <BaseButton to="signup" theme="success" :label="labels.LOGIN_VIEW.SIGN_UP" :disabled="flags.isDisabled" />
+            <BaseButton
+              to="signup"
+              theme="success"
+              :label="labels.LOGIN_VIEW.SIGN_UP"
+              :disabled="flags.isDisabled"
+            />
           </div>
 
           <BaseLink
