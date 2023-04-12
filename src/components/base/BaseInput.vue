@@ -69,10 +69,9 @@ export default {
   props: {
     type: {
       type: String,
-      required: true,
       default: 'text'
     },
-    placeholder: {
+    name: {
       type: String,
       default: ''
     },
@@ -84,6 +83,10 @@ export default {
       type: Boolean,
       default: false
     },
+    placeholder: {
+      type: String,
+      default: ''
+    },
     disabled: {
       type: Boolean,
       required: false
@@ -91,6 +94,10 @@ export default {
     icon: {
       type: String,
       default: ''
+    },
+    maxLength: {
+      type: Number,
+      default: 0
     },
     rules: {
       type: [Object, null],
@@ -120,16 +127,33 @@ export default {
       input.touched && !input.valid ? 'invalid' : ''
     ]);
 
+    const isValueNumber = computed(() => {
+      switch (props.name) {
+        case 'captcha':
+          return true;
+        default:
+          return false;
+      }
+    });
+
     const inputListeners = computed(() => {
       return {
         input: (event) => {
-          const value = event.target.value;
+          let value = event.target.value;
 
-          context.emit('update:modelValue', value);
+          if (isValueNumber.value) {
+            value = value.replace(/\D/g,'');
+          }
+
+          if (props.maxLength && props.maxLength < value.length) {
+            value = value.substring(0, props.maxLength);
+          }
 
           input.value = value;
 
           state.validationMessage = '';
+
+          context.emit('update:modelValue', value);
         },
         blur: () => {
           context.emit('blur');
@@ -143,7 +167,7 @@ export default {
       event.preventDefault();
     };
 
-    if (props.debounceValidation && props.type !== 'captcha') {
+    if (props.debounceValidation) {
       watch(
         () => input.value,
         debounce(() => validationHandle(), magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)
@@ -248,6 +272,16 @@ $colors: (
         font-weight: $font-weight-bold;
         letter-spacing: -2px;
       }
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type='number'] {
+      -moz-appearance:textfield;
     }
 
     .icon {

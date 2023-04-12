@@ -35,11 +35,12 @@
     </div>
 
     <BaseInput
-      ref="input"
+      v-model="state.input"
       class="input"
-      type="captcha"
+      name="captcha"
       autofocus
       :placeholder="labels.CAPTCHA.PLACEHOLDER"
+      :max-length="8"
       :rules="rules.captcha"
       @input="onInput"
       @keydown="onKeydownDelete"
@@ -84,7 +85,6 @@ export default {
   emits: ['update:modelValue', 'close'],
   setup(props, context) {
     const code = ref(null);
-    const input = ref(null);
 
     const state = reactive({
       input: '',
@@ -140,7 +140,7 @@ export default {
     const addCSSClasses = (number) => {
       for (const cell of code.value.children[number].children) {
         if (Object.values(cell.classList).indexOf('active') > -1) {
-          const valuesArray = input.value.input.value.split('');
+          const valuesArray = state.input.split('');
 
           Number(valuesArray[number]) === state.code[number] ?
             cell.classList.add('success') :
@@ -162,14 +162,14 @@ export default {
     };
 
     const restCaptcha = () => {
-      for (let i = 0; i < input.value.input.value.length; i++) {
+      for (let i = 0; i < state.input.length; i++) {
         removeCSSClasses(i);
       }
 
       setRandomOpacity();
 
       state.code = arrayRandomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE);
-      input.value.input.value = '';
+      state.input = '';
     };
 
     const onClickButton = () => {
@@ -211,7 +211,6 @@ export default {
 
     return {
       code,
-      input,
       state,
       rules,
       labels,
