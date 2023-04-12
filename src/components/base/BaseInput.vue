@@ -2,19 +2,19 @@
   <div :class="['base-input', classes]">
     <div class="wrapper">
       <input
-        v-model="input.value"
         class="field"
+        :value="modelValue"
         :type="type"
-        :placeholder="placeholder"
-        :disabled="disabled"
         :autofocus="autofocus"
         :autocomplete="autocomplete"
+        :placeholder="placeholder"
+        :disabled="disabled"
         v-on="inputListeners"
       >
 
       <div
         class="icon"
-        @mousedown="onIconMouseDown"
+        @mousedown="onMousedownIcon"
       >
         <slot
           v-if="!!$slots.icon"
@@ -26,18 +26,6 @@
           :icon="icon"
           color="secondary"
         />
-
-        <BaseIcon
-          v-if="rules && input.valid && input.touched"
-          icon="check"
-          color="success"
-        />
-
-        <BaseIcon
-          v-if="rules && !input.valid && input.touched"
-          icon="exclamation"
-          color="danger"
-        />
       </div>
     </div>
 
@@ -45,23 +33,29 @@
       v-if="!!$slots.extension"
       name="extension"
     />
-
-    <span
-      v-if="validationNotice && state.validationMessage"
-      class="validation-message"
-      v-text="state.validationMessage"
-    />
   </div>
 </template>
 
 <script>
-import { computed, reactive, watch } from 'vue';
+import { computed } from 'vue';
 import BaseIcon from '@/components/base/BaseIcon';
-import { useInput } from '@/hooks/useInput';
-import { debounce } from '@/helpers/debounce';
-import { magicNumbers } from '@/utils/magic-numbers';
 
-const ALLOWED_KEYS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+const ALLOWED_KEYS = [
+  'Backspace',
+  'Delete',
+  'ArrowRight',
+  'ArrowLeft',
+  '0',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9'
+];
 
 export default {
   name: 'BaseInput',
@@ -69,13 +63,13 @@ export default {
     BaseIcon
   },
   props: {
+    modelValue: {
+      type: String,
+      default: ''
+    },
     type: {
       type: String,
       default: 'text'
-    },
-    name: {
-      type: String,
-      default: ''
     },
     autofocus: {
       type: Boolean,
@@ -101,89 +95,43 @@ export default {
       type: Number,
       default: 0
     },
-    rules: {
-      type: [Object, null],
-      default: null
-    },
-    debounceValidation: {
-      type: Boolean,
-      default: true
-    },
-    validationNotice: {
-      type: Boolean,
-      default: true
-    }
   },
-  emits: ['update:modelValue', 'blur'],
+  emits: ['keydown', 'input', 'update:modelValue'],
   setup: function (props, context) {
-    const state = reactive({validationMessage: ''});
-
-    const input = useInput({
-      value: '',
-      rules: props.rules
-    });
-
     const classes = computed(() => [
       props.disabled ? 'disabled' : '',
-      input.touched && input.valid ? 'valid' : '',
-      input.touched && !input.valid ? 'invalid' : ''
     ]);
 
     const inputListeners = computed(() => {
       return {
-        input: (event) => {
-          let value = event.target.value;
-
-          if (props.maxLength && props.maxLength < value.length) {
-            value = value.substring(0, props.maxLength);
-          }
-
-          input.value = value;
-
-          state.validationMessage = '';
-
-          context.emit('update:modelValue', value);
-        },
-        keypress: (event) => {
+        keydown: (event) => {
           if (props.type === 'number') {
             if (!ALLOWED_KEYS.includes(event.key)) {
               event.preventDefault();
             }
           }
-        },
-        blur: () => {
-          context.emit('blur');
 
-          validationHandle();
+          context.emit('keydown', event);
+        },
+        input: (event) => {
+          if (props.maxLength && props.maxLength < event.target.value.length) {
+            event.target.value = event.target.value.substring(0, props.maxLength);
+          }
+
+          context.emit('input', event);
+          context.emit('update:modelValue', event.target.value);
         }
       };
     });
 
-    const onIconMouseDown = (event) => {
+    const onMousedownIcon = (event) => {
       event.preventDefault();
     };
 
-    if (props.debounceValidation) {
-      watch(
-        () => input.value,
-        debounce(() => validationHandle(), magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)
-      );
-    }
-
-    const validationHandle = () => {
-      input.blur();
-
-      if (props.rules && !input.valid) {
-        state.validationMessage = input.error;
-      }
-    };
-
     return {
-      state,
-      input,
       classes,
       inputListeners,
-      onIconMouseDown
+      onMousedownIcon
     };
   }
 };

@@ -4,7 +4,7 @@
       <transition name="fade-slide-up">
         <SignupForm
           v-if="state.shouldDisplaySignupForm"
-          v-model="data.formData"
+          v-model="data.signupFormData"
           :is-loading="flags.isLoading"
           :is-disabled="flags.isDisabled"
           @submit.prevent="onSubmitSignupForm"

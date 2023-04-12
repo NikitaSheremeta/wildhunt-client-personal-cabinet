@@ -11,7 +11,6 @@
       type="text"
       :placeholder="labels.SIGN_UP_VIEW.USER_NAME"
       :disabled="isDisabled"
-      :rules="rules.username"
       @input="onInput"
     />
 
@@ -21,8 +20,6 @@
       type="email"
       :placeholder="labels.SIGN_UP_VIEW.EMAIL"
       :disabled="isDisabled"
-      :rules="rules.email"
-      :debounce-validation="false"
       @input="onInput"
     />
 
@@ -32,7 +29,6 @@
       create
       :placeholder="labels.SIGN_UP_VIEW.PASSWORD"
       :disabled="isDisabled"
-      :rules="rules.password"
       @input="onInput"
     />
 
