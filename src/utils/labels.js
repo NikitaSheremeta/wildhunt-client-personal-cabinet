@@ -36,7 +36,7 @@ export const labels = {
     USER_NAME: 'Логин',
     EMAIL: 'Электронная почта',
     PASSWORD: 'Пароль',
-    REPEAT_PASSWORD: 'Повторите пароль',
+    CONFIRMATION_PASSWORD: 'Повторите пароль',
     SIGN_UP: 'Зарегистрироваться',
     TERMS: 'пользовательское соглашение',
     PRIVACY_POLICY: 'политику конфиденциальности',

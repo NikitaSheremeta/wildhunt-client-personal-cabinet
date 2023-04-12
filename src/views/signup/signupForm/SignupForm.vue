@@ -36,6 +36,13 @@
       @input="onInput"
     />
 
+    <BasePassword
+      v-model="state.confirmationPassword"
+      class="form__field"
+      :placeholder="labels.SIGN_UP_VIEW.CONFIRMATION_PASSWORD"
+      :disabled="isDisabled"
+    />
+
     <div class="form__actions">
       <BaseButton
         full-width
@@ -114,7 +121,10 @@ export default {
       password: ''
     });
 
-    const state = reactive({ eula: true });
+    const state = reactive({
+      confirmationPassword: '',
+      eula: true
+    });
 
     const rules = {
       username: {

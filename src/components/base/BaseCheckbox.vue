@@ -60,7 +60,7 @@ export default {
     ]);
 
     const onChange = (event) => {
-      const value = event.target.value;
+      const value = event.target.checked;
 
       context.emit('update:modelValue', value);
     };
