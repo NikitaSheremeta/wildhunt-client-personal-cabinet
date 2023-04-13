@@ -36,14 +36,6 @@ export default {
     BaseIcon
   },
   props: {
-    label: {
-      type: String,
-      default: ''
-    },
-    to: {
-      type: String,
-      default: ''
-    },
     fullWidth: {
       type: Boolean,
       default: false
@@ -51,6 +43,14 @@ export default {
     iconButton: {
       type: Boolean,
       default: false
+    },
+    label: {
+      type: String,
+      default: ''
+    },
+    to: {
+      type: String,
+      default: ''
     },
     icon: {
       type: String,

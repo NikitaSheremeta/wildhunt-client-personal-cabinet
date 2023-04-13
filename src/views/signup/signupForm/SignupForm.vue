@@ -8,7 +8,6 @@
     <BaseInput
       v-model="data.username"
       class="form__field"
-      type="text"
       :placeholder="labels.SIGN_UP_VIEW.USER_NAME"
       :disabled="isDisabled"
       @input="onInput"
@@ -26,15 +25,14 @@
     <BasePassword
       v-model="data.password"
       class="form__field"
-      create
-      :placeholder="labels.SIGN_UP_VIEW.PASSWORD"
       :disabled="isDisabled"
       @input="onInput"
     />
 
-    <BasePassword
+    <BaseInput
       v-model="state.confirmationPassword"
       class="form__field"
+      type="password"
       :placeholder="labels.SIGN_UP_VIEW.CONFIRMATION_PASSWORD"
       :disabled="isDisabled"
     />
@@ -43,8 +41,8 @@
       <BaseButton
         full-width
         :label="labels.SIGN_UP_VIEW.SIGN_UP"
-        :loading="isLoading"
         :disabled="!state.eula || isDisabled"
+        :loading="isLoading"
       />
     </div>
 
@@ -86,10 +84,10 @@ import BasePassword from '@/components/base/BasePassword';
 import BaseButton from '@/components/base/BaseButton';
 import BaseCheckbox from '@/components/base/BaseCheckbox';
 import BaseLink from '@/components/base/BaseLink';
-import { email, maxLength, minLength, required } from '@/helpers/validators';
+// import { email, maxLength, minLength, required } from '@/helpers/validators';
 import { labels } from '@/utils/labels';
-import { validationMessages } from '@/utils/validation-messages';
-import { magicNumbers } from '@/utils/magic-numbers';
+// import { validationMessages } from '@/utils/validation-messages';
+// import { magicNumbers } from '@/utils/magic-numbers';
 
 export default {
   components: {
@@ -122,31 +120,37 @@ export default {
       eula: true
     });
 
-    const rules = {
-      username: {
-        required: required(validationMessages.LOGIN.REQUIRED),
-        minLength: minLength(magicNumbers.LOGIN.MIN_LENGTH, validationMessages.LOGIN.MIN_LENGTH),
-        maxLength: maxLength(magicNumbers.LOGIN.MAX_LENGTH, validationMessages.LOGIN.MAX_LENGTH)
-      },
-      email: {
-        required: required(validationMessages.EMAIL.REQUIRED),
-        email: email(validationMessages.EMAIL.INCORRECT)
-      },
-      password: {
-        required: required(validationMessages.PASSWORD.REQUIRED_LOGIN_PAGE),
-        minLength: minLength(magicNumbers.PASSWORD.MIN_LENGTH, validationMessages.PASSWORD.MIN_LENGTH),
-        maxLength: maxLength(magicNumbers.PASSWORD.MAX_LENGTH, validationMessages.PASSWORD.MAX_LENGTH)
-      },
-      repeatPassword: {
-        required: required(validationMessages.CONFIRM_PASSWORD.REQUIRED)
-      }
-    };
+    // const rules = {
+    //   username: {
+    //     required: required(validationMessages.LOGIN.REQUIRED),
+    //     minLength: minLength(magicNumbers.LOGIN.MIN_LENGTH, validationMessages.LOGIN.MIN_LENGTH),
+    //     maxLength: maxLength(magicNumbers.LOGIN.MAX_LENGTH, validationMessages.LOGIN.MAX_LENGTH)
+    //   },
+    //   email: {
+    //     required: required(validationMessages.EMAIL.REQUIRED),
+    //     email: email(validationMessages.EMAIL.INCORRECT)
+    //   },
+    //   password: {
+    //     required: required(validationMessages.PASSWORD.REQUIRED_LOGIN_PAGE),
+    //     minLength: minLength(magicNumbers.PASSWORD.MIN_LENGTH, validationMessages.PASSWORD.MIN_LENGTH),
+    //     maxLength: maxLength(magicNumbers.PASSWORD.MAX_LENGTH, validationMessages.PASSWORD.MAX_LENGTH)
+    //   },
+    //   repeatPassword: {
+    //     required: required(validationMessages.CONFIRM_PASSWORD.REQUIRED)
+    //   }
+    // };
 
     const onInput = async () => {
       context.emit('update:modelValue', data);
     };
 
-    return { data, state, rules, labels, onInput };
+    return {
+      data,
+      state,
+      // rules,
+      labels,
+      onInput
+    };
   }
 };
 </script>

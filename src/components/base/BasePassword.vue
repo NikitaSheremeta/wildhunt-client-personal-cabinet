@@ -1,32 +1,23 @@
 <template>
   <div :class="['base-password', classes]">
     <BaseInput
-      ref="input"
+      v-model="password.value"
       :type="state.type"
-      :placeholder="placeholder"
+      :placeholder="labels.SIGN_UP_VIEW.PASSWORD"
       :disabled="disabled"
-      :rules="rules"
-      :debounce-validation="create"
-      :validation-notice="!create"
       v-on="inputListeners"
     >
-      <template
-        v-if="create"
-        #icon
-      >
+      <template #icon>
         <BaseIcon
           width="22"
           height="22"
           color="secondary"
           :icon="state.type === 'password' ? 'eye' : 'eye-slash'"
-          @click="onIconClick"
+          @click="onClickIcon"
         />
       </template>
 
-      <template
-        v-if="create"
-        #extension
-      >
+      <template #extension>
         <div class="meter">
           <span class="meter__item" />
           <span class="meter__item" />
@@ -44,10 +35,11 @@
 </template>
 
 <script>
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive } from 'vue';
 import BaseInput from '@/components/base/BaseInput';
 import BaseIcon from '@/components/base/BaseIcon';
 import { usePassword } from '@/hooks/usePassword';
+import { labels } from '@/utils/labels';
 
 export default {
   name: 'BasePassword',
@@ -56,30 +48,16 @@ export default {
     BaseIcon
   },
   props: {
-    create: {
-      type: Boolean,
-      default: false
-    },
-    placeholder: {
-      type: String,
-      default: ''
-    },
     disabled: {
       type: Boolean,
       default: false
-    },
-    rules: {
-      type: [Object, null],
-      default: null
     }
   },
-  emits: ['update:modelValue'],
+  emits: ['update:model-value'],
   setup(props, context) {
-    const input = ref(null);
+    const password = usePassword({ value: '' });
 
     const state = reactive({ type: 'password' });
-
-    const password = usePassword({ value: '' });
 
     const classes = computed(() => [
       props.disabled ? 'disabled' : '',
@@ -91,40 +69,43 @@ export default {
         input: (event) => {
           const value = event.target.value;
 
-          context.emit('update:modelValue', value);
+          password.value = value;
 
-          if (input.value.input.valid) {
-            password.value = value;
-          }
+          context.emit('update:model-value', value);
 
-          passwordHookHandle();
+
+          // if (input.value.input.valid) {
+          //   password.value = value;
+          // }
+
+          // passwordHookHandle();
         },
-        blur: () => {
-          passwordHookHandle();
-        }
+        // blur: () => {
+        //   passwordHookHandle();
+        // }
       };
     });
 
-    const onIconClick = () => {
+    const onClickIcon = () => {
       if (!props.disabled) {
         state.type = state.type === 'password' ? 'text' : 'password';
       }
     };
 
-    const passwordHookHandle = () => {
-      if (!input.value.input.valid) {
-        password.status = 'invalid';
-        password.notice = input.value.input.error;
-      }
-    };
+    // const passwordHookHandle = () => {
+    //   if (!input.value.input.valid) {
+    //     password.status = 'invalid';
+    //     password.notice = input.value.input.error;
+    //   }
+    // };
 
     return {
-      input,
       state,
       password,
       classes,
+      labels,
       inputListeners,
-      onIconClick
+      onClickIcon
     };
   }
 };

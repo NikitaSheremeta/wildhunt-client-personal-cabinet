@@ -3,7 +3,7 @@
     <div class="row">
       <transition name="fade-slide-up">
         <SignupForm
-          v-if="state.shouldDisplaySignupForm"
+          v-if="flags.shouldDisplaySignupForm"
           v-model="data.signupFormData"
           :is-loading="flags.isLoading"
           :is-disabled="flags.isDisabled"
@@ -13,7 +13,7 @@
 
       <transition name="fade-slide-up">
         <BaseCaptcha
-          v-if="state.shouldDisplayCaptcha"
+          v-if="flags.shouldDisplayCaptcha"
           v-model="flags.isCaptchaValid"
           @close="onCloseCaptcha"
         />
@@ -21,7 +21,7 @@
 
       <transition name="fade-slide-up">
         <BaseNotice
-          v-if="state.shouldDisplayNotice"
+          v-if="flags.shouldDisplayNotice"
           success
           :icon="labels.SIGN_UP_VIEW.SUCCESSFULLY_CREATED.ICON"
           :title="labels.SIGN_UP_VIEW.SUCCESSFULLY_CREATED.TITLE"
@@ -67,13 +67,10 @@ export default {
       confirmationFormData: {}
     });
 
-    const state = reactive({
+    const flags = reactive({
       shouldDisplaySignupForm: true,
       shouldDisplayCaptcha: false,
-      shouldDisplayNotice: false
-    });
-
-    const flags = reactive({
+      shouldDisplayNotice: false,
       isCaptchaValid: false,
       isLoading: false,
       isDisabled: false
@@ -87,11 +84,11 @@ export default {
         .dispatch('SIGNUP', data.signupFormData)
         .then((result) =>
           debounce(() => {
-            state.shouldDisplaySignupForm = false;
+            flags.shouldDisplaySignupForm = false;
 
             debounce(() => {
               // state.shouldDisplayNotice = true;
-              state.shouldDisplayCaptcha = true;
+              flags.shouldDisplayCaptcha = true;
             })();
 
             if (Object.prototype.hasOwnProperty.call(result, 'error')) {
@@ -112,10 +109,10 @@ export default {
     };
 
     const onCloseCaptcha = () => {
-      state.shouldDisplayCaptcha = false;
+      flags.shouldDisplayCaptcha = false;
 
       debounce(() => {
-        state.shouldDisplaySignupForm = true;
+        flags.shouldDisplaySignupForm = true;
         flags.isLoading = false;
         flags.isDisabled = false;
       })();
@@ -123,7 +120,6 @@ export default {
 
     return {
       data,
-      state,
       flags,
       labels,
       validationMessages,

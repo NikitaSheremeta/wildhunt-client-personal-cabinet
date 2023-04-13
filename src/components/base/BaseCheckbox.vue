@@ -52,7 +52,7 @@ export default {
       required: false
     }
   },
-  emits: ['update:modelValue'],
+  emits: ['update:model-value'],
   setup(props, context) {
     const classes = computed(() => [
       props.disabled ? 'disabled' : '',
@@ -62,7 +62,7 @@ export default {
     const onChange = (event) => {
       const value = event.target.checked;
 
-      context.emit('update:modelValue', value);
+      context.emit('update:model-value', value);
     };
 
     return { classes, onChange };

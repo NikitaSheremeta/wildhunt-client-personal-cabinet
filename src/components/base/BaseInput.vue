@@ -96,7 +96,7 @@ export default {
       default: 0
     },
   },
-  emits: ['keydown', 'input', 'update:modelValue'],
+  emits: ['keydown', 'input', 'update:model-value'],
   setup: function (props, context) {
     const classes = computed(() => [
       props.disabled ? 'disabled' : '',
@@ -119,7 +119,7 @@ export default {
           }
 
           context.emit('input', event);
-          context.emit('update:modelValue', event.target.value);
+          context.emit('update:model-value', event.target.value);
         }
       };
     });

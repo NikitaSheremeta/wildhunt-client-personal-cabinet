@@ -15,10 +15,8 @@
           <BaseInput
             v-model="data.username"
             class="form__field"
-            type="text"
             :placeholder="labels.LOGIN_VIEW.USER_NAME"
             :disabled="flags.isDisabled"
-            :rules="rules.username"
           />
 
           <BaseInput
@@ -27,7 +25,6 @@
             type="password"
             :placeholder="labels.LOGIN_VIEW.PASSWORD"
             :disabled="flags.isDisabled"
-            :rules="rules.password"
           />
 
           <div class="form__actions">
@@ -50,9 +47,9 @@
             class="form__reset-password"
             href="reset-password"
             color="secondary"
-            icon-left="question"
             :label="labels.LOGIN_VIEW.RESET_PASSWORD"
             :disabled="flags.isDisabled"
+            icon-left="question"
           />
         </form>
       </transition>
@@ -66,10 +63,10 @@ import { useStore } from 'vuex';
 import BaseInput from '@/components/base/BaseInput';
 import BaseButton from '@/components/base/BaseButton';
 import BaseLink from '@/components/base/BaseLink';
-import { required, minLength, maxLength } from '@/helpers/validators';
+// import { required, minLength, maxLength } from '@/helpers/validators';
 import { debounce } from '@/helpers/debounce';
-import { validationMessages } from '@/utils/validation-messages';
-import { magicNumbers } from '@/utils/magic-numbers';
+// import { validationMessages } from '@/utils/validation-messages';
+// import { magicNumbers } from '@/utils/magic-numbers';
 import { labels } from '@/utils/labels';
 
 export default {
@@ -92,18 +89,18 @@ export default {
       isHideForm: false
     });
 
-    const rules = {
-      username: {
-        required: required(validationMessages.LOGIN.REQUIRED_LOGIN_PAGE),
-        minLength: minLength(magicNumbers.LOGIN.MIN_LENGTH, validationMessages.LOGIN.MIN_LENGTH),
-        maxLength: maxLength(magicNumbers.LOGIN.MAX_LENGTH, validationMessages.LOGIN.MAX_LENGTH)
-      },
-      password: {
-        required: required(validationMessages.PASSWORD.REQUIRED_LOGIN_PAGE),
-        minLength: minLength(magicNumbers.PASSWORD.MIN_LENGTH, validationMessages.PASSWORD.MIN_LENGTH),
-        maxLength: maxLength(magicNumbers.PASSWORD.MAX_LENGTH, validationMessages.PASSWORD.MAX_LENGTH)
-      }
-    };
+    // const rules = {
+    //   username: {
+    //     required: required(validationMessages.LOGIN.REQUIRED_LOGIN_PAGE),
+    //     minLength: minLength(magicNumbers.LOGIN.MIN_LENGTH, validationMessages.LOGIN.MIN_LENGTH),
+    //     maxLength: maxLength(magicNumbers.LOGIN.MAX_LENGTH, validationMessages.LOGIN.MAX_LENGTH)
+    //   },
+    //   password: {
+    //     required: required(validationMessages.PASSWORD.REQUIRED_LOGIN_PAGE),
+    //     minLength: minLength(magicNumbers.PASSWORD.MIN_LENGTH, validationMessages.PASSWORD.MIN_LENGTH),
+    //     maxLength: maxLength(magicNumbers.PASSWORD.MAX_LENGTH, validationMessages.PASSWORD.MAX_LENGTH)
+    //   }
+    // };
 
     const onSubmitForm = async () => {
       flags.isLoading = true;
@@ -125,7 +122,6 @@ export default {
     return {
       data,
       flags,
-      rules,
       labels,
       onSubmitForm
     };

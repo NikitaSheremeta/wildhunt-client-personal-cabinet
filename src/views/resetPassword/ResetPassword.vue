@@ -20,16 +20,15 @@
           <BaseInput
             v-model="data.email"
             class="form__field"
-            type="text"
+            type="email"
             :placeholder="labels.RESET_PASSWORD_VIEW.EMAIL"
             :disabled="flags.isDisabled"
-            :rules="rules.email"
           />
 
           <div class="form__actions">
             <BaseButton
-              full-width
               type="submit"
+              full-width
               :label="labels.RESET_PASSWORD_VIEW.SUBMIT"
               :disabled="flags.isDisabled"
               :loading="flags.isLoading"
@@ -40,9 +39,9 @@
             class="form__account-recover"
             href="support"
             color="secondary"
-            icon-left="question"
             :label="labels.RESET_PASSWORD_VIEW.ACCOUNT_RECOVER"
             :disabled="flags.isDisabled"
+            icon-left="question"
           />
         </form>
       </transition>
@@ -56,10 +55,10 @@ import { useStore } from 'vuex';
 import BaseInput from '@/components/base/BaseInput';
 import BaseButton from '@/components/base/BaseButton';
 import BaseLink from '@/components/base/BaseLink';
-import { email, required } from '@/helpers/validators';
+// import { email, required } from '@/helpers/validators';
 import { debounce } from '@/helpers/debounce';
 import { labels } from '@/utils/labels';
-import { validationMessages } from '@/utils/validation-messages';
+// import { validationMessages } from '@/utils/validation-messages';
 
 export default {
   components: {
@@ -78,12 +77,12 @@ export default {
       isHideForm: false
     });
 
-    const rules = {
-      email: {
-        required: required(validationMessages.EMAIL.REQUIRED),
-        email: email(validationMessages.EMAIL.INCORRECT)
-      }
-    };
+    // const rules = {
+    //   email: {
+    //     required: required(validationMessages.EMAIL.REQUIRED),
+    //     email: email(validationMessages.EMAIL.INCORRECT)
+    //   }
+    // };
 
     const onSubmitForm = async () => {
       flags.isLoading = true;
@@ -105,7 +104,6 @@ export default {
     return {
       data,
       flags,
-      rules,
       labels,
       onSubmitForm
     };

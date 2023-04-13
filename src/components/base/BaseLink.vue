@@ -31,9 +31,9 @@ export default {
     BaseIcon
   },
   props: {
-    label: {
-      type: String,
-      default: ''
+    underline: {
+      type: Boolean,
+      default: false
     },
     href: {
       type: String,
@@ -43,13 +43,13 @@ export default {
       type: String,
       default: ''
     },
-    underline: {
-      type: Boolean,
-      default: false
-    },
     color: {
       type: String,
       default: 'primary'
+    },
+    label: {
+      type: String,
+      default: ''
     },
     disabled: {
       type: Boolean,
