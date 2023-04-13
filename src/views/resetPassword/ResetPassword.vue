@@ -122,8 +122,12 @@ export default {
 
   &__description {
     margin-top: 8px;
-    margin-bottom: 24px;
+    margin-bottom: 0;
     color: $font-color-secondary;
+  }
+
+  &__field {
+    margin-top: 24px;
   }
 
   &__actions {

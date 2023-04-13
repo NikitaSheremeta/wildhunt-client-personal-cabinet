@@ -228,7 +228,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 24px;
 
     .title {
       margin: 0;
@@ -241,7 +240,7 @@ export default {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 8px;
-    margin-bottom: 24px;
+    margin-top: 24px;
     font-size: $font-size-xs;
     user-select: none;
 
@@ -272,6 +271,8 @@ export default {
   }
 
   .input {
+    margin-top: 24px;
+
     .redo-icon {
       cursor: pointer;
     }

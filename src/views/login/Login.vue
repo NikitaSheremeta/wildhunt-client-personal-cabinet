@@ -134,15 +134,15 @@ export default {
   width: 320px;
 
   &__title {
-    margin-top: 0;
+    margin: 0;
     font-weight: $font-weight-base;
   }
 
   &__field {
-    margin-bottom: 16px;
+    margin-top: 16px;
 
-    &:last-child {
-      margin-bottom: 0;
+    &:nth-child(2) {
+      margin-top: 24px;
     }
   }
 
@@ -151,7 +151,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     margin-top: 24px;
-    gap: 12px;
+    gap: 16px;
   }
 
   &__reset-password {

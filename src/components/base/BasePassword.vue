@@ -134,6 +134,7 @@ export default {
 
   .notice {
     margin-top: 8px;
+    width: 100%;
     color: $font-color-secondary;
     font-size: $font-size-xs;
     user-select: none;
