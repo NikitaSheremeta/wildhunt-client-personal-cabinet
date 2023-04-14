@@ -9,6 +9,7 @@
         :autocomplete="autocomplete"
         :placeholder="placeholder"
         :disabled="disabled"
+        :maxlength="magicNumbers.PASSWORD.MAX_LENGTH"
         v-on="inputListeners"
       />
 
@@ -21,13 +22,18 @@
 
     <slot v-if="!!$slots.extension" name="extension" />
 
-    <span v-if="validation.touched && validation.notice" class="validation-notice" v-text="validation.notice" />
+    <span
+      v-if="validation.touched && validation.notice && !disableNotice"
+      class="validation-notice"
+      v-text="validation.notice"
+    />
   </div>
 </template>
 
 <script>
 import { computed } from 'vue';
 import BaseIcon from '@/components/base/BaseIcon';
+import { magicNumbers } from '@/utils/magic-numbers';
 
 const ALLOWED_KEYS = [
   'Backspace',
@@ -84,6 +90,14 @@ export default {
       type: Number,
       default: 0
     },
+    notice: {
+      type: String,
+      default: ''
+    },
+    disableNotice: {
+      type: Boolean,
+      default: false
+    },
     validation: {
       type: [Object, null],
       default: null
@@ -131,7 +145,8 @@ export default {
     return {
       classes,
       inputListeners,
-      onMousedownIcon
+      onMousedownIcon,
+      magicNumbers
     };
   }
 };

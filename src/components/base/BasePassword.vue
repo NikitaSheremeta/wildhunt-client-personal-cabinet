@@ -1,10 +1,11 @@
 <template>
   <div :class="['base-password', classes]">
     <BaseInput
-      v-model="password.value"
+      v-model="state.value"
       :type="state.type"
-      :placeholder="labels.SIGN_UP_VIEW.PASSWORD"
+      :placeholder="placeholder"
       :disabled="disabled"
+      :disable-notice="create"
       :validation="validation"
       v-on="inputListeners"
     >
@@ -18,24 +19,25 @@
         />
       </template>
 
-      <template #extension>
+      <template v-if="create" #extension>
         <div class="meter">
           <span class="meter__item" />
           <span class="meter__item" />
           <span class="meter__item" />
         </div>
 
-        <span v-if="password.notice" class="notice" v-text="password.notice" />
+        <span v-if="state.notice" class="notice" v-text="state.notice" />
       </template>
     </BaseInput>
   </div>
 </template>
 
 <script>
-import { computed, reactive } from 'vue';
+import { computed, onMounted, reactive, watch } from 'vue';
 import BaseInput from '@/components/base/BaseInput';
 import BaseIcon from '@/components/base/BaseIcon';
-import { usePassword } from '@/hooks/usePassword';
+import { magicNumbers } from '@/utils/magic-numbers';
+import { regularExpressions } from '@/utils/regular-expressions';
 import { labels } from '@/utils/labels';
 
 export default {
@@ -45,6 +47,14 @@ export default {
     BaseIcon
   },
   props: {
+    create: {
+      type: Boolean,
+      default: false
+    },
+    placeholder: {
+      type: String,
+      default: ''
+    },
     disabled: {
       type: Boolean,
       default: false
@@ -56,32 +66,39 @@ export default {
   },
   emits: ['update:model-value'],
   setup(props, context) {
-    const password = usePassword({ value: '' });
+    const state = reactive({
+      value: '',
+      type: 'password',
+      status: '',
+      notice: labels.PASSWORD_STRENGTH_NOTICE.DEFAULT
+    });
 
-    const state = reactive({ type: 'password' });
-
-    const classes = computed(() => [props.disabled ? 'disabled' : '', password.status]);
+    const classes = computed(() => [props.disabled ? 'disabled' : '', state.status]);
 
     const inputListeners = computed(() => {
       return {
         input: (event) => {
-          const value = event.target.value;
+          context.emit('update:model-value', event.target.value);
+        },
+        blur: () => {
+          props.validation.blur();
 
-          password.value = value;
-
-          context.emit('update:model-value', value);
-
-          // if (input.value.input.valid) {
-          //   password.value = value;
-          // }
-
-          // passwordHookHandle();
+          if (!props.validation.valid && props.validation.touched) {
+            state.status = 'invalid';
+            state.notice = props.validation.notice;
+          }
         }
-        // blur: () => {
-        //   passwordHookHandle();
-        // }
       };
     });
+
+    onMounted(() => {
+      reassign();
+    });
+
+    watch(
+      () => state.value,
+      () => reassign()
+    );
 
     const onClickIcon = () => {
       if (!props.disabled) {
@@ -89,16 +106,80 @@ export default {
       }
     };
 
-    // const passwordHookHandle = () => {
-    //   if (!input.value.input.valid) {
-    //     password.status = 'invalid';
-    //     password.notice = input.value.input.error;
-    //   }
-    // };
+    const getStrengthScore = () => {
+      let score = 0;
+
+      if (state.value === '') {
+        return score;
+      }
+
+      const letters = {};
+
+      for (let i = 0; i < state.value.length; i++) {
+        letters[state.value[i]] = (letters[state.value[i]] || 0) + 1;
+
+        // eslint-disable-next-line no-magic-numbers
+        score += 5.0 / letters[state.value[i]];
+      }
+
+      const variations = {
+        digits: regularExpressions.digits.test(state.value),
+        lower: regularExpressions.lower.test(state.value),
+        upper: regularExpressions.upper.test(state.value),
+        special: regularExpressions.special.test(state.value)
+      };
+
+      let variationsCount = 0;
+
+      for (const check in variations) {
+        variationsCount += variations[check] === true ? 1 : 0;
+      }
+
+      // eslint-disable-next-line no-magic-numbers
+      score += (variationsCount - 1) * 10;
+
+      return score;
+    };
+
+    // eslint-disable-next-line max-statements
+    const reassign = () => {
+      if (!props.validation.valid && props.validation.touched) {
+        state.status = 'invalid';
+      }
+
+      if (!props.validation.valid) {
+        state.notice = props.validation.notice;
+      }
+
+      if (!props.validation.touched && state.value.length < magicNumbers.PASSWORD.MIN_LENGTH) {
+        state.status = '';
+      }
+
+      if (state.value.length >= magicNumbers.PASSWORD.MIN_LENGTH) {
+        const strengthScore = getStrengthScore();
+
+        // eslint-disable-next-line no-magic-numbers
+        if (strengthScore <= 25 && state.value.length >= magicNumbers.PASSWORD.MIN_LENGTH) {
+          state.status = 'danger';
+          state.notice = labels.PASSWORD_STRENGTH_NOTICE.DANGER;
+        }
+
+        // eslint-disable-next-line no-magic-numbers
+        if (strengthScore > 20 && strengthScore <= 50 && state.value.length !== 0) {
+          state.status = 'warning';
+          state.notice = labels.PASSWORD_STRENGTH_NOTICE.WARNING;
+        }
+
+        // eslint-disable-next-line no-magic-numbers
+        if (strengthScore > 50 && state.value.length !== 0) {
+          state.status = 'success';
+          state.notice = labels.PASSWORD_STRENGTH_NOTICE.SUCCESS;
+        }
+      }
+    };
 
     return {
       state,
-      password,
       classes,
       inputListeners,
       onClickIcon,

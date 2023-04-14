@@ -13,10 +13,9 @@
             :validation="validation['login']"
           />
 
-          <BaseInput
+          <BasePassword
             v-model="state.password"
             class="form__field"
-            type="password"
             :placeholder="labels.LOGIN_VIEW.PASSWORD"
             :disabled="flags.isDisabled"
             :validation="validation['password']"
@@ -52,6 +51,7 @@ import { computed, reactive } from 'vue';
 import { useStore } from 'vuex';
 import { useValidation } from '@/hooks/useValidation';
 import BaseInput from '@/components/base/BaseInput';
+import BasePassword from '@/components/base/BasePassword';
 import BaseButton from '@/components/base/BaseButton';
 import BaseLink from '@/components/base/BaseLink';
 import { required, minLength, maxLength } from '@/helpers/validators';
@@ -63,6 +63,7 @@ import { labels } from '@/utils/labels';
 export default {
   components: {
     BaseInput,
+    BasePassword,
     BaseButton,
     BaseLink
   },

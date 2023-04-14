@@ -24,15 +24,16 @@
     <BasePassword
       v-model="state.password"
       class="form__field"
+      create
+      :placeholder="labels.SIGN_UP_VIEW.PASSWORD"
       :disabled="isDisabled"
       :validation="validation['password']"
       @input="onInput"
     />
 
-    <BaseInput
+    <BasePassword
       v-model="state.passwordConfirmation"
       class="form__field"
-      type="password"
       :placeholder="labels.SIGN_UP_VIEW.CONFIRMATION_PASSWORD"
       :disabled="isDisabled"
       :validation="validation['passwordConfirmation']"
