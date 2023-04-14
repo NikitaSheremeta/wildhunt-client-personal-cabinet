@@ -32,7 +32,7 @@ export function email(validationMessage) {
 
 export function sameAs(comparedValue, validationMessages) {
   return function (value) {
-    return comparedValue.value === value ? '' : validationMessages;
+    return comparedValue === value ? '' : validationMessages;
   };
 }
 

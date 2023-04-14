@@ -2,6 +2,7 @@
   <div :class="['base-input', classes]">
     <div class="wrapper">
       <input
+        ref="input"
         class="field"
         :value="modelValue"
         :type="type"
@@ -13,10 +14,10 @@
         v-on="inputListeners"
       />
 
-      <div class="icon" @mousedown="onMousedownIcon">
+      <div class="icon" @mousedown="onMousedownIcon" @mouseup="onMouseupIcon">
         <slot v-if="!!$slots.icon" name="icon" />
 
-        <BaseIcon v-if="validation.valid && validation.touched" icon="check" color="success" />
+        <BaseIcon v-if="validation.valid" icon="check" color="success" />
 
         <BaseIcon v-if="!validation.valid && validation.touched" icon="exclamation" color="danger" />
 
@@ -35,7 +36,7 @@
 </template>
 
 <script>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import BaseIcon from '@/components/base/BaseIcon';
 import { magicNumbers } from '@/utils/magic-numbers';
 
@@ -109,6 +110,8 @@ export default {
   },
   emits: ['keydown', 'input', 'update:model-value', 'blur'],
   setup: function (props, context) {
+    const input = ref(null);
+
     const classes = computed(() => [
       props.disabled ? 'disabled' : '',
       props.validation.touched && props.validation.valid ? 'valid' : '',
@@ -146,10 +149,19 @@ export default {
       event.preventDefault();
     };
 
+    // Fixing a bag with the cursor moving to the beginning of the line on the onMousedownIcon event
+    const onMouseupIcon = () => {
+      setTimeout(() => {
+        input.value.selectionStart = input.value.value.length;
+      });
+    };
+
     return {
+      input,
       classes,
       inputListeners,
       onMousedownIcon,
+      onMouseupIcon,
       magicNumbers
     };
   }

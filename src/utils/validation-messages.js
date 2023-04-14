@@ -14,7 +14,7 @@ export const validationMessages = {
     MAX_LENGTH: `Пароль должен быть не более ${magicNumbers.PASSWORD.MAX_LENGTH}-x символов`
   },
   CONFIRM_PASSWORD: {
-    SAME_AS: 'Введенные пароли не совпадают'
+    SAME_AS: 'Подтверждение не совпадает с паролем'
   },
   EMAIL: {
     INCORRECT: 'Введенная электронная почта некорректна'
