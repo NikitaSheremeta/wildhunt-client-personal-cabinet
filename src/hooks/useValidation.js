@@ -54,7 +54,14 @@ export function useValidation(rules, fields) {
         }
       }
 
-      data[field].errors = objectSorting(data[field].errors, ['required', 'minLength', 'maxLength', 'email', 'sameAs']);
+      data[field].errors = objectSorting(data[field].errors, [
+        'required',
+        'allowedCharacters',
+        'minLength',
+        'maxLength',
+        'email',
+        'sameAs'
+      ]);
 
       data[field].notice = Object.values(data[field].errors)[0];
     });

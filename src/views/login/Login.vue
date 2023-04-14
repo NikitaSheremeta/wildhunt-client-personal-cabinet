@@ -84,12 +84,12 @@ export default {
     const rules = computed(() => {
       return {
         login: {
-          required: required(validationMessages.LOGIN.REQUIRED_LOGIN_PAGE),
+          required: required(validationMessages.BASE.REQUIRED),
           minLength: minLength(magicNumbers.LOGIN.MIN_LENGTH, validationMessages.LOGIN.MIN_LENGTH),
           maxLength: maxLength(magicNumbers.LOGIN.MAX_LENGTH, validationMessages.LOGIN.MAX_LENGTH)
         },
         password: {
-          required: required(validationMessages.PASSWORD.REQUIRED_LOGIN_PAGE),
+          required: required(validationMessages.BASE.REQUIRED),
           minLength: minLength(magicNumbers.PASSWORD.MIN_LENGTH, validationMessages.PASSWORD.MIN_LENGTH),
           maxLength: maxLength(magicNumbers.PASSWORD.MAX_LENGTH, validationMessages.PASSWORD.MAX_LENGTH)
         }

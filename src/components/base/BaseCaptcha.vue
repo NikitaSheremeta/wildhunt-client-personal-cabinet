@@ -94,7 +94,7 @@ export default {
     const rules = computed(() => {
       return {
         captcha: {
-          required: required(validationMessages.CAPTCHA.REQUIRED),
+          required: required(validationMessages.BASE.REQUIRED),
           minLength: minLength(magicNumbers.CAPTCHA.MIN_LENGTH, validationMessages.CAPTCHA.MIN_LENGTH),
           maxLength: maxLength(magicNumbers.CAPTCHA.MAX_LENGTH, validationMessages.CAPTCHA.MAX_LENGTH),
           sameAs: sameAs(captchaResult, validationMessages.CAPTCHA.INCORRECT)

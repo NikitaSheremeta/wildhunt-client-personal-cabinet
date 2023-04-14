@@ -73,7 +73,7 @@ export default {
     const rules = computed(() => {
       return {
         email: {
-          required: required(validationMessages.EMAIL.REQUIRED),
+          required: required(validationMessages.BASE.REQUIRED),
           email: email(validationMessages.EMAIL.INCORRECT)
         }
       };

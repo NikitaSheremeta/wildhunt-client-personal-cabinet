@@ -82,7 +82,7 @@ import BasePassword from '@/components/base/BasePassword';
 import BaseButton from '@/components/base/BaseButton';
 import BaseCheckbox from '@/components/base/BaseCheckbox';
 import BaseLink from '@/components/base/BaseLink';
-import { email, maxLength, minLength, required, sameAs } from '@/helpers/validators';
+import { allowedCharacters, email, maxLength, minLength, required, sameAs } from '@/helpers/validators';
 import { labels } from '@/utils/labels';
 import { validationMessages } from '@/utils/validation-messages';
 import { magicNumbers } from '@/utils/magic-numbers';
@@ -121,21 +121,23 @@ export default {
     const rules = computed(() => {
       return {
         username: {
-          required: required(validationMessages.LOGIN.REQUIRED),
+          required: required(validationMessages.BASE.REQUIRED),
           minLength: minLength(magicNumbers.LOGIN.MIN_LENGTH, validationMessages.LOGIN.MIN_LENGTH),
-          maxLength: maxLength(magicNumbers.LOGIN.MAX_LENGTH, validationMessages.LOGIN.MAX_LENGTH)
+          maxLength: maxLength(magicNumbers.LOGIN.MAX_LENGTH, validationMessages.LOGIN.MAX_LENGTH),
+          allowedCharacters: allowedCharacters(validationMessages.BASE.ALLOWED_CHARACTERS)
         },
         email: {
-          required: required(validationMessages.EMAIL.REQUIRED),
+          required: required(validationMessages.BASE.REQUIRED),
           email: email(validationMessages.EMAIL.INCORRECT)
         },
         password: {
-          required: required(validationMessages.PASSWORD.REQUIRED_LOGIN_PAGE),
+          required: required(validationMessages.BASE.REQUIRED),
           minLength: minLength(magicNumbers.PASSWORD.MIN_LENGTH, validationMessages.PASSWORD.MIN_LENGTH),
-          maxLength: maxLength(magicNumbers.PASSWORD.MAX_LENGTH, validationMessages.PASSWORD.MAX_LENGTH)
+          maxLength: maxLength(magicNumbers.PASSWORD.MAX_LENGTH, validationMessages.PASSWORD.MAX_LENGTH),
+          allowedCharacters: allowedCharacters(validationMessages.BASE.ALLOWED_CHARACTERS)
         },
         passwordConfirmation: {
-          required: required(validationMessages.CONFIRM_PASSWORD.REQUIRED),
+          required: required(validationMessages.BASE.REQUIRED),
           sameAs: sameAs(state.password, validationMessages.CONFIRM_PASSWORD.SAME_AS)
         }
       };

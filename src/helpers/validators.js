@@ -29,8 +29,15 @@ export function email(validationMessage) {
     return value.match(regularExpressions.email) ? '' : validationMessage;
   };
 }
+
 export function sameAs(comparedValue, validationMessages) {
   return function (value) {
     return comparedValue.value === value ? '' : validationMessages;
+  };
+}
+
+export function allowedCharacters(validationMessages) {
+  return function (value) {
+    return regularExpressions.allowedCharacters.test(value) ? '' : validationMessages;
   };
 }

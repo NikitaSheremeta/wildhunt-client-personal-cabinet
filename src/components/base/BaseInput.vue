@@ -9,12 +9,16 @@
         :autocomplete="autocomplete"
         :placeholder="placeholder"
         :disabled="disabled"
-        :maxlength="magicNumbers.PASSWORD.MAX_LENGTH"
+        :maxlength="maxLength"
         v-on="inputListeners"
       />
 
       <div class="icon" @mousedown="onMousedownIcon">
         <slot v-if="!!$slots.icon" name="icon" />
+
+        <BaseIcon v-if="validation.valid && validation.touched" icon="check" color="success" />
+
+        <BaseIcon v-if="!validation.valid && validation.touched" icon="exclamation" color="danger" />
 
         <BaseIcon v-if="icon" :icon="icon" color="secondary" />
       </div>
@@ -87,8 +91,8 @@ export default {
       default: ''
     },
     maxLength: {
-      type: Number,
-      default: 0
+      type: [Number, null],
+      default: null
     },
     notice: {
       type: String,

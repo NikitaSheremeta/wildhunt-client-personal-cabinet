@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { computed, onMounted, reactive, watch } from 'vue';
+import { computed, reactive, watch } from 'vue';
 import BaseInput from '@/components/base/BaseInput';
 import BaseIcon from '@/components/base/BaseIcon';
 import { magicNumbers } from '@/utils/magic-numbers';
@@ -73,7 +73,11 @@ export default {
       notice: labels.PASSWORD_STRENGTH_NOTICE.DEFAULT
     });
 
-    const classes = computed(() => [props.disabled ? 'disabled' : '', state.status]);
+    const classes = computed(() => [
+      props.disabled ? 'disabled' : '',
+      props.validation.touched ? 'touched' : '',
+      state.status
+    ]);
 
     const inputListeners = computed(() => {
       return {
@@ -83,16 +87,9 @@ export default {
         blur: () => {
           props.validation.blur();
 
-          if (!props.validation.valid && props.validation.touched) {
-            state.status = 'invalid';
-            state.notice = props.validation.notice;
-          }
+          handleValidation();
         }
       };
-    });
-
-    onMounted(() => {
-      reassign();
     });
 
     watch(
@@ -103,6 +100,13 @@ export default {
     const onClickIcon = () => {
       if (!props.disabled) {
         state.type = state.type === 'password' ? 'text' : 'password';
+      }
+    };
+
+    const handleValidation = () => {
+      if (!props.validation.valid) {
+        state.status = 'invalid';
+        state.notice = props.validation.notice;
       }
     };
 
@@ -141,21 +145,10 @@ export default {
       return score;
     };
 
-    // eslint-disable-next-line max-statements
     const reassign = () => {
-      if (!props.validation.valid && props.validation.touched) {
-        state.status = 'invalid';
-      }
+      handleValidation();
 
-      if (!props.validation.valid) {
-        state.notice = props.validation.notice;
-      }
-
-      if (!props.validation.touched && state.value.length < magicNumbers.PASSWORD.MIN_LENGTH) {
-        state.status = '';
-      }
-
-      if (state.value.length >= magicNumbers.PASSWORD.MIN_LENGTH) {
+      if (props.validation.valid && state.value.length >= magicNumbers.PASSWORD.MIN_LENGTH) {
         const strengthScore = getStrengthScore();
 
         // eslint-disable-next-line no-magic-numbers
@@ -219,8 +212,10 @@ export default {
   }
 
   &.invalid {
-    .notice {
-      color: $danger;
+    &.touched {
+      .notice {
+        color: $danger;
+      }
     }
   }
 
