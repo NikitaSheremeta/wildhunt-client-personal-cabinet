@@ -155,6 +155,8 @@ export default {
 
       state.captcha = '';
       state.code = arrayRandomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE);
+
+      validation['captcha'].reset();
     };
 
     const onClickButton = () => {
