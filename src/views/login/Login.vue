@@ -2,29 +2,24 @@
   <div class="container">
     <div class="row">
       <transition name="fade-slide-up">
-        <form
-          v-if="!flags.isHideForm"
-          class="form"
-          @submit.prevent="onSubmitForm"
-        >
-          <h2
-            class="form__title"
-            v-text="labels.LOGIN_VIEW.TITLE"
-          />
+        <form v-if="!flags.isHideForm" class="form" @submit.prevent="onSubmitForm">
+          <h2 class="form__title" v-text="labels.LOGIN_VIEW.TITLE" />
 
           <BaseInput
-            v-model="data.username"
+            v-model="state.login"
             class="form__field"
             :placeholder="labels.LOGIN_VIEW.USER_NAME"
             :disabled="flags.isDisabled"
+            :validation="validation['login']"
           />
 
           <BaseInput
-            v-model="data.password"
+            v-model="state.password"
             class="form__field"
             type="password"
             :placeholder="labels.LOGIN_VIEW.PASSWORD"
             :disabled="flags.isDisabled"
+            :validation="validation['password']"
           />
 
           <div class="form__actions">
@@ -35,12 +30,7 @@
               :loading="flags.isLoading"
             />
 
-            <BaseButton
-              to="signup"
-              theme="success"
-              :label="labels.LOGIN_VIEW.SIGN_UP"
-              :disabled="flags.isDisabled"
-            />
+            <BaseButton to="signup" theme="success" :label="labels.LOGIN_VIEW.SIGN_UP" :disabled="flags.isDisabled" />
           </div>
 
           <BaseLink
@@ -58,15 +48,16 @@
 </template>
 
 <script>
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
 import { useStore } from 'vuex';
+import { useValidation } from '@/hooks/useValidation';
 import BaseInput from '@/components/base/BaseInput';
 import BaseButton from '@/components/base/BaseButton';
 import BaseLink from '@/components/base/BaseLink';
-// import { required, minLength, maxLength } from '@/helpers/validators';
+import { required, minLength, maxLength } from '@/helpers/validators';
 import { debounce } from '@/helpers/debounce';
-// import { validationMessages } from '@/utils/validation-messages';
-// import { magicNumbers } from '@/utils/magic-numbers';
+import { validationMessages } from '@/utils/validation-messages';
+import { magicNumbers } from '@/utils/magic-numbers';
 import { labels } from '@/utils/labels';
 
 export default {
@@ -78,8 +69,8 @@ export default {
   setup() {
     const store = useStore();
 
-    const data = reactive({
-      username: '',
+    const state = reactive({
+      login: '',
       password: ''
     });
 
@@ -89,41 +80,52 @@ export default {
       isHideForm: false
     });
 
-    // const rules = {
-    //   username: {
-    //     required: required(validationMessages.LOGIN.REQUIRED_LOGIN_PAGE),
-    //     minLength: minLength(magicNumbers.LOGIN.MIN_LENGTH, validationMessages.LOGIN.MIN_LENGTH),
-    //     maxLength: maxLength(magicNumbers.LOGIN.MAX_LENGTH, validationMessages.LOGIN.MAX_LENGTH)
-    //   },
-    //   password: {
-    //     required: required(validationMessages.PASSWORD.REQUIRED_LOGIN_PAGE),
-    //     minLength: minLength(magicNumbers.PASSWORD.MIN_LENGTH, validationMessages.PASSWORD.MIN_LENGTH),
-    //     maxLength: maxLength(magicNumbers.PASSWORD.MAX_LENGTH, validationMessages.PASSWORD.MAX_LENGTH)
-    //   }
-    // };
+    const rules = computed(() => {
+      return {
+        login: {
+          required: required(validationMessages.LOGIN.REQUIRED_LOGIN_PAGE),
+          minLength: minLength(magicNumbers.LOGIN.MIN_LENGTH, validationMessages.LOGIN.MIN_LENGTH),
+          maxLength: maxLength(magicNumbers.LOGIN.MAX_LENGTH, validationMessages.LOGIN.MAX_LENGTH)
+        },
+        password: {
+          required: required(validationMessages.PASSWORD.REQUIRED_LOGIN_PAGE),
+          minLength: minLength(magicNumbers.PASSWORD.MIN_LENGTH, validationMessages.PASSWORD.MIN_LENGTH),
+          maxLength: maxLength(magicNumbers.PASSWORD.MAX_LENGTH, validationMessages.PASSWORD.MAX_LENGTH)
+        }
+      };
+    });
+
+    const validation = useValidation(rules, state);
 
     const onSubmitForm = async () => {
       flags.isLoading = true;
       flags.isDisabled = true;
 
       await store
-        .dispatch('LOGIN', data)
-        .then((result) => {
-          // flags.isHideForm = true;
+        .dispatch('LOGIN', state)
+        .then((result) =>
+          debounce(() => {
+            flags.isHideForm = true;
 
-          if (Object.prototype.hasOwnProperty.call(result, 'error')) {
-            debounce(() => console.log(result))();
-          }
-        })
+            if (Object.prototype.hasOwnProperty.call(result, 'error')) {
+              debounce(() => console.log(result))();
+            }
+          }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
+        )
         .catch((error) => debounce(() => console.log(error))())
-        .finally(() => (flags.isLoading = false));
+        .finally(() =>
+          debounce(() => {
+            flags.isLoading = false;
+          }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
+        );
     };
 
     return {
-      data,
+      state,
       flags,
-      labels,
-      onSubmitForm
+      validation,
+      onSubmitForm,
+      labels
     };
   }
 };

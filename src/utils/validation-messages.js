@@ -16,7 +16,7 @@ export const validationMessages = {
     ALLOWED_CHARACTERS: 'Пароль содержит запрещенные символы'
   },
   CONFIRM_PASSWORD: {
-    REQUIRED: 'Введите пароль еще раз',
+    REQUIRED: 'Это поле необходимо заполнить',
     SAME_AS: 'Подтверждение не совпадает с паролем'
   },
   EMAIL: {

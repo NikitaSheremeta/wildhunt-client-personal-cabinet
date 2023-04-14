@@ -4,7 +4,7 @@
       <transition name="fade-slide-up">
         <SignupForm
           v-if="flags.shouldDisplaySignupForm"
-          v-model="data.signupFormData"
+          v-model="state.signupFormData"
           :is-loading="flags.isLoading"
           :is-disabled="flags.isDisabled"
           @submit.prevent="onSubmitSignupForm"
@@ -12,11 +12,7 @@
       </transition>
 
       <transition name="fade-slide-up">
-        <BaseCaptcha
-          v-if="flags.shouldDisplayCaptcha"
-          v-model="flags.isCaptchaValid"
-          @close="onCloseCaptcha"
-        />
+        <BaseCaptcha v-if="flags.shouldDisplayCaptcha" v-model="flags.isCaptchaValid" @close="onCloseCaptcha" />
       </transition>
 
       <transition name="fade-slide-up">
@@ -62,7 +58,7 @@ export default {
   setup() {
     const store = useStore();
 
-    const data = reactive({
+    const state = reactive({
       signupFormData: {},
       confirmationFormData: {}
     });
@@ -81,7 +77,7 @@ export default {
       flags.isDisabled = true;
 
       await store
-        .dispatch('SIGNUP', data.signupFormData)
+        .dispatch('SIGNUP', state.signupFormData)
         .then((result) =>
           debounce(() => {
             flags.shouldDisplaySignupForm = false;
@@ -119,12 +115,12 @@ export default {
     };
 
     return {
-      data,
+      state,
       flags,
-      labels,
-      validationMessages,
       onSubmitSignupForm,
       onCloseCaptcha,
+      labels,
+      validationMessages
     };
   }
 };

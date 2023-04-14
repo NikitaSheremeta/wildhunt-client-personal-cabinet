@@ -1,22 +1,13 @@
 <template>
   <label :class="['base-checkbox', classes]">
-    <input
-      class="field"
-      type="checkbox"
-      :checked="modelValue"
-      :disabled="disabled"
-      @change="onChange"
-    >
+    <input class="field" type="checkbox" :checked="modelValue" :disabled="disabled" @change="onChange" />
 
     <span class="wrapper">
       <span class="check-icon">
         <BaseIcon icon="check" />
       </span>
 
-      <span
-        v-if="!!$slots.default || label"
-        class="label"
-      >
+      <span v-if="!!$slots.default || label" class="label">
         {{ label }}
 
         <slot />
@@ -54,10 +45,7 @@ export default {
   },
   emits: ['update:model-value'],
   setup(props, context) {
-    const classes = computed(() => [
-      props.disabled ? 'disabled' : '',
-      props.color ? props.color : ''
-    ]);
+    const classes = computed(() => [props.disabled ? 'disabled' : '', props.color ? props.color : '']);
 
     const onChange = (event) => {
       const value = event.target.checked;
@@ -65,7 +53,10 @@ export default {
       context.emit('update:model-value', value);
     };
 
-    return { classes, onChange };
+    return {
+      classes,
+      onChange
+    };
   }
 };
 </script>

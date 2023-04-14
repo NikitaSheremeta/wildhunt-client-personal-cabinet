@@ -1,10 +1,7 @@
 <template>
   <div :class="['base-captcha']">
     <div class="top-bar">
-      <h2
-        class="title"
-        v-text="labels.CAPTCHA.TITLE"
-      />
+      <h2 class="title" v-text="labels.CAPTCHA.TITLE" />
 
       <BaseButton
         class="button"
@@ -16,15 +13,8 @@
       />
     </div>
 
-    <div
-      ref="code"
-      class="code"
-    >
-      <div
-        v-for="(number, numberIndex) in state.code"
-        :key="numberIndex"
-        class="number"
-      >
+    <div ref="code" class="code">
+      <div v-for="(number, numberIndex) in state.code" :key="numberIndex" class="number">
         <div
           v-for="(cell, cellIndex) in state.numberMarkups[number]"
           :key="cellIndex"
@@ -35,22 +25,18 @@
     </div>
 
     <BaseInput
-      v-model="state.input"
+      v-model="state.captcha"
       class="input"
       type="number"
       autofocus
       :placeholder="labels.CAPTCHA.PLACEHOLDER"
       :max-length="CAPTCHA_NUMBERS_LENGTH"
+      :validation="validation['captcha']"
       @keydown="onKeydownInput"
       @input="onInput"
     >
       <template #icon>
-        <BaseIcon
-          class="redo-icon"
-          icon="redo"
-          color="secondary"
-          @click="onClickIcon"
-        />
+        <BaseIcon class="redo-icon" icon="redo" color="secondary" @click="onClickIcon" />
       </template>
     </BaseInput>
   </div>
@@ -58,13 +44,14 @@
 
 <script>
 import { computed, onMounted, reactive, ref } from 'vue';
+import { useValidation } from '@/hooks/useValidation';
 import BaseButton from '@/components/base/BaseButton';
 import BaseInput from '@/components/base/BaseInput';
 import BaseIcon from '@/components/base/BaseIcon';
-// import { maxLength, minLength, required, sameAs } from '@/helpers/validators';
+import { maxLength, minLength, required, sameAs } from '@/helpers/validators';
 import { valueRandomNumbers, arrayRandomNumbers } from '@/helpers/random-numbers';
-// import { validationMessages } from '@/utils/validation-messages';
-// import { magicNumbers } from '@/utils/magic-numbers';
+import { validationMessages } from '@/utils/validation-messages';
+import { magicNumbers } from '@/utils/magic-numbers';
 import { labels } from '@/utils/labels';
 
 const MINIMUM_VALUE = 2;
@@ -86,7 +73,7 @@ export default {
     const code = ref(null);
 
     const state = reactive({
-      input: '',
+      captcha: '',
       code: [...arrayRandomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE)],
       numberMarkups: [
         [1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1],
@@ -102,19 +89,20 @@ export default {
       ]
     });
 
-    // const rules = {
-    //   captcha: {
-    //     required: required(validationMessages.CAPTCHA.REQUIRED),
-    //     minLength: minLength(magicNumbers.CAPTCHA.MIN_LENGTH, validationMessages.CAPTCHA.MIN_LENGTH),
-    //     maxLength: maxLength(magicNumbers.CAPTCHA.MAX_LENGTH, validationMessages.CAPTCHA.MAX_LENGTH),
-    //     sameAs: sameAs(
-    //       computed(() => captchaResult.value),
-    //       validationMessages.CAPTCHA.INCORRECT
-    //     )
-    //   }
-    // };
-
     const captchaResult = computed(() => state.code.join(''));
+
+    const rules = computed(() => {
+      return {
+        captcha: {
+          required: required(validationMessages.CAPTCHA.REQUIRED),
+          minLength: minLength(magicNumbers.CAPTCHA.MIN_LENGTH, validationMessages.CAPTCHA.MIN_LENGTH),
+          maxLength: maxLength(magicNumbers.CAPTCHA.MAX_LENGTH, validationMessages.CAPTCHA.MAX_LENGTH),
+          sameAs: sameAs(captchaResult, validationMessages.CAPTCHA.INCORRECT)
+        }
+      };
+    });
+
+    const validation = useValidation(rules, state);
 
     onMounted(() => {
       setRandomOpacity();
@@ -138,13 +126,10 @@ export default {
 
     const addCSSClasses = (number, value) => {
       for (const cell of code.value.children[number].children) {
-
         if (Object.values(cell.classList).indexOf('active') > -1) {
           const valuesArray = Array.from(String(value), Number);
 
-          valuesArray[number] === state.code[number] ?
-            cell.classList.add('success') :
-            cell.classList.add('error');
+          valuesArray[number] === state.code[number] ? cell.classList.add('success') : cell.classList.add('error');
         }
       }
     };
@@ -168,7 +153,7 @@ export default {
 
       setRandomOpacity();
 
-      state.input = '';
+      state.captcha = '';
       state.code = arrayRandomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE);
     };
 
@@ -208,12 +193,13 @@ export default {
     return {
       code,
       state,
-      labels,
+      validation,
       onClickButton,
       onMousedownButton,
       onInput,
       onKeydownInput,
       onClickIcon,
+      labels,
       CAPTCHA_NUMBERS_LENGTH
     };
   }

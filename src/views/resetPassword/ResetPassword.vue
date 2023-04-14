@@ -2,27 +2,18 @@
   <div class="container">
     <div class="row">
       <transition name="fade-slide-up">
-        <form
-          v-if="!flags.isHideForm"
-          class="form"
-          @submit.prevent="onSubmitForm"
-        >
-          <h2
-            class="form__title"
-            v-text="labels.RESET_PASSWORD_VIEW.TITLE"
-          />
+        <form v-if="!flags.isHideForm" class="form" @submit.prevent="onSubmitForm">
+          <h2 class="form__title" v-text="labels.RESET_PASSWORD_VIEW.TITLE" />
 
-          <p
-            class="form__description"
-            v-text="labels.RESET_PASSWORD_VIEW.DESCRIPTION"
-          />
+          <p class="form__description" v-text="labels.RESET_PASSWORD_VIEW.DESCRIPTION" />
 
           <BaseInput
-            v-model="data.email"
+            v-model="state.email"
             class="form__field"
             type="email"
             :placeholder="labels.RESET_PASSWORD_VIEW.EMAIL"
             :disabled="flags.isDisabled"
+            :validation="validation['email']"
           />
 
           <div class="form__actions">
@@ -50,15 +41,17 @@
 </template>
 
 <script>
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
 import { useStore } from 'vuex';
+import { useValidation } from '@/hooks/useValidation';
 import BaseInput from '@/components/base/BaseInput';
 import BaseButton from '@/components/base/BaseButton';
 import BaseLink from '@/components/base/BaseLink';
-// import { email, required } from '@/helpers/validators';
+import { email, required } from '@/helpers/validators';
 import { debounce } from '@/helpers/debounce';
 import { labels } from '@/utils/labels';
-// import { validationMessages } from '@/utils/validation-messages';
+import { validationMessages } from '@/utils/validation-messages';
+import { magicNumbers } from '@/utils/magic-numbers';
 
 export default {
   components: {
@@ -69,7 +62,7 @@ export default {
   setup() {
     const store = useStore();
 
-    const data = reactive({ email: '' });
+    const state = reactive({ email: '' });
 
     const flags = reactive({
       isLoading: false,
@@ -77,35 +70,46 @@ export default {
       isHideForm: false
     });
 
-    // const rules = {
-    //   email: {
-    //     required: required(validationMessages.EMAIL.REQUIRED),
-    //     email: email(validationMessages.EMAIL.INCORRECT)
-    //   }
-    // };
+    const rules = computed(() => {
+      return {
+        email: {
+          required: required(validationMessages.EMAIL.REQUIRED),
+          email: email(validationMessages.EMAIL.INCORRECT)
+        }
+      };
+    });
+
+    const validation = useValidation(rules, state);
 
     const onSubmitForm = async () => {
       flags.isLoading = true;
       flags.isDisabled = true;
 
       await store
-        .dispatch('FORGOT_PASSWORD', data)
-        .then((result) => {
-          // flags.isHideForm = true;
+        .dispatch('FORGOT_PASSWORD', state)
+        .then((result) =>
+          debounce(() => {
+            flags.isHideForm = true;
 
-          if (Object.prototype.hasOwnProperty.call(result, 'error')) {
-            debounce(() => console.log(result))();
-          }
-        })
+            if (Object.prototype.hasOwnProperty.call(result, 'error')) {
+              debounce(() => console.log(result))();
+            }
+          }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
+        )
         .catch((error) => debounce(() => console.log(error))())
-        .finally(() => (flags.isLoading = false));
+        .finally(() =>
+          debounce(() => {
+            flags.isLoading = false;
+          }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
+        );
     };
 
     return {
-      data,
+      state,
       flags,
-      labels,
-      onSubmitForm
+      validation,
+      onSubmitForm,
+      labels
     };
   }
 };

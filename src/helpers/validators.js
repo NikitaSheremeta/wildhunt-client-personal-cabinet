@@ -1,20 +1,36 @@
 import { regularExpressions } from '@/utils/regular-expressions';
 
-export const required = (validationMessage) => (value) => {
-  let localValue = null;
+export function required(validationMessage) {
+  return function (value) {
+    let localValue = null;
 
-  if (typeof value === 'string') {
-    localValue = value.trim();
-  }
+    if (typeof value === 'string') {
+      localValue = value.trim();
+    }
 
-  return localValue ? '' : validationMessage;
-};
+    return localValue ? '' : validationMessage;
+  };
+}
 
-export const minLength = (number, validationMessage) => (value) => value.length >= number ? '' : validationMessage;
+export function minLength(number, validationMessage) {
+  return function (value) {
+    return value.length >= number ? '' : validationMessage;
+  };
+}
 
-export const maxLength = (number, validationMessage) => (value) => value.length <= number ? '' : validationMessage;
+export function maxLength(number, validationMessage) {
+  return function (value) {
+    return value.length <= number ? '' : validationMessage;
+  };
+}
 
-export const email = (validationMessage) => (value) => value.match(regularExpressions.email) ? '' : validationMessage;
-
-export const sameAs = (comparedValue, validationMessages) => (value) =>
-  comparedValue.value === value ? '' : validationMessages;
+export function email(validationMessage) {
+  return function (value) {
+    return value.match(regularExpressions.email) ? '' : validationMessage;
+  };
+}
+export function sameAs(comparedValue, validationMessages) {
+  return function (value) {
+    return comparedValue.value === value ? '' : validationMessages;
+  };
+}

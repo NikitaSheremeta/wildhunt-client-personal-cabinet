@@ -5,6 +5,7 @@
       :type="state.type"
       :placeholder="labels.SIGN_UP_VIEW.PASSWORD"
       :disabled="disabled"
+      :validation="validation"
       v-on="inputListeners"
     >
       <template #icon>
@@ -24,11 +25,7 @@
           <span class="meter__item" />
         </div>
 
-        <span
-          v-if="password.notice"
-          class="notice"
-          v-text="password.notice"
-        />
+        <span v-if="password.notice" class="notice" v-text="password.notice" />
       </template>
     </BaseInput>
   </div>
@@ -51,6 +48,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    validation: {
+      type: [Object, null],
+      default: null
     }
   },
   emits: ['update:model-value'],
@@ -59,10 +60,7 @@ export default {
 
     const state = reactive({ type: 'password' });
 
-    const classes = computed(() => [
-      props.disabled ? 'disabled' : '',
-      password.status
-    ]);
+    const classes = computed(() => [props.disabled ? 'disabled' : '', password.status]);
 
     const inputListeners = computed(() => {
       return {
@@ -73,13 +71,12 @@ export default {
 
           context.emit('update:model-value', value);
 
-
           // if (input.value.input.valid) {
           //   password.value = value;
           // }
 
           // passwordHookHandle();
-        },
+        }
         // blur: () => {
         //   passwordHookHandle();
         // }
@@ -103,9 +100,9 @@ export default {
       state,
       password,
       classes,
-      labels,
       inputListeners,
-      onClickIcon
+      onClickIcon,
+      labels
     };
   }
 };

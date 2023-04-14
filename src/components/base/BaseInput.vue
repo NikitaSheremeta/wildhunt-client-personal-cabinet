@@ -10,29 +10,18 @@
         :placeholder="placeholder"
         :disabled="disabled"
         v-on="inputListeners"
-      >
+      />
 
-      <div
-        class="icon"
-        @mousedown="onMousedownIcon"
-      >
-        <slot
-          v-if="!!$slots.icon"
-          name="icon"
-        />
+      <div class="icon" @mousedown="onMousedownIcon">
+        <slot v-if="!!$slots.icon" name="icon" />
 
-        <BaseIcon
-          v-if="icon"
-          :icon="icon"
-          color="secondary"
-        />
+        <BaseIcon v-if="icon" :icon="icon" color="secondary" />
       </div>
     </div>
 
-    <slot
-      v-if="!!$slots.extension"
-      name="extension"
-    />
+    <slot v-if="!!$slots.extension" name="extension" />
+
+    <span v-if="validation.touched && validation.notice" class="validation-notice" v-text="validation.notice" />
   </div>
 </template>
 
@@ -95,11 +84,17 @@ export default {
       type: Number,
       default: 0
     },
+    validation: {
+      type: [Object, null],
+      default: null
+    }
   },
-  emits: ['keydown', 'input', 'update:model-value'],
+  emits: ['keydown', 'input', 'update:model-value', 'blur'],
   setup: function (props, context) {
     const classes = computed(() => [
       props.disabled ? 'disabled' : '',
+      props.validation.touched && props.validation.valid ? 'valid' : '',
+      props.validation.touched && !props.validation.valid ? 'invalid' : ''
     ]);
 
     const inputListeners = computed(() => {
@@ -120,6 +115,11 @@ export default {
 
           context.emit('input', event);
           context.emit('update:model-value', event.target.value);
+        },
+        blur: (event) => {
+          props.validation.blur();
+
+          context.emit('blur', event);
         }
       };
     });
@@ -225,7 +225,7 @@ $colors: (
     }
 
     input[type='number'] {
-      -moz-appearance:textfield;
+      -moz-appearance: textfield;
     }
 
     .icon {
@@ -239,20 +239,20 @@ $colors: (
     }
   }
 
-  .validation-message {
+  .validation-notice {
     margin-top: 8px;
     font-size: $font-size-xs;
     user-select: none;
   }
 
   &.invalid {
-    .validation-message {
+    .validation-notice {
       color: $danger;
     }
   }
 
   &.valid {
-    .validation-message {
+    .validation-notice {
       color: $success;
     }
   }

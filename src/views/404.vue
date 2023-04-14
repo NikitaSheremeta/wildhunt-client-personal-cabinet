@@ -5,25 +5,15 @@
         <div class="not-found-code">
           <span class="not-found-code__number">4</span>
 
-          <img
-            class="not-found-code__image"
-            src="@/assets/img/dancing-parrot.gif"
-            alt="Minecraft Wild Hunt"
-          >
+          <img class="not-found-code__image" src="@/assets/img/dancing-parrot.gif" alt="Minecraft Wild Hunt" />
 
           <span class="not-found-code__number">4</span>
         </div>
 
         <!-- eslint-disable vue/no-v-html -->
-        <p
-          class="not-found__description"
-          v-html="labels.NOT_FOUND.DESCRIPTION"
-        />
+        <p class="not-found__description" v-html="labels.NOT_FOUND.DESCRIPTION" />
 
-        <BaseButton
-          :label="labels.NOT_FOUND.GO_BACK"
-          @click="$router.go(-1)"
-        />
+        <BaseButton :label="labels.NOT_FOUND.GO_BACK" @click="$router.go(-1)" />
       </div>
     </div>
   </div>

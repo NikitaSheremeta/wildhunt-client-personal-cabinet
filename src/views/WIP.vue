@@ -2,22 +2,12 @@
   <div class="container">
     <div class="row">
       <div class="work-in-progress">
-        <img
-          class="work-in-progress__image"
-          src="@/assets/img/wolf-and-cat.gif"
-          alt="Minecraft Wild Hunt"
-        >
+        <img class="work-in-progress__image" src="@/assets/img/wolf-and-cat.gif" alt="Minecraft Wild Hunt" />
 
         <!-- eslint-disable vue/no-v-html -->
-        <p
-          class="work-in-progress__description"
-          v-html="labels.WIP.DESCRIPTION"
-        />
+        <p class="work-in-progress__description" v-html="labels.WIP.DESCRIPTION" />
 
-        <BaseButton
-          :label="labels.WIP.GO_BACK"
-          @click="$router.go(-1)"
-        />
+        <BaseButton :label="labels.WIP.GO_BACK" @click="$router.go(-1)" />
       </div>
     </div>
   </div>

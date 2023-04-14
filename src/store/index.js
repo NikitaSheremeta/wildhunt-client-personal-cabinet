@@ -24,7 +24,7 @@ export default createStore({
       try {
         const { data: response } = await auth.login(req.login, req.password);
 
-        localStorage.setItem('token', response.data.accessToken);
+        localStorage.setItem('token', response.data['accessToken']);
 
         commit('SET_AUTH', true);
         commit('SET_USER', response.data.user);
@@ -38,7 +38,7 @@ export default createStore({
       try {
         const { data: response } = await auth.signup(req.username, req.email, req.password);
 
-        localStorage.setItem('token', response.data.accessToken);
+        localStorage.setItem('token', response.data['accessToken']);
 
         commit('SET_AUTH', true);
         commit('SET_USER', response.data.user);
@@ -79,7 +79,7 @@ export default createStore({
           withCredentials: true
         });
 
-        localStorage.setItem('token', response.data.accessToken);
+        localStorage.setItem('token', response.data['accessToken']);
 
         commit('SET_AUTH', true);
         commit('SET_USER', response.user);

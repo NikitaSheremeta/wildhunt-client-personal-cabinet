@@ -1,27 +1,10 @@
 <template>
-  <button
-    :class="['base-button', classes]"
-    :disabled="disabled"
-    @click="onClick"
-  >
-    <BaseIcon
-      v-if="loading"
-      spin
-      icon="preloader"
-      width="20"
-      height="20"
-    />
+  <button :class="['base-button', classes]" :disabled="disabled" @click="onClick">
+    <BaseIcon v-if="loading" spin icon="preloader" width="20" height="20" />
 
-    <BaseIcon
-      v-if="icon"
-      color="secondary"
-      :icon="icon"
-    />
+    <BaseIcon v-if="icon" color="secondary" :icon="icon" />
 
-    <span
-      v-if="label"
-      v-text="label"
-    />
+    <span v-if="label" v-text="label" />
   </button>
 </template>
 
@@ -86,7 +69,10 @@ export default {
       }
     };
 
-    return { classes, onClick };
+    return {
+      classes,
+      onClick
+    };
   }
 };
 </script>
@@ -101,7 +87,7 @@ $theme-palette: (
   dark: (
     background-color: $gray-800,
     hover-background: $black,
-    active-background: $black,
+    active-background: $black
   ),
   success: (
     background-color: $success,

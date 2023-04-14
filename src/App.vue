@@ -1,12 +1,7 @@
 <template>
-  <template v-if="isLoading">
-    Загрузка...
-  </template>
+  <template v-if="isLoading"> Загрузка... </template>
 
-  <component
-    :is="layout"
-    v-else
-  >
+  <component :is="layout" v-else>
     <router-view />
   </component>
 </template>
@@ -26,15 +21,18 @@ export default {
 
     const store = useStore();
 
-    const layout = computed(() => (router.meta.layout || 'Base') + 'Layout');
+    const layout = computed(() => (router.meta['layout'] || 'Base') + 'Layout');
 
     const isLoading = computed(() => store.getters.GET_IS_LOADING);
 
-    watch(() => layout.value, async () => {
-      if (localStorage.getItem('token')) {
-        await store.dispatch('CHECK_AUTH');
+    watch(
+      () => layout.value,
+      async () => {
+        if (localStorage.getItem('token')) {
+          await store.dispatch('CHECK_AUTH');
+        }
       }
-    });
+    );
 
     return { layout, isLoading };
   }
