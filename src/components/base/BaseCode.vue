@@ -1,6 +1,10 @@
 <template>
   <div :class="['base-code']">
-    <h2 class="title" v-text="labels.CONFIRMATION.TITLE" />
+    <div class="top-bar">
+      <h2 class="title" v-text="labels.CONFIRMATION.TITLE" />
+
+      <BaseButton class="button" icon-button icon="cross" theme="dark" @click="onClickButton" />
+    </div>
 
     <p class="description" v-text="labels.CONFIRMATION.DESCRIPTION" />
 
@@ -8,12 +12,12 @@
       <template v-for="(value, index) in state.code" :key="index">
         <BaseInput
           :ref="
-            (el) => {
-              if (el) inputs[index] = el;
+            (item) => {
+              if (item) inputs[index] = item;
             }
           "
           v-model="state.code[index]"
-          :class="['input', 'text-center', 'caret-transparent']"
+          :class="['input', 'code-item']"
           type="number"
           :data-id="index"
           :autofocus="index === 0"
@@ -28,33 +32,50 @@
     </div>
 
     <BaseLink
+      v-if="!flags.isDisplayNotice"
       class="resend-code"
-      href="support"
       color="secondary"
       :label="labels.CONFIRMATION.RESEND_CODE"
       icon-left="redo"
+      @click="onClickResend"
     />
+
+    <span v-if="flags.isDisplayNotice" class="notice">
+      Отправить код повторно можно будет через
+
+      <span ref="timer"></span>
+    </span>
   </div>
 </template>
 
 <script>
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import BaseInput from '@/components/base/BaseInput';
+import BaseButton from '@/components/base/BaseButton';
 import BaseLink from '@/components/base/BaseLink';
+import { createTimer, checkTimer } from '@/helpers/timer';
+import { magicNumbers } from '@/utils/magic-numbers';
 import { labels } from '@/utils/labels';
 
 export default {
   name: 'BaseCode',
   components: {
     BaseInput,
+    BaseButton,
     BaseLink
   },
-  setup() {
+  emits: ['update:mode-value', 'close'],
+  setup(props, context) {
     const inputs = ref([]);
+    const timer = ref(null);
 
-    const state = reactive({
-      code: ['', '', '', '']
-    });
+    const state = reactive({ code: ['', '', '', ''] });
+
+    const flags = reactive({ isDisplayNotice: false });
+
+    const onClickButton = () => {
+      context.emit('close');
+    };
 
     const onDelete = (event, currentIndex) => {
       event.preventDefault();
@@ -115,6 +136,12 @@ export default {
 
           input.focus();
         }
+
+        if (state.code[currentIndex] && currentIndex === state.code.length - 1) {
+          const input = inputs.value[currentIndex].input;
+
+          input.blur();
+        }
       }
     };
 
@@ -126,13 +153,35 @@ export default {
       event.target.select(event);
     };
 
+    const onClickResend = (event) => {
+      event.preventDefault();
+
+      createTimer(timer, magicNumbers.ONE_HUNDRED_TWENTY_MILLISECOND);
+
+      flags.isDisplayNotice = true;
+    };
+
+    onMounted(() => {
+      const timerOn = localStorage.getItem('timerOn');
+
+      if (timerOn) {
+        checkTimer(timer);
+
+        flags.isDisplayNotice = true;
+      }
+    });
+
     return {
       inputs,
+      timer,
       state,
+      flags,
+      onClickButton,
       onClick,
       onKeydown,
       onInput,
       onFocus,
+      onClickResend,
       labels
     };
   }
@@ -143,9 +192,15 @@ export default {
 .base-code {
   width: 320px;
 
-  .title {
-    margin: 0;
-    font-weight: $font-weight-base;
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .title {
+      margin: 0;
+      font-weight: $font-weight-base;
+    }
   }
 
   .description {
@@ -157,13 +212,19 @@ export default {
   .wrapper {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+    gap: 8px;
     margin-top: 24px;
   }
 
   .resend-code {
     margin-top: 16px;
     font-size: $font-size-xs;
+  }
+
+  .notice {
+    margin-top: 16px;
+    font-size: $font-size-xs;
+    color: $font-color-secondary;
   }
 }
 </style>

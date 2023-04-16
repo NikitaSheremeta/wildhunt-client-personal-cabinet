@@ -20,7 +20,7 @@
 
         <BaseIcon v-if="validation && validation.valid" icon="check" color="success" />
 
-        <BaseIcon v-if="isValidationInvalid" icon="exclamation" color="danger" />
+        <BaseIcon v-if="validation && validation.touched && !validation.valid" icon="exclamation" color="danger" />
 
         <BaseIcon v-if="icon" :icon="icon" color="secondary" />
       </div>
@@ -113,12 +113,10 @@ export default {
   setup: function (props, context) {
     const input = ref(null);
 
-    const isValidationInvalid = computed(() => props.validation && props.validation.touched && !props.validation.valid);
-
     const classes = computed(() => [
       props.disabled ? 'disabled' : '',
       props.validation && props.validation.touched && props.validation.valid ? 'valid' : '',
-      isValidationInvalid.value ? 'invalid' : ''
+      props.validation && props.validation.touched && !props.validation.valid ? 'invalid' : ''
     ]);
 
     const shouldDisplayValidationMessage = computed(
@@ -174,7 +172,6 @@ export default {
 
     return {
       input,
-      isValidationInvalid,
       classes,
       shouldDisplayValidationMessage,
       inputListeners,
@@ -288,18 +285,18 @@ $colors: (
     }
   }
 
-  &.text-center {
+  &.code-item {
     .wrapper {
       .field {
         text-align: center;
-      }
-    }
-  }
 
-  &.caret-transparent {
-    .wrapper {
-      .field {
-        caret-color: transparent;
+        &:focus {
+          background-color: $gray-900;
+        }
+
+        &::selection {
+          background: transparent;
+        }
       }
     }
   }
