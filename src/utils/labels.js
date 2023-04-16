@@ -28,7 +28,8 @@ export const labels = {
   CONFIRMATION: {
     TITLE: 'Подтвердите почту',
     DESCRIPTION: 'Код был отправлен на электронную почту, которую вы указали при регистрации.',
-    RESEND_CODE: 'Отправить код еще раз'
+    RESEND_CODE_LABEL: 'Отправить код еще раз',
+    RESEND_CODE_NOTICE: 'Отправить код повторно через'
   },
   LOGIN_VIEW: {
     TITLE: 'Вход в аккаунт',

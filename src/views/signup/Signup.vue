@@ -12,11 +12,15 @@
       </transition>
 
       <transition name="fade-slide-up">
-        <BaseCaptcha v-if="flags.shouldDisplayCaptcha" v-model="flags.isCaptchaValid" @close="onCloseCaptcha" />
+        <BaseCaptcha
+          v-if="flags.shouldDisplayCaptcha && !flags.isCaptchaValid"
+          v-model="flags.isCaptchaValid"
+          @close="onCloseCaptcha"
+        />
       </transition>
 
       <transition name="fade-slide-up">
-        <BaseCode />
+        <BaseCode v-if="!flags.isCaptchaValid" />
       </transition>
 
       <transition name="fade-slide-up">

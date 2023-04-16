@@ -9,7 +9,7 @@
     <p class="description" v-text="labels.CONFIRMATION.DESCRIPTION" />
 
     <div class="wrapper">
-      <template v-for="(value, index) in state.code" :key="index">
+      <template v-for="(value, index) in state.code" :key="value">
         <BaseInput
           :ref="
             (item) => {
@@ -32,28 +32,24 @@
     </div>
 
     <BaseLink
-      v-if="!flags.isDisplayNotice"
+      v-if="!timer.active"
       class="resend-code"
       color="secondary"
-      :label="labels.CONFIRMATION.RESEND_CODE"
+      :label="labels.CONFIRMATION.RESEND_CODE_LABEL"
       icon-left="redo"
       @click="onClickResend"
     />
 
-    <span v-if="flags.isDisplayNotice" class="notice">
-      Отправить код повторно можно будет через
-
-      <span ref="timer"></span>
-    </span>
+    <span v-if="timer.active" class="notice" v-text="resendNotice" />
   </div>
 </template>
 
 <script>
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
+import { useTimer } from '@/hooks/useTimer';
 import BaseInput from '@/components/base/BaseInput';
 import BaseButton from '@/components/base/BaseButton';
 import BaseLink from '@/components/base/BaseLink';
-import { createTimer, checkTimer } from '@/helpers/timer';
 import { magicNumbers } from '@/utils/magic-numbers';
 import { labels } from '@/utils/labels';
 
@@ -67,11 +63,12 @@ export default {
   emits: ['update:mode-value', 'close'],
   setup(props, context) {
     const inputs = ref([]);
-    const timer = ref(null);
+
+    const timer = useTimer();
 
     const state = reactive({ code: ['', '', '', ''] });
 
-    const flags = reactive({ isDisplayNotice: false });
+    const resendNotice = computed(() => String(labels.CONFIRMATION.RESEND_CODE_NOTICE) + ' ' + timer.time);
 
     const onClickButton = () => {
       context.emit('close');
@@ -136,12 +133,6 @@ export default {
 
           input.focus();
         }
-
-        if (state.code[currentIndex] && currentIndex === state.code.length - 1) {
-          const input = inputs.value[currentIndex].input;
-
-          input.blur();
-        }
       }
     };
 
@@ -156,26 +147,18 @@ export default {
     const onClickResend = (event) => {
       event.preventDefault();
 
-      createTimer(timer, magicNumbers.ONE_HUNDRED_TWENTY_MILLISECOND);
-
-      flags.isDisplayNotice = true;
+      timer.createTimer(magicNumbers.ONE_HUNDRED_TWENTY_MILLISECOND);
     };
 
     onMounted(() => {
-      const timerOn = localStorage.getItem('timerOn');
-
-      if (timerOn) {
-        checkTimer(timer);
-
-        flags.isDisplayNotice = true;
-      }
+      timer.checkTimer();
     });
 
     return {
       inputs,
       timer,
       state,
-      flags,
+      resendNotice,
       onClickButton,
       onClick,
       onKeydown,
