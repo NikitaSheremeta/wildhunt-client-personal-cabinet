@@ -54,7 +54,7 @@ import BaseInput from '@/components/base/BaseInput';
 import BasePassword from '@/components/base/BasePassword';
 import BaseButton from '@/components/base/BaseButton';
 import BaseLink from '@/components/base/BaseLink';
-import { required, minLength, maxLength } from '@/helpers/validators';
+import { required, minLength, maxLength, allowedCharacters } from '@/helpers/validators';
 import { debounce } from '@/helpers/debounce';
 import { validationMessages } from '@/utils/validation-messages';
 import { magicNumbers } from '@/utils/magic-numbers';
@@ -86,12 +86,14 @@ export default {
         login: {
           required: required(validationMessages.BASE.REQUIRED),
           minLength: minLength(magicNumbers.LOGIN.MIN_LENGTH, validationMessages.LOGIN.MIN_LENGTH),
-          maxLength: maxLength(magicNumbers.LOGIN.MAX_LENGTH, validationMessages.LOGIN.MAX_LENGTH)
+          maxLength: maxLength(magicNumbers.LOGIN.MAX_LENGTH, validationMessages.LOGIN.MAX_LENGTH),
+          allowedCharacters: allowedCharacters(validationMessages.BASE.ALLOWED_CHARACTERS)
         },
         password: {
           required: required(validationMessages.BASE.REQUIRED),
           minLength: minLength(magicNumbers.PASSWORD.MIN_LENGTH, validationMessages.PASSWORD.MIN_LENGTH),
-          maxLength: maxLength(magicNumbers.PASSWORD.MAX_LENGTH, validationMessages.PASSWORD.MAX_LENGTH)
+          maxLength: maxLength(magicNumbers.PASSWORD.MAX_LENGTH, validationMessages.PASSWORD.MAX_LENGTH),
+          allowedCharacters: allowedCharacters(validationMessages.BASE.ALLOWED_CHARACTERS)
         }
       };
     });

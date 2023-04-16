@@ -6,6 +6,7 @@
         class="field"
         :value="modelValue"
         :type="type"
+        :data-id="dataId"
         :autofocus="autofocus"
         :autocomplete="autocomplete"
         :placeholder="placeholder"
@@ -17,9 +18,9 @@
       <div class="icon" @mousedown="onMousedownIcon" @mouseup="onMouseupIcon">
         <slot v-if="!!$slots.icon" name="icon" />
 
-        <BaseIcon v-if="validation.valid" icon="check" color="success" />
+        <BaseIcon v-if="validation && validation.valid" icon="check" color="success" />
 
-        <BaseIcon v-if="!validation.valid && validation.touched" icon="exclamation" color="danger" />
+        <BaseIcon v-if="isValidationInvalid" icon="exclamation" color="danger" />
 
         <BaseIcon v-if="icon" :icon="icon" color="secondary" />
       </div>
@@ -27,11 +28,7 @@
 
     <slot v-if="!!$slots.extension" name="extension" />
 
-    <span
-      v-if="validation.touched && validation.notice && !disableNotice"
-      class="validation-notice"
-      v-text="validation.notice"
-    />
+    <span v-if="shouldDisplayValidationMessage" class="validation-notice" v-text="validation.notice" />
   </div>
 </template>
 
@@ -71,6 +68,10 @@ export default {
       type: String,
       default: 'text'
     },
+    dataId: {
+      type: [Number, null],
+      default: null
+    },
     autofocus: {
       type: Boolean,
       default: false
@@ -108,19 +109,29 @@ export default {
       default: null
     }
   },
-  emits: ['keydown', 'input', 'update:model-value', 'blur'],
+  emits: ['keydown', 'input', 'update:model-value', 'focus', 'blur'],
   setup: function (props, context) {
     const input = ref(null);
 
+    const isValidationInvalid = computed(() => props.validation && props.validation.touched && !props.validation.valid);
+
     const classes = computed(() => [
       props.disabled ? 'disabled' : '',
-      props.validation.touched && props.validation.valid ? 'valid' : '',
-      props.validation.touched && !props.validation.valid ? 'invalid' : ''
+      props.validation && props.validation.touched && props.validation.valid ? 'valid' : '',
+      isValidationInvalid.value ? 'invalid' : ''
     ]);
+
+    const shouldDisplayValidationMessage = computed(
+      () => props.validation && props.validation.touched && props.validation.notice && !props.disableNotice
+    );
 
     const inputListeners = computed(() => {
       return {
         keydown: (event) => {
+          if (event.key === 'Escape') {
+            input.value.blur();
+          }
+
           if (props.type === 'number') {
             if (!ALLOWED_KEYS.includes(event.key)) {
               event.preventDefault();
@@ -137,8 +148,13 @@ export default {
           context.emit('input', event);
           context.emit('update:model-value', event.target.value);
         },
+        focus: (event) => {
+          context.emit('focus', event);
+        },
         blur: (event) => {
-          props.validation.blur();
+          if (props.validation) {
+            props.validation.blur();
+          }
 
           context.emit('blur', event);
         }
@@ -158,7 +174,9 @@ export default {
 
     return {
       input,
+      isValidationInvalid,
       classes,
+      shouldDisplayValidationMessage,
       inputListeners,
       onMousedownIcon,
       onMouseupIcon,
@@ -267,6 +285,22 @@ $colors: (
       position: absolute;
       gap: 8px;
       right: 16px;
+    }
+  }
+
+  &.text-center {
+    .wrapper {
+      .field {
+        text-align: center;
+      }
+    }
+  }
+
+  &.caret-transparent {
+    .wrapper {
+      .field {
+        caret-color: transparent;
+      }
     }
   }
 

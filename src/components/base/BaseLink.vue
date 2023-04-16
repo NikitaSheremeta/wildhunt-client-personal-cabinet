@@ -135,14 +135,22 @@ $color-palette: (
   }
 
   &.icon-left {
+    span {
+      margin-top: 1px;
+    }
+
     .base-icon {
-      margin-right: 8px;
+      margin-right: 12px;
     }
   }
 
   &.icon-right {
+    span {
+      margin-top: 1px;
+    }
+
     .base-icon {
-      margin-left: 8px;
+      margin-left: 12px;
     }
   }
 }

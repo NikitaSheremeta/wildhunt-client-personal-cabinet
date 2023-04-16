@@ -3,7 +3,7 @@
     <div class="row">
       <transition name="fade-slide-up">
         <SignupForm
-          v-if="flags.shouldDisplaySignupForm"
+          v-if="!flags.shouldDisplaySignupForm"
           v-model="state.signupFormData"
           :is-loading="flags.isLoading"
           :is-disabled="flags.isDisabled"
@@ -13,6 +13,10 @@
 
       <transition name="fade-slide-up">
         <BaseCaptcha v-if="flags.shouldDisplayCaptcha" v-model="flags.isCaptchaValid" @close="onCloseCaptcha" />
+      </transition>
+
+      <transition name="fade-slide-up">
+        <BaseCode />
       </transition>
 
       <transition name="fade-slide-up">
@@ -41,6 +45,7 @@ import { reactive } from 'vue';
 import { useStore } from 'vuex';
 import SignupForm from '@/views/signup/signupForm/SignupForm';
 import BaseCaptcha from '@/components/base/BaseCaptcha';
+import BaseCode from '@/components/base/BaseCode';
 import BaseNotice from '@/components/base/BaseNotice';
 import BaseButton from '@/components/base/BaseButton';
 import { debounce } from '@/helpers/debounce';
@@ -52,6 +57,7 @@ export default {
   components: {
     SignupForm,
     BaseCaptcha,
+    BaseCode,
     BaseNotice,
     BaseButton
   },

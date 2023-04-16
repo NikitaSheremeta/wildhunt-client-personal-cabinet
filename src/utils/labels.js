@@ -25,6 +25,11 @@ export const labels = {
     TITLE: 'Каптча!',
     PLACEHOLDER: 'Введите код'
   },
+  CONFIRMATION: {
+    TITLE: 'Подтвердите почту',
+    DESCRIPTION: 'Код был отправлен на электронную почту, которую вы указали при регистрации.',
+    RESEND_CODE: 'Отправить код еще раз'
+  },
   LOGIN_VIEW: {
     TITLE: 'Вход в аккаунт',
     USER_NAME: 'Логин или электронная почта',
