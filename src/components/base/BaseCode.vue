@@ -1,12 +1,12 @@
 <template>
   <div :class="['base-code']">
     <div class="top-bar">
-      <h2 class="title" v-text="labels.CONFIRMATION.TITLE" />
+      <h2 class="title" v-text="labels.CODE.TITLE" />
 
       <BaseButton class="button" icon-button icon="cross" theme="dark" @click="onClickButton" />
     </div>
 
-    <p class="description" v-text="labels.CONFIRMATION.DESCRIPTION" />
+    <p class="description" v-text="labels.CODE.DESCRIPTION" />
 
     <div class="wrapper">
       <template v-for="(value, index) in state.code" :key="value">
@@ -35,7 +35,7 @@
       v-if="!timer.active"
       class="resend-code"
       color="secondary"
-      :label="labels.CONFIRMATION.RESEND_CODE_LABEL"
+      :label="labels.CODE.RESEND_CODE_LABEL"
       icon-left="redo"
       @click="onClickResend"
     />
@@ -68,7 +68,7 @@ export default {
 
     const state = reactive({ code: ['', '', '', ''] });
 
-    const resendNotice = computed(() => String(labels.CONFIRMATION.RESEND_CODE_NOTICE) + ' ' + timer.time);
+    const resendNotice = computed(() => String(labels.CODE.RESEND_CODE_NOTICE) + ' ' + timer.time);
 
     const onClickButton = () => {
       context.emit('close');
