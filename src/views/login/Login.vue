@@ -32,7 +32,7 @@ export default {
   setup() {
     const loginForm = ref(null);
 
-    const form = useFormValidation(loginForm);
+    const formValidation = useFormValidation(loginForm);
 
     const store = useStore();
 
@@ -47,9 +47,9 @@ export default {
     });
 
     const onSubmitLoginForm = async () => {
-      form.checkValidity();
+      formValidation.checkValidity();
 
-      if (form.valid) {
+      if (formValidation.valid) {
         flags.loading = true;
         flags.disabled = true;
 

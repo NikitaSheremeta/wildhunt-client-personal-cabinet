@@ -174,6 +174,8 @@ export default {
     };
 
     const onCloseNewPasswordForm = () => {
+      localStorage.removeItem('newPassword');
+
       flags.loading = false;
       flags.disabled = false;
       flags.shouldDisplayNewPasswordForm = false;
