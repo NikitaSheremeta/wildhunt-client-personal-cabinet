@@ -1,26 +1,26 @@
 <template>
-  <form class="form">
-    <div class="form__top-bar">
-      <BaseButton class="form__button" icon-button icon="arrow-left" theme="dark" @click.prevent="onClickBackButton" />
+  <div :class="['base-confirmation']">
+    <div class="top-bar">
+      <BaseButton class="button" icon-button icon="arrow-left" theme="dark" @click.prevent="onClickBackButton" />
 
-      <h2 class="form__title" v-text="labels.CODE.TITLE" />
+      <h2 class="title" v-text="labels.CONFIRMATION.TITLE" />
     </div>
 
-    <p class="form__description" v-text="labels.CODE.DESCRIPTION" />
+    <p class="description" v-text="labels.CONFIRMATION.DESCRIPTION" />
 
-    <BaseCode class="form__code" />
+    <BaseCode class="code" />
 
     <BaseLink
       v-if="!timer.active"
-      class="form__link"
+      class="link"
       color="secondary"
-      :label="labels.CODE.RESEND_CODE_LABEL"
+      :label="labels.CONFIRMATION.RESEND_CODE_LABEL"
       icon-left="redo"
       @click.prevent="onClickResendLink"
     />
 
-    <span v-if="timer.active" class="form__notice" v-text="notice" />
-  </form>
+    <span v-if="timer.active" class="notice" v-text="notice" />
+  </div>
 </template>
 
 <script>
@@ -33,7 +33,7 @@ import { magicNumbers } from '@/utils/magic-numbers';
 import { labels } from '@/utils/labels';
 
 export default {
-  name: 'ConfirmationForm',
+  name: 'BaseConfirmation',
   components: {
     BaseButton,
     BaseCode,
@@ -43,7 +43,7 @@ export default {
   setup(props, context) {
     const timer = useTimer();
 
-    const notice = computed(() => String(labels.CODE.RESEND_CODE_NOTICE) + ' ' + timer.time);
+    const notice = computed(() => String(labels.CONFIRMATION.RESEND_CODE_NOTICE) + ' ' + timer.time);
 
     const onClickBackButton = () => {
       context.emit('close-confirmation');
@@ -69,36 +69,36 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.form {
+.base-confirmation {
   width: 320px;
 
-  &__top-bar {
+  .top-bar {
     display: flex;
     align-items: center;
     gap: 16px;
   }
 
-  &__title {
+  .title {
     margin: 0;
     font-weight: $font-weight-base;
   }
 
-  &__description {
+  .description {
     margin-top: 12px;
     margin-bottom: 0;
     color: $font-color-secondary;
   }
 
-  &__code {
+  .code {
     margin-top: 24px;
   }
 
-  &__link {
+  .link {
     margin-top: 16px;
     font-size: $font-size-xs;
   }
 
-  &__notice {
+  .notice {
     margin-top: 16px;
     font-size: $font-size-xs;
     color: $font-color-secondary;

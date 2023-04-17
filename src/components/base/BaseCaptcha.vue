@@ -37,11 +37,8 @@ import BaseButton from '@/components/base/BaseButton';
 import BaseCode from '@/components/base/BaseCode';
 import BaseLink from '@/components/base/BaseLink';
 import { valueRandomNumbers, arrayRandomNumbers } from '@/helpers/random-numbers';
+import { magicNumbers } from '@/utils/magic-numbers';
 import { labels } from '@/utils/labels';
-
-const MINIMUM_VALUE = 1;
-const MAXIMUM_VALUE = 10;
-const CAPTCHA_NUMBERS_LENGTH = 4;
 
 export default {
   name: 'BaseCaptcha',
@@ -50,13 +47,13 @@ export default {
     BaseCode,
     BaseLink
   },
-  emits: ['update:mode-value', 'close-captcha'],
+  emits: ['update:model-value', 'close-captcha'],
   setup(props, context) {
     const captcha = ref(null);
 
     const state = reactive({
       code: [],
-      captcha: [...arrayRandomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE)],
+      captcha: [...arrayRandomNumbers(magicNumbers.CAPTCHA.NUMBERS_LENGTH, magicNumbers.CAPTCHA.NUMBERS_MAX_VALUE)],
       numberMarkups: [
         [1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1],
         [0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1],
@@ -71,14 +68,35 @@ export default {
       ]
     });
 
-    const setRandomOpacity = () => {
+    const allCellsSelection = (callback) => {
       for (const number of captcha.value.children) {
         for (const cell of number.children) {
-          if (Object.values(cell.classList).indexOf('active') > -1) {
-            cell.style.opacity = `0.${valueRandomNumbers(MINIMUM_VALUE, MAXIMUM_VALUE)}`;
-          }
+          callback(cell);
         }
       }
+    };
+
+    const setRandomOpacity = () => {
+      allCellsSelection((cell) => {
+        if (Object.values(cell.classList).indexOf('active') > -1) {
+          cell.style.opacity = `0.${valueRandomNumbers(
+            magicNumbers.CAPTCHA.NUMBERS_MIN_VALUE,
+            magicNumbers.CAPTCHA.NUMBERS_MAX_VALUE
+          )}`;
+        }
+      });
+    };
+
+    const removeCSSClasses = () => {
+      allCellsSelection((cell) => {
+        if (Object.values(cell.classList).indexOf('error') > -1) {
+          cell.classList.remove('error');
+        }
+
+        if (Object.values(cell.classList).indexOf('success') > -1) {
+          cell.classList.remove('success');
+        }
+      });
     };
 
     const addCSSClasses = () => {
@@ -95,29 +113,13 @@ export default {
       });
     };
 
-    const removeCSSClasses = () => {
-      state.code.forEach((value, key) => {
-        if (!value) {
-          for (const cell of captcha.value.children[key].children) {
-            if (Object.values(cell.classList).indexOf('error') > -1) {
-              cell.classList.remove('error');
-            }
-
-            if (Object.values(cell.classList).indexOf('success') > -1) {
-              cell.classList.remove('success');
-            }
-          }
-        }
-      });
-    };
-
     const onClickBackButton = () => {
       context.emit('close-captcha');
     };
 
     const onClickResetIcon = () => {
-      state.code = ['', '', '', ''];
-      state.captcha = arrayRandomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE);
+      state.code = [];
+      state.captcha = arrayRandomNumbers(magicNumbers.CAPTCHA.NUMBERS_LENGTH, magicNumbers.CAPTCHA.NUMBERS_MAX_VALUE);
 
       removeCSSClasses();
       setRandomOpacity();
@@ -130,18 +132,20 @@ export default {
         keydown: (event) => {
           if (event.key === 'Backspace' || event.key === 'Delete') {
             removeCSSClasses();
+            addCSSClasses();
           }
 
-          context.emit('update:mode-value', isCaptchaValid.value);
+          context.emit('update:model-value', isCaptchaValid.value);
         },
         input: () => {
           const value = state.code.join('');
 
           if (value.length) {
+            removeCSSClasses();
             addCSSClasses();
           }
 
-          context.emit('update:mode-value', isCaptchaValid.value);
+          context.emit('update:model-value', isCaptchaValid.value);
         }
       };
     });

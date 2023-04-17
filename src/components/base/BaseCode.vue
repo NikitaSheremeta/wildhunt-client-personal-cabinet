@@ -1,12 +1,13 @@
 <template>
   <div :class="['base-code']">
-    <template v-for="(value, index) in state.code" :key="value">
+    <template v-for="(value, index) in state.code" :key="index">
       <BaseInput
         :ref="
           (item) => {
             if (item) inputs[index] = item;
           }
         "
+        v-model="state.code[index]"
         :class="['input', 'code-item']"
         type="number"
         :data-id="index"
@@ -19,10 +20,9 @@
     </template>
   </div>
 </template>
-
+ч
 <script>
-import { computed, reactive, ref } from 'vue';
-import { useTimer } from '@/hooks/useTimer';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import BaseInput from '@/components/base/BaseInput';
 import { magicNumbers } from '@/utils/magic-numbers';
 import { labels } from '@/utils/labels';
@@ -35,7 +35,7 @@ export default {
   props: {
     modelValue: {
       type: Array,
-      default: () => ['', '', '', '']
+      default: () => []
     },
     disabled: {
       type: Boolean,
@@ -46,9 +46,17 @@ export default {
   setup(props, context) {
     const inputs = ref([]);
 
-    const timer = useTimer();
+    const state = reactive({ code: [] });
 
-    const state = reactive({ code: ['', '', '', ''] });
+    const codePreparation = () => {
+      if (state.code.length) {
+        state.code = [];
+      }
+
+      for (let i = 0; magicNumbers.CODE.NUMBERS_LENGTH > i; i++) {
+        state.code.push('');
+      }
+    };
 
     const focusOnPrevious = (currentIndex) => {
       const input = inputs.value[currentIndex - 1].input;
@@ -117,9 +125,23 @@ export default {
       };
     });
 
+    onMounted(() => {
+      codePreparation();
+    });
+
+    watch(
+      () => props.modelValue,
+      () => {
+        if (!props.modelValue.length) {
+          codePreparation();
+
+          context.emit('update:model-value', state.code);
+        }
+      }
+    );
+
     return {
       inputs,
-      timer,
       state,
       inputListeners,
       magicNumbers,

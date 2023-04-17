@@ -296,10 +296,6 @@ $colors: (
         &:focus {
           background-color: $gray-900;
         }
-
-        &::selection {
-          background: transparent;
-        }
       }
     }
   }

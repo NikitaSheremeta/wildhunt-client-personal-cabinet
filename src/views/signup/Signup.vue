@@ -3,42 +3,12 @@
     <div class="row">
       <transition name="fade-slide-up">
         <SignupForm
-          v-if="!flags.shouldDisplaySignupForm"
+          v-if="flags.shouldDisplaySignupForm"
           v-model="state.signupFormData"
           :is-loading="flags.isLoading"
           :is-disabled="flags.isDisabled"
           @submit.prevent="onSubmitSignupForm"
         />
-      </transition>
-
-      <transition name="fade-slide-up">
-        <BaseCaptcha
-          v-if="!flags.shouldDisplayCaptcha && !flags.isCaptchaValid"
-          v-model="flags.isCaptchaValid"
-          @close="onCloseCaptcha"
-        />
-      </transition>
-
-      <transition name="fade-slide-up">
-        <ConfirmationForm v-if="flags.isCaptchaValid" />
-      </transition>
-
-      <transition name="fade-slide-up">
-        <BaseNotice
-          v-if="flags.shouldDisplayNotice"
-          success
-          :icon="labels.SIGN_UP_VIEW.SUCCESSFULLY_CREATED.ICON"
-          :title="labels.SIGN_UP_VIEW.SUCCESSFULLY_CREATED.TITLE"
-          :description="labels.SIGN_UP_VIEW.SUCCESSFULLY_CREATED.DESCRIPTION"
-        >
-          <template #extension>
-            <BaseButton
-              to="download-launcher"
-              theme="success"
-              :label="labels.SIGN_UP_VIEW.SUCCESSFULLY_CREATED.SUBMIT"
-            />
-          </template>
-        </BaseNotice>
       </transition>
     </div>
   </div>
@@ -48,10 +18,6 @@
 import { reactive } from 'vue';
 import { useStore } from 'vuex';
 import SignupForm from '@/views/signup/signupForm/SignupForm';
-import ConfirmationForm from '@/views/signup/confirmationForm/ConfirmationForm';
-import BaseCaptcha from '@/components/base/BaseCaptcha';
-import BaseNotice from '@/components/base/BaseNotice';
-import BaseButton from '@/components/base/BaseButton';
 import { debounce } from '@/helpers/debounce';
 import { validationMessages } from '@/utils/validation-messages';
 import { magicNumbers } from '@/utils/magic-numbers';
@@ -59,25 +25,17 @@ import { labels } from '@/utils/labels';
 
 export default {
   components: {
-    SignupForm,
-    ConfirmationForm,
-    BaseCaptcha,
-    BaseNotice,
-    BaseButton
+    SignupForm
   },
   setup() {
     const store = useStore();
 
     const state = reactive({
-      signupFormData: {},
-      confirmationFormData: {}
+      signupFormData: {}
     });
 
     const flags = reactive({
       shouldDisplaySignupForm: true,
-      shouldDisplayCaptcha: false,
-      shouldDisplayNotice: false,
-      isCaptchaValid: false,
       isLoading: false,
       isDisabled: false
     });
@@ -91,11 +49,6 @@ export default {
         .then((result) =>
           debounce(() => {
             flags.shouldDisplaySignupForm = false;
-
-            debounce(() => {
-              // state.shouldDisplayNotice = true;
-              flags.shouldDisplayCaptcha = true;
-            })();
 
             if (Object.prototype.hasOwnProperty.call(result, 'error')) {
               debounce(() => console.log(result))();
@@ -114,21 +67,10 @@ export default {
         );
     };
 
-    const onCloseCaptcha = () => {
-      flags.shouldDisplayCaptcha = false;
-
-      debounce(() => {
-        flags.shouldDisplaySignupForm = true;
-        flags.isLoading = false;
-        flags.isDisabled = false;
-      })();
-    };
-
     return {
       state,
       flags,
       onSubmitSignupForm,
-      onCloseCaptcha,
       labels,
       validationMessages
     };
