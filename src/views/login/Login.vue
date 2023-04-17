@@ -4,6 +4,7 @@
       <transition name="fade-slide-up">
         <LoginForm
           v-if="flags.shouldDisplayLoginForm"
+          ref="loginForm"
           v-model="state.LoginFormData"
           :is-loading="flags.isLoading"
           :is-disabled="flags.isDisabled"
@@ -15,19 +16,24 @@
 </template>
 
 <script>
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
+import { useForm } from '@/hooks/useForm';
 import { useStore } from 'vuex';
+import LoginForm from '@/views/login/loginForm/LoginForm';
 import { debounce } from '@/helpers/debounce';
 import { magicNumbers } from '@/utils/magic-numbers';
 import { labels } from '@/utils/labels';
 
-import LoginForm from '@/views/login/loginForm/LoginForm';
-
 export default {
+  name: 'Login',
   components: {
     LoginForm
   },
   setup() {
+    const loginForm = ref(null);
+
+    const form = useForm(loginForm);
+
     const store = useStore();
 
     const state = reactive({
@@ -41,33 +47,38 @@ export default {
     });
 
     const onSubmitLoginForm = async () => {
-      flags.isLoading = true;
-      flags.isDisabled = true;
+      form.checkValidity();
 
-      await store
-        .dispatch('LOGIN', state.LoginFormData)
-        .then((result) =>
-          debounce(() => {
-            flags.shouldDisplayLoginForm = false;
+      if (form.valid) {
+        flags.isLoading = true;
+        flags.isDisabled = true;
 
-            if (Object.prototype.hasOwnProperty.call(result, 'error')) {
-              debounce(() => console.log(result))();
-            }
-          }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
-        )
-        .catch((error) =>
-          debounce(() => {
-            console.log(error);
-          })()
-        )
-        .finally(() =>
-          debounce(() => {
-            flags.isLoading = false;
-          }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
-        );
+        await store
+          .dispatch('LOGIN', state.LoginFormData)
+          .then((result) =>
+            debounce(() => {
+              flags.shouldDisplayLoginForm = false;
+
+              if (Object.prototype.hasOwnProperty.call(result, 'error')) {
+                debounce(() => console.log(result))();
+              }
+            }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
+          )
+          .catch((error) =>
+            debounce(() => {
+              console.log(error);
+            })()
+          )
+          .finally(() =>
+            debounce(() => {
+              flags.isLoading = false;
+            }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
+          );
+      }
     };
 
     return {
+      loginForm,
       state,
       flags,
       onSubmitLoginForm,

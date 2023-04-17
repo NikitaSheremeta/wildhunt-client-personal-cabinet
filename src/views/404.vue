@@ -23,6 +23,7 @@
 import BaseButton from '@/components/base/BaseButton';
 import { labels } from '@/utils/labels';
 export default {
+  name: '404',
   components: {
     BaseButton
   },

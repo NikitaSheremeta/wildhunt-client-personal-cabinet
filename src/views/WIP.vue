@@ -17,6 +17,7 @@
 import BaseButton from '@/components/base/BaseButton';
 import { labels } from '@/utils/labels';
 export default {
+  name: 'WIP',
   components: {
     BaseButton
   },

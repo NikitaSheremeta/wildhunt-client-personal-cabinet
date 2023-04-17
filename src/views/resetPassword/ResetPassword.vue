@@ -2,145 +2,84 @@
   <div class="container">
     <div class="row">
       <transition name="fade-slide-up">
-        <form v-if="!flags.isHideForm" class="form" @submit.prevent="onSubmitForm">
-          <h2 class="form__title" v-text="labels.RESET_PASSWORD_VIEW.TITLE" />
-
-          <p class="form__description" v-text="labels.RESET_PASSWORD_VIEW.DESCRIPTION" />
-
-          <BaseInput
-            v-model="state.email"
-            class="form__field"
-            type="email"
-            :placeholder="labels.RESET_PASSWORD_VIEW.EMAIL"
-            :disabled="flags.isDisabled"
-            :validation="validation['email']"
-          />
-
-          <div class="form__actions">
-            <BaseButton
-              type="submit"
-              full-width
-              :label="labels.RESET_PASSWORD_VIEW.SUBMIT"
-              :disabled="flags.isDisabled"
-              :loading="flags.isLoading"
-            />
-          </div>
-
-          <BaseLink
-            class="form__account-recover"
-            href="support"
-            color="secondary"
-            :label="labels.RESET_PASSWORD_VIEW.ACCOUNT_RECOVER"
-            :disabled="flags.isDisabled"
-            icon-left="question"
-          />
-        </form>
+        <ResetPasswordForm
+          v-if="flags.shouldDisplayResetPasswordForm"
+          ref="resetPasswordForm"
+          v-model="state.resetPasswordForm"
+          :is-loading="flags.isLoading"
+          :is-disabled="flags.isDisabled"
+          @submit.prevent="onSubmitResetPasswordForm"
+        />
       </transition>
     </div>
   </div>
 </template>
 
 <script>
-import { computed, reactive } from 'vue';
+import { reactive, ref } from 'vue';
+import { useForm } from '@/hooks/useForm';
 import { useStore } from 'vuex';
-import { useValidation } from '@/hooks/useValidation';
-import BaseInput from '@/components/base/BaseInput';
-import BaseButton from '@/components/base/BaseButton';
-import BaseLink from '@/components/base/BaseLink';
-import { email, required } from '@/helpers/validators';
+import ResetPasswordForm from '@/views/resetPassword/resetPasswordForm/ResetPasswordForm';
 import { debounce } from '@/helpers/debounce';
-import { labels } from '@/utils/labels';
-import { validationMessages } from '@/utils/validation-messages';
 import { magicNumbers } from '@/utils/magic-numbers';
 
 export default {
+  name: 'ResetPassword',
   components: {
-    BaseInput,
-    BaseButton,
-    BaseLink
+    ResetPasswordForm
   },
   setup() {
+    const resetPasswordForm = ref(null);
+
+    const form = useForm(resetPasswordForm);
+
     const store = useStore();
 
-    const state = reactive({ email: '' });
+    const state = reactive({ resetPasswordForm: {} });
 
     const flags = reactive({
+      shouldDisplayResetPasswordForm: true,
       isLoading: false,
-      isDisabled: false,
-      isHideForm: false
+      isDisabled: false
     });
 
-    const rules = computed(() => {
-      return {
-        email: {
-          required: required(validationMessages.BASE.REQUIRED),
-          email: email(validationMessages.EMAIL.INCORRECT)
-        }
-      };
-    });
+    const onSubmitResetPasswordForm = async () => {
+      form.checkValidity();
 
-    const validation = useValidation(rules, state);
+      if (form.valid) {
+        flags.isLoading = true;
+        flags.isDisabled = true;
 
-    const onSubmitForm = async () => {
-      flags.isLoading = true;
-      flags.isDisabled = true;
+        await store
+          .dispatch('FORGOT_PASSWORD', state.resetPasswordForm)
+          .then((result) =>
+            debounce(() => {
+              flags.shouldDisplayResetPasswordForm = false;
 
-      await store
-        .dispatch('FORGOT_PASSWORD', state)
-        .then((result) =>
-          debounce(() => {
-            flags.isHideForm = true;
-
-            if (Object.prototype.hasOwnProperty.call(result, 'error')) {
-              debounce(() => console.log(result))();
-            }
-          }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
-        )
-        .catch((error) => debounce(() => console.log(error))())
-        .finally(() =>
-          debounce(() => {
-            flags.isLoading = false;
-          }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
-        );
+              if (Object.prototype.hasOwnProperty.call(result, 'error')) {
+                debounce(() => console.log(result))();
+              }
+            }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
+          )
+          .catch((error) =>
+            debounce(() => {
+              console.log(error);
+            })()
+          )
+          .finally(() =>
+            debounce(() => {
+              flags.isLoading = false;
+            }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
+          );
+      }
     };
 
     return {
+      resetPasswordForm,
       state,
       flags,
-      validation,
-      onSubmitForm,
-      labels
+      onSubmitResetPasswordForm
     };
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.form {
-  width: 320px;
-
-  &__title {
-    margin: 0;
-    font-weight: $font-weight-base;
-  }
-
-  &__description {
-    margin-top: 8px;
-    margin-bottom: 0;
-    color: $font-color-secondary;
-  }
-
-  &__field {
-    margin-top: 24px;
-  }
-
-  &__actions {
-    margin-top: 24px;
-  }
-
-  &__account-recover {
-    margin-top: 16px;
-    font-size: $font-size-xs;
-  }
-}
-</style>
