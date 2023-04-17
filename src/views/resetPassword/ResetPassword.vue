@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useFormValidation } from '@/hooks/useFormValidation';
 import { useStore } from 'vuex';
 import ResetPasswordForm from '@/views/resetPassword/resetPasswordForm/ResetPasswordForm';
@@ -74,7 +74,7 @@ export default {
     const state = reactive({ resetPasswordForm: {} });
 
     const flags = reactive({
-      shouldDisplayResetPasswordForm: true,
+      shouldDisplayResetPasswordForm: false,
       shouldDisplayCaptcha: false,
       shouldDisplayConfirmation: false,
       shouldDisplayNewPasswordForm: false,
@@ -136,7 +136,7 @@ export default {
       })();
 
       debounce(() => {
-        flags.shouldDisplayConfirmation = true;
+        flags.shouldDisplayNewPasswordForm = true;
       }, magicNumbers.FOUR_HUNDRED_MILLISECONDS)();
     };
 
@@ -182,6 +182,18 @@ export default {
         flags.shouldDisplayResetPasswordForm = true;
       })();
     };
+
+    onMounted(() => {
+      const storageNewPassword = localStorage.getItem('newPassword');
+
+      if (storageNewPassword) {
+        flags.shouldDisplayNewPasswordForm = true;
+      }
+
+      if (!storageNewPassword) {
+        flags.shouldDisplayResetPasswordForm = true;
+      }
+    });
 
     return {
       resetPasswordForm,

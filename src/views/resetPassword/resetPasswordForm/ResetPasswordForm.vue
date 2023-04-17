@@ -7,7 +7,6 @@
     <BaseInput
       v-model="state.email"
       class="form__field"
-      type="email"
       autofocus
       :placeholder="labels.RESET_PASSWORD_VIEW.EMAIL"
       :disabled="disabled"
@@ -78,9 +77,9 @@ export default {
 
     const fieldsValidation = useFieldsValidation(rules, state);
 
-    const onInput = async () => {
+    const onInput = (event) => {
       context.emit('update:model-value', {
-        email: state.email
+        email: event.target.value
       });
     };
 

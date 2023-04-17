@@ -147,7 +147,7 @@ export default {
 
     const fieldsValidation = useFieldsValidation(rules, state);
 
-    const onInput = async () => {
+    const onInput = () => {
       context.emit('update:model-value', {
         username: state.username,
         email: state.email,

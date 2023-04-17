@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { computed, reactive } from 'vue';
+import { computed, onMounted, reactive } from 'vue';
 import { useFieldsValidation } from '@/hooks/useFieldsValidation';
 import BasePassword from '@/components/base/BasePassword';
 import BaseButton from '@/components/base/BaseButton';
@@ -84,11 +84,15 @@ export default {
       context.emit('close');
     };
 
-    const onInput = async () => {
+    const onInput = () => {
       context.emit('update:model-value', {
         password: state.password
       });
     };
+
+    onMounted(() => {
+      localStorage.setItem('newPassword', 'active');
+    });
 
     return {
       state,

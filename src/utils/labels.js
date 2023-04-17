@@ -22,7 +22,7 @@ export const labels = {
   },
   CAPTCHA: {
     TITLE: 'Каптча!',
-    DESCRIPTION: 'Введите 4-х значный',
+    DESCRIPTION: 'Введите 4-х значный код',
     RESET_CAPTCHA_LABEL: 'Сгенерировать новый код'
   },
   CONFIRMATION: {

@@ -18,9 +18,15 @@
       <div class="icon" @mousedown="onMousedownIcon" @mouseup="onMouseupIcon">
         <slot v-if="!!$slots.icon" name="icon" />
 
-        <BaseIcon v-if="validation && validation.valid" icon="check" color="success" />
+        <BaseIcon v-if="validation && validation.valid" icon="check" color="success" width="16" height="16" />
 
-        <BaseIcon v-if="validation && validation.touched && !validation.valid" icon="exclamation" color="danger" />
+        <BaseIcon
+          v-if="validation && validation.touched && !validation.valid"
+          icon="exclamation"
+          color="danger"
+          width="16"
+          height="16"
+        />
 
         <BaseIcon v-if="icon" :icon="icon" color="secondary" />
       </div>
@@ -142,6 +148,8 @@ export default {
           if (props.maxLength && props.maxLength < event.target.value.length) {
             event.target.value = event.target.value.substring(0, props.maxLength);
           }
+
+          event.target.value = event.target.value.replace(/\s/g, '');
 
           context.emit('input', event);
           context.emit('update:model-value', event.target.value);

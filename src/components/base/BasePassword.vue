@@ -70,6 +70,7 @@ export default {
     const classes = computed(() => [
       props.disabled ? 'disabled' : '',
       props.validation.touched ? 'touched' : '',
+      props.validation.touched && !props.validation.valid ? 'invalid' : '',
       state.status
     ]);
 
@@ -253,7 +254,7 @@ export default {
     }
 
     .meter__item {
-      background-color: $disabled-background;
+      background-color: $disabled-background !important;
     }
   }
 }

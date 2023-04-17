@@ -7,7 +7,7 @@
     :width="width"
     :height="height"
     :fill="color"
-    :viewBox="viewBoxModifier"
+    viewBox="0 0 54 54"
   >
     <template v-if="icon === 'eye'">
       <path
@@ -33,7 +33,7 @@
       />
     </template>
 
-    <template v-if="isExclamation">
+    <template v-if="icon === 'exclamation'">
       <path
         d="M26.9091 44.1818C24.1978 44.1818 22 46.3796 22 49.0909C22 51.8022 24.1978 54 26.9091 54C29.6204 54 31.8182 51.8022 31.8182 49.0909C31.8182 46.3796 29.6204 44.1818 26.9091 44.1818ZM26.9091 37.3091C29.0799 37.3091 30.8364 35.5507 30.8364 33.3818V3.92727C30.8364 1.75843 29.0799 0 26.9091 0C24.7383 0 22.9818 1.75843 22.9818 3.92727V33.3818C22.9818 35.5507 24.7383 37.3091 26.9091 37.3091Z"
       />
@@ -151,15 +151,7 @@ export default {
       props.spin ? 'preloader' : ''
     ]);
 
-    const isExclamation = computed(() => props.icon === 'exclamation');
-
-    const viewBoxModifier = computed(() => (isExclamation.value ? '0 0 8 50' : '0 0 54 54'));
-
-    return {
-      classes,
-      isExclamation,
-      viewBoxModifier
-    };
+    return { classes };
   }
 };
 </script>
