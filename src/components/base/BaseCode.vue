@@ -20,7 +20,7 @@
     </template>
   </div>
 </template>
-ч
+
 <script>
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import BaseInput from '@/components/base/BaseInput';
