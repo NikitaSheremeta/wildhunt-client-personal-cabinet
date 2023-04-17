@@ -1,20 +1,15 @@
 <template>
   <div :class="['base-captcha']">
     <div class="top-bar">
-      <h2 class="title" v-text="labels.CAPTCHA.TITLE" />
+      <BaseButton class="button" icon-button icon="arrow-left" theme="dark" @click.prevent="onClickBackButton" />
 
-      <BaseButton
-        class="button"
-        icon-button
-        icon="cross"
-        theme="dark"
-        @click="onClickButton"
-        @mousedown="onMousedownButton"
-      />
+      <h2 class="title" v-text="labels.CAPTCHA.TITLE" />
     </div>
 
-    <div ref="code" class="code">
-      <div v-for="(number, numberIndex) in state.code" :key="numberIndex" class="number">
+    <p class="description" v-text="labels.CAPTCHA.DESCRIPTION" />
+
+    <div ref="captcha" class="captcha">
+      <div v-for="(number, numberIndex) in state.captcha" :key="numberIndex" class="number">
         <div
           v-for="(cell, cellIndex) in state.numberMarkups[number]"
           :key="cellIndex"
@@ -24,57 +19,44 @@
       </div>
     </div>
 
-    <BaseInput
-      v-model="state.captcha"
-      class="input"
-      type="number"
-      autofocus
-      :placeholder="labels.CAPTCHA.PLACEHOLDER"
-      :max-length="CAPTCHA_NUMBERS_LENGTH"
-      :validation="validation['captcha']"
-      @keydown="onKeydownInput"
-      @input="onInput"
-    >
-      <template #icon>
-        <BaseIcon class="redo-icon" icon="redo" color="secondary" @click="onClickIcon" />
-      </template>
-    </BaseInput>
+    <BaseCode v-model="state.code" class="code" v-on="codeListeners" />
+
+    <BaseLink
+      class="link"
+      color="secondary"
+      :label="labels.CAPTCHA.RESET_CAPTCHA_LABEL"
+      icon-left="redo"
+      @click.prevent="onClickResetIcon"
+    />
   </div>
 </template>
 
 <script>
 import { computed, onMounted, reactive, ref } from 'vue';
-import { useValidation } from '@/hooks/useValidation';
 import BaseButton from '@/components/base/BaseButton';
-import BaseInput from '@/components/base/BaseInput';
-import BaseIcon from '@/components/base/BaseIcon';
-import { maxLength, minLength, required, sameAs } from '@/helpers/validators';
+import BaseCode from '@/components/base/BaseCode';
+import BaseLink from '@/components/base/BaseLink';
 import { valueRandomNumbers, arrayRandomNumbers } from '@/helpers/random-numbers';
-import { validationMessages } from '@/utils/validation-messages';
-import { magicNumbers } from '@/utils/magic-numbers';
 import { labels } from '@/utils/labels';
 
-const MINIMUM_VALUE = 2;
+const MINIMUM_VALUE = 1;
 const MAXIMUM_VALUE = 10;
-const CAPTCHA_NUMBERS_LENGTH = 8;
+const CAPTCHA_NUMBERS_LENGTH = 4;
 
 export default {
   name: 'BaseCaptcha',
   components: {
     BaseButton,
-    BaseInput,
-    BaseIcon
+    BaseCode,
+    BaseLink
   },
-  component: {
-    BaseInput
-  },
-  emits: ['update:mode-value', 'close'],
+  emits: ['update:mode-value', 'close-captcha'],
   setup(props, context) {
-    const code = ref(null);
+    const captcha = ref(null);
 
     const state = reactive({
-      captcha: '',
-      code: [...arrayRandomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE)],
+      code: [],
+      captcha: [...arrayRandomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE)],
       numberMarkups: [
         [1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1],
         [0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1],
@@ -89,120 +71,92 @@ export default {
       ]
     });
 
-    const captchaResult = computed(() => state.code.join(''));
+    const setRandomOpacity = () => {
+      for (const number of captcha.value.children) {
+        for (const cell of number.children) {
+          if (Object.values(cell.classList).indexOf('active') > -1) {
+            cell.style.opacity = `0.${valueRandomNumbers(MINIMUM_VALUE, MAXIMUM_VALUE)}`;
+          }
+        }
+      }
+    };
 
-    const rules = computed(() => {
+    const addCSSClasses = () => {
+      state.code.forEach((value, key) => {
+        if (value) {
+          for (const cell of captcha.value.children[key].children) {
+            if (Object.values(cell.classList).indexOf('active') > -1) {
+              Number(state.code[key]) === state.captcha[key]
+                ? cell.classList.add('success')
+                : cell.classList.add('error');
+            }
+          }
+        }
+      });
+    };
+
+    const removeCSSClasses = () => {
+      state.code.forEach((value, key) => {
+        if (!value) {
+          for (const cell of captcha.value.children[key].children) {
+            if (Object.values(cell.classList).indexOf('error') > -1) {
+              cell.classList.remove('error');
+            }
+
+            if (Object.values(cell.classList).indexOf('success') > -1) {
+              cell.classList.remove('success');
+            }
+          }
+        }
+      });
+    };
+
+    const onClickBackButton = () => {
+      context.emit('close-captcha');
+    };
+
+    const onClickResetIcon = () => {
+      state.code = ['', '', '', ''];
+      state.captcha = arrayRandomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE);
+
+      removeCSSClasses();
+      setRandomOpacity();
+    };
+
+    const isCaptchaValid = computed(() => state.code.join('') === state.captcha.join(''));
+
+    const codeListeners = computed(() => {
       return {
-        captcha: {
-          required: required(validationMessages.BASE.REQUIRED),
-          minLength: minLength(magicNumbers.CAPTCHA.MIN_LENGTH, validationMessages.CAPTCHA.MIN_LENGTH),
-          maxLength: maxLength(magicNumbers.CAPTCHA.MAX_LENGTH, validationMessages.CAPTCHA.MAX_LENGTH),
-          sameAs: sameAs(captchaResult.value, validationMessages.CAPTCHA.INCORRECT)
+        keydown: (event) => {
+          if (event.key === 'Backspace' || event.key === 'Delete') {
+            removeCSSClasses();
+          }
+
+          context.emit('update:mode-value', isCaptchaValid.value);
+        },
+        input: () => {
+          const value = state.code.join('');
+
+          if (value.length) {
+            addCSSClasses();
+          }
+
+          context.emit('update:mode-value', isCaptchaValid.value);
         }
       };
     });
-
-    const validation = useValidation(rules, state);
 
     onMounted(() => {
       setRandomOpacity();
     });
 
-    const allCellsSelection = (callback) => {
-      for (const number of code.value.children) {
-        for (const cell of number.children) {
-          callback(cell);
-        }
-      }
-    };
-
-    const setRandomOpacity = () => {
-      allCellsSelection((cell) => {
-        if (Object.values(cell.classList).indexOf('active') > -1) {
-          cell.style.opacity = `0.${valueRandomNumbers(MINIMUM_VALUE, MAXIMUM_VALUE)}`;
-        }
-      });
-    };
-
-    const addCSSClasses = (number, value) => {
-      for (const cell of code.value.children[number].children) {
-        if (Object.values(cell.classList).indexOf('active') > -1) {
-          const valuesArray = Array.from(String(value), Number);
-
-          valuesArray[number] === state.code[number] ? cell.classList.add('success') : cell.classList.add('error');
-        }
-      }
-    };
-
-    const removeCSSClasses = (number) => {
-      for (const cell of code.value.children[number].children) {
-        if (Object.values(cell.classList).indexOf('error') > -1) {
-          cell.classList.remove('error');
-        }
-
-        if (Object.values(cell.classList).indexOf('success') > -1) {
-          cell.classList.remove('success');
-        }
-      }
-    };
-
-    const restCaptcha = () => {
-      for (let i = 0; i < CAPTCHA_NUMBERS_LENGTH; i++) {
-        removeCSSClasses(i);
-      }
-
-      setRandomOpacity();
-
-      state.captcha = '';
-      state.code = arrayRandomNumbers(CAPTCHA_NUMBERS_LENGTH, MAXIMUM_VALUE);
-
-      validation['captcha'].reset();
-    };
-
-    const onClickButton = () => {
-      context.emit('close');
-    };
-
-    const onMousedownButton = (event) => {
-      event.preventDefault();
-    };
-
-    const onInput = (event) => {
-      const value = event.target.value;
-
-      if (value.length) {
-        for (let i = 0; i < value.length; i++) {
-          removeCSSClasses(i);
-          addCSSClasses(i, value);
-        }
-      }
-
-      context.emit('update:mode-value', value === captchaResult.value);
-    };
-
-    const onKeydownInput = (event) => {
-      if (event.key === 'Backspace' || event.key === 'Delete') {
-        for (let i = 0; i < event.target.value.length; i++) {
-          removeCSSClasses(i);
-        }
-      }
-    };
-
-    const onClickIcon = () => {
-      restCaptcha();
-    };
-
     return {
-      code,
+      captcha,
       state,
-      validation,
-      onClickButton,
-      onMousedownButton,
-      onInput,
-      onKeydownInput,
-      onClickIcon,
-      labels,
-      CAPTCHA_NUMBERS_LENGTH
+      codeListeners,
+      onClickBackButton,
+      onClickResetIcon,
+      labels
     };
   }
 };
@@ -215,7 +169,7 @@ export default {
   .top-bar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 16px;
 
     .title {
       margin: 0;
@@ -223,11 +177,17 @@ export default {
     }
   }
 
-  .code {
+  .description {
+    margin-top: 12px;
+    margin-bottom: 0;
+    color: $font-color-secondary;
+  }
+
+  .captcha {
     position: relative;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
+    gap: 12px;
     margin-top: 24px;
     font-size: $font-size-xs;
     user-select: none;
@@ -258,12 +218,13 @@ export default {
     }
   }
 
-  .input {
+  .code {
     margin-top: 24px;
+  }
 
-    .redo-icon {
-      cursor: pointer;
-    }
+  .link {
+    margin-top: 16px;
+    font-size: $font-size-xs;
   }
 }
 </style>

@@ -18,10 +18,5 @@ export const validationMessages = {
   },
   EMAIL: {
     INCORRECT: 'Введенная электронная почта некорректна'
-  },
-  CAPTCHA: {
-    MIN_LENGTH: `Код должен быть не менее ${magicNumbers.CAPTCHA.MIN_LENGTH}-и цифр`,
-    MAX_LENGTH: `Код должен быть не более ${magicNumbers.CAPTCHA.MAX_LENGTH}-и цифр`,
-    INCORRECT: 'Введенный код неверен'
   }
 };

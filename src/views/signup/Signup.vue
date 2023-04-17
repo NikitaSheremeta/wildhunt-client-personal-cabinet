@@ -13,14 +13,14 @@
 
       <transition name="fade-slide-up">
         <BaseCaptcha
-          v-if="flags.shouldDisplayCaptcha && !flags.isCaptchaValid"
+          v-if="!flags.shouldDisplayCaptcha && !flags.isCaptchaValid"
           v-model="flags.isCaptchaValid"
           @close="onCloseCaptcha"
         />
       </transition>
 
       <transition name="fade-slide-up">
-        <BaseCode v-if="!flags.isCaptchaValid" />
+        <ConfirmationForm v-if="flags.isCaptchaValid" />
       </transition>
 
       <transition name="fade-slide-up">
@@ -48,8 +48,8 @@
 import { reactive } from 'vue';
 import { useStore } from 'vuex';
 import SignupForm from '@/views/signup/signupForm/SignupForm';
+import ConfirmationForm from '@/views/signup/confirmationForm/ConfirmationForm';
 import BaseCaptcha from '@/components/base/BaseCaptcha';
-import BaseCode from '@/components/base/BaseCode';
 import BaseNotice from '@/components/base/BaseNotice';
 import BaseButton from '@/components/base/BaseButton';
 import { debounce } from '@/helpers/debounce';
@@ -60,8 +60,8 @@ import { labels } from '@/utils/labels';
 export default {
   components: {
     SignupForm,
+    ConfirmationForm,
     BaseCaptcha,
-    BaseCode,
     BaseNotice,
     BaseButton
   },

@@ -1,6 +1,6 @@
 <template>
   <a :class="['base-link', classes]" :href="href" :target="target">
-    <BaseIcon v-if="iconLeft" :icon="iconLeft" />
+    <BaseIcon v-if="iconLeft" :icon="iconLeft" width="14" height="14px" />
 
     <span v-if="label" v-text="label" />
 

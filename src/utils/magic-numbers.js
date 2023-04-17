@@ -7,9 +7,8 @@ export const magicNumbers = {
     MIN_LENGTH: 4,
     MAX_LENGTH: 24
   },
-  CAPTCHA: {
-    MIN_LENGTH: 8,
-    MAX_LENGTH: 8
+  CODE: {
+    MAX_LENGTH: 1
   },
   ONE_HUNDRED_TWENTY_MILLISECOND: 120,
   TWO_HUNDRED_MILLISECONDS: 200,

@@ -109,7 +109,7 @@ export default {
       default: null
     }
   },
-  emits: ['keydown', 'input', 'update:model-value', 'focus', 'blur'],
+  emits: ['keydown', 'input', 'update:model-value', 'click', 'focus', 'blur'],
   setup: function (props, context) {
     const input = ref(null);
 
@@ -145,6 +145,9 @@ export default {
 
           context.emit('input', event);
           context.emit('update:model-value', event.target.value);
+        },
+        click: (event) => {
+          context.emit('click', event);
         },
         focus: (event) => {
           context.emit('focus', event);
