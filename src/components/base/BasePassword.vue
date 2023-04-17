@@ -10,13 +10,7 @@
       v-on="inputListeners"
     >
       <template #icon>
-        <BaseIcon
-          width="22"
-          height="22"
-          color="secondary"
-          :icon="state.type === 'password' ? 'eye' : 'eye-slash'"
-          @click="onClickIcon"
-        />
+        <BaseIcon color="secondary" :icon="state.type === 'password' ? 'eye' : 'eye-slash'" @click="onClickIcon" />
       </template>
 
       <template v-if="create" #extension>

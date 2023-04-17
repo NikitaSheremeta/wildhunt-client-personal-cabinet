@@ -3,10 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="grid">
-          <span
-            class="copyright"
-            v-text="copyright"
-          />
+          <span class="copyright" v-text="copyright" />
 
           <div class="navigation">
             <BaseLink
@@ -24,7 +21,7 @@
         <div class="grid">
           <span class="policy">
             Все права защищены. Копирование материалов сайта запрещено.
-            <br>Мы предоставляем ознакомительный и бесплатный вариант игры Minecraft. <br>Приобрести полную весрию
+            <br />Мы предоставляем ознакомительный и бесплатный вариант игры Minecraft. <br />Приобрести полную весрию
             можно на сайте Minecraft.net'
           </span>
 

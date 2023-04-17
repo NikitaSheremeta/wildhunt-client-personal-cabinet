@@ -1,6 +1,6 @@
 <template>
   <button :class="['base-button', classes]" :disabled="disabled" @click="onClick">
-    <BaseIcon v-if="loading" spin icon="preloader" width="20" height="20" />
+    <BaseIcon v-if="loading" spin icon="preloader" />
 
     <BaseIcon v-if="icon" color="secondary" :icon="icon" width="14" height="14" />
 
