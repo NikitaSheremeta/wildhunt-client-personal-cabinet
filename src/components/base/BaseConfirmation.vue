@@ -39,14 +39,14 @@ export default {
     BaseCode,
     BaseLink
   },
-  emits: ['close-confirmation'],
+  emits: ['close'],
   setup(props, context) {
     const timer = useTimer();
 
     const notice = computed(() => String(labels.CONFIRMATION.RESEND_CODE_NOTICE) + ' ' + timer.time);
 
     const onClickBackButton = () => {
-      context.emit('close-confirmation');
+      context.emit('close');
     };
 
     const onClickResendLink = () => {

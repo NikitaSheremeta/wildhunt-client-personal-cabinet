@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <BaseCode v-model="state.code" class="code" v-on="codeListeners" />
+    <BaseCode v-model="state.code" class="code" :disabled="disabled" v-on="codeListeners" />
 
     <BaseLink
       class="link"
@@ -47,7 +47,13 @@ export default {
     BaseCode,
     BaseLink
   },
-  emits: ['update:model-value', 'close-captcha'],
+  props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  },
+  emits: ['success', 'close'],
   setup(props, context) {
     const captcha = ref(null);
 
@@ -114,7 +120,7 @@ export default {
     };
 
     const onClickBackButton = () => {
-      context.emit('close-captcha');
+      context.emit('close');
     };
 
     const onClickResetIcon = () => {
@@ -135,7 +141,9 @@ export default {
             addCSSClasses();
           }
 
-          context.emit('update:model-value', isCaptchaValid.value);
+          if (isCaptchaValid.value) {
+            context.emit('success', isCaptchaValid.value);
+          }
         },
         input: () => {
           const value = state.code.join('');
@@ -145,7 +153,9 @@ export default {
             addCSSClasses();
           }
 
-          context.emit('update:model-value', isCaptchaValid.value);
+          if (isCaptchaValid.value) {
+            context.emit('success', isCaptchaValid.value);
+          }
         }
       };
     });

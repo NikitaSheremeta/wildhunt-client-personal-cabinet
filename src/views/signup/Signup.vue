@@ -6,8 +6,8 @@
           v-if="flags.shouldDisplaySignupForm"
           ref="signupForm"
           v-model="state.signupFormData"
-          :is-loading="flags.isLoading"
-          :is-disabled="flags.isDisabled"
+          :loading="flags.loading"
+          :disabled="flags.disabled"
           @submit.prevent="onSubmitSignupForm"
         />
       </transition>
@@ -17,7 +17,7 @@
 
 <script>
 import { reactive, ref } from 'vue';
-import { useForm } from '@/hooks/useForm';
+import { useFormValidation } from '@/hooks/useFormValidation';
 import { useStore } from 'vuex';
 import SignupForm from '@/views/signup/signupForm/SignupForm';
 import { debounce } from '@/helpers/debounce';
@@ -33,7 +33,7 @@ export default {
   setup() {
     const signupForm = ref(null);
 
-    const form = useForm(signupForm);
+    const form = useFormValidation(signupForm);
 
     const store = useStore();
 
@@ -43,16 +43,16 @@ export default {
 
     const flags = reactive({
       shouldDisplaySignupForm: true,
-      isLoading: false,
-      isDisabled: false
+      loading: false,
+      disabled: false
     });
 
     const onSubmitSignupForm = async () => {
       form.checkValidity();
 
       if (form.valid) {
-        flags.isLoading = true;
-        flags.isDisabled = true;
+        flags.loading = true;
+        flags.disabled = true;
 
         await store
           .dispatch('SIGNUP', state.signupFormData)
@@ -72,7 +72,7 @@ export default {
           )
           .finally(() =>
             debounce(() => {
-              flags.isLoading = false;
+              flags.loading = false;
             }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
           );
       }

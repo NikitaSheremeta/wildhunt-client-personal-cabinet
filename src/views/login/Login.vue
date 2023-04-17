@@ -6,8 +6,8 @@
           v-if="flags.shouldDisplayLoginForm"
           ref="loginForm"
           v-model="state.LoginFormData"
-          :is-loading="flags.isLoading"
-          :is-disabled="flags.isDisabled"
+          :loading="flags.loading"
+          :disabled="flags.disabled"
           @submit.prevent="onSubmitLoginForm"
         />
       </transition>
@@ -17,7 +17,7 @@
 
 <script>
 import { reactive, ref } from 'vue';
-import { useForm } from '@/hooks/useForm';
+import { useFormValidation } from '@/hooks/useFormValidation';
 import { useStore } from 'vuex';
 import LoginForm from '@/views/login/loginForm/LoginForm';
 import { debounce } from '@/helpers/debounce';
@@ -32,7 +32,7 @@ export default {
   setup() {
     const loginForm = ref(null);
 
-    const form = useForm(loginForm);
+    const form = useFormValidation(loginForm);
 
     const store = useStore();
 
@@ -42,16 +42,16 @@ export default {
 
     const flags = reactive({
       shouldDisplayLoginForm: true,
-      isLoading: false,
-      isDisabled: false
+      loading: false,
+      disabled: false
     });
 
     const onSubmitLoginForm = async () => {
       form.checkValidity();
 
       if (form.valid) {
-        flags.isLoading = true;
-        flags.isDisabled = true;
+        flags.loading = true;
+        flags.disabled = true;
 
         await store
           .dispatch('LOGIN', state.LoginFormData)
@@ -71,7 +71,7 @@ export default {
           )
           .finally(() =>
             debounce(() => {
-              flags.isLoading = false;
+              flags.loading = false;
             }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
           );
       }

@@ -6,8 +6,8 @@
       v-model="state.username"
       class="form__field"
       :placeholder="labels.SIGN_UP_VIEW.USER_NAME"
-      :disabled="isDisabled"
-      :validation="validation['username']"
+      :disabled="disabled"
+      :validation="fieldsValidation['username']"
       @input="onInput"
     />
 
@@ -16,8 +16,8 @@
       class="form__field"
       type="email"
       :placeholder="labels.SIGN_UP_VIEW.EMAIL"
-      :disabled="isDisabled"
-      :validation="validation['email']"
+      :disabled="disabled"
+      :validation="fieldsValidation['email']"
       @input="onInput"
     />
 
@@ -26,8 +26,8 @@
       class="form__field"
       create
       :placeholder="labels.SIGN_UP_VIEW.PASSWORD"
-      :disabled="isDisabled"
-      :validation="validation['password']"
+      :disabled="disabled"
+      :validation="fieldsValidation['password']"
       @input="onInput"
     />
 
@@ -35,28 +35,28 @@
       v-model="state.passwordConfirmation"
       class="form__field"
       :placeholder="labels.SIGN_UP_VIEW.CONFIRMATION_PASSWORD"
-      :disabled="isDisabled"
-      :validation="validation['passwordConfirmation']"
+      :disabled="disabled"
+      :validation="fieldsValidation['passwordConfirmation']"
     />
 
     <div class="form__actions">
       <BaseButton
         full-width
         :label="labels.SIGN_UP_VIEW.SIGN_UP"
-        :disabled="!flags.eula || isDisabled"
-        :loading="isLoading"
+        :disabled="!flags.eula || disabled"
+        :loading="loading"
       />
     </div>
 
     <div class="form__eula">
-      <BaseCheckbox v-model="flags.eula" color="secondary" :label="labels.SIGN_UP_VIEW.EULA" :disabled="isDisabled">
+      <BaseCheckbox v-model="flags.eula" color="secondary" :label="labels.SIGN_UP_VIEW.EULA" :disabled="disabled">
         <BaseLink
           underline
           href="terms"
           target="_blank"
           color="secondary"
           :label="labels.SIGN_UP_VIEW.TERMS"
-          :disabled="isDisabled"
+          :disabled="disabled"
         />
 
         <br />и
@@ -67,7 +67,7 @@
           target="_blank"
           color="secondary"
           :label="labels.SIGN_UP_VIEW.PRIVACY_POLICY"
-          :disabled="isDisabled"
+          :disabled="disabled"
         />
       </BaseCheckbox>
     </div>
@@ -76,7 +76,7 @@
 
 <script>
 import { computed, reactive } from 'vue';
-import { useValidation } from '@/hooks/useValidation';
+import { useFieldsValidation } from '@/hooks/useFieldsValidation';
 import BaseInput from '@/components/base/BaseInput';
 import BasePassword from '@/components/base/BasePassword';
 import BaseButton from '@/components/base/BaseButton';
@@ -97,11 +97,11 @@ export default {
     BaseLink
   },
   props: {
-    isLoading: {
+    loading: {
       type: Boolean,
       default: false
     },
-    isDisabled: {
+    disabled: {
       type: Boolean,
       default: false
     }
@@ -144,7 +144,7 @@ export default {
       };
     });
 
-    const validation = useValidation(rules, state);
+    const fieldsValidation = useFieldsValidation(rules, state);
 
     const onInput = async () => {
       context.emit('update:model-value', {
@@ -157,7 +157,7 @@ export default {
     return {
       state,
       flags,
-      validation,
+      fieldsValidation,
       onInput,
       labels
     };

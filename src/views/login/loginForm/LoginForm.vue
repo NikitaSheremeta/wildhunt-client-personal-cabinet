@@ -6,8 +6,8 @@
       v-model="state.login"
       class="form__field"
       :placeholder="labels.LOGIN_VIEW.USER_NAME"
-      :disabled="isDisabled"
-      :validation="validation['login']"
+      :disabled="disabled"
+      :validation="fieldsValidation['login']"
       @input="onInput"
     />
 
@@ -15,15 +15,15 @@
       v-model="state.password"
       class="form__field"
       :placeholder="labels.LOGIN_VIEW.PASSWORD"
-      :disabled="isDisabled"
-      :validation="validation['password']"
+      :disabled="disabled"
+      :validation="fieldsValidation['password']"
       @input="onInput"
     />
 
     <div class="form__actions">
-      <BaseButton type="submit" :label="labels.LOGIN_VIEW.LOGIN" :disabled="isDisabled" :loading="isLoading" />
+      <BaseButton type="submit" :label="labels.LOGIN_VIEW.LOGIN" :disabled="disabled" :loading="loading" />
 
-      <BaseButton to="signup" theme="success" :label="labels.LOGIN_VIEW.SIGN_UP" :disabled="isDisabled" />
+      <BaseButton to="signup" theme="success" :label="labels.LOGIN_VIEW.SIGN_UP" :disabled="disabled" />
     </div>
 
     <BaseLink
@@ -31,7 +31,7 @@
       href="reset-password"
       color="secondary"
       :label="labels.LOGIN_VIEW.RESET_PASSWORD"
-      :disabled="isDisabled"
+      :disabled="disabled"
       icon-left="question"
     />
   </form>
@@ -39,7 +39,7 @@
 
 <script>
 import { computed, reactive } from 'vue';
-import { useValidation } from '@/hooks/useValidation';
+import { useFieldsValidation } from '@/hooks/useFieldsValidation';
 import BaseInput from '@/components/base/BaseInput';
 import BasePassword from '@/components/base/BasePassword';
 import BaseButton from '@/components/base/BaseButton';
@@ -58,11 +58,11 @@ export default {
     BaseLink
   },
   props: {
-    isLoading: {
+    loading: {
       type: Boolean,
       default: false
     },
-    isDisabled: {
+    disabled: {
       type: Boolean,
       default: false
     }
@@ -91,7 +91,7 @@ export default {
       };
     });
 
-    const validation = useValidation(rules, state);
+    const fieldsValidation = useFieldsValidation(rules, state);
 
     const onInput = async () => {
       context.emit('update:model-value', {
@@ -102,7 +102,7 @@ export default {
 
     return {
       state,
-      validation,
+      fieldsValidation,
       onInput,
       labels
     };

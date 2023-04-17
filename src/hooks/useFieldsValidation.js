@@ -1,7 +1,7 @@
 import { reactive, ref, watch } from 'vue';
 import { objectSorting } from '@/helpers/object-sorting';
 
-export function useValidation(rules, fields) {
+export function useFieldsValidation(rules, fields) {
   const createData = () => {
     const data = {};
 

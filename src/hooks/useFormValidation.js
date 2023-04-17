@@ -1,6 +1,6 @@
 import { reactive } from 'vue';
 
-export function useForm(element) {
+export function useFormValidation(element) {
   const data = reactive({
     valid: false,
     checkValidity: () => {
@@ -11,8 +11,8 @@ export function useForm(element) {
   const checkValidity = () => {
     const invalidFields = [];
 
-    for (const field in element.value.validation) {
-      const fieldValidation = element.value.validation[field];
+    for (const field in element.value.fieldsValidation) {
+      const fieldValidation = element.value.fieldsValidation[field];
 
       fieldValidation.blur();
 

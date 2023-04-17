@@ -8,9 +8,10 @@
       v-model="state.email"
       class="form__field"
       type="email"
+      autofocus
       :placeholder="labels.RESET_PASSWORD_VIEW.EMAIL"
-      :disabled="isDisabled"
-      :validation="validation['email']"
+      :disabled="disabled"
+      :validation="fieldsValidation['email']"
       @input="onInput"
     />
 
@@ -19,8 +20,8 @@
         type="submit"
         full-width
         :label="labels.RESET_PASSWORD_VIEW.SUBMIT"
-        :disabled="isDisabled"
-        :loading="isLoading"
+        :disabled="disabled"
+        :loading="loading"
       />
     </div>
 
@@ -29,7 +30,7 @@
       href="support"
       color="secondary"
       :label="labels.RESET_PASSWORD_VIEW.ACCOUNT_RECOVER"
-      :disabled="isDisabled"
+      :disabled="disabled"
       icon-left="question"
     />
   </form>
@@ -37,7 +38,7 @@
 
 <script>
 import { computed, reactive } from 'vue';
-import { useValidation } from '@/hooks/useValidation';
+import { useFieldsValidation } from '@/hooks/useFieldsValidation';
 import BaseInput from '@/components/base/BaseInput';
 import BaseButton from '@/components/base/BaseButton';
 import BaseLink from '@/components/base/BaseLink';
@@ -53,11 +54,11 @@ export default {
     BaseLink
   },
   props: {
-    isLoading: {
+    loading: {
       type: Boolean,
       default: false
     },
-    isDisabled: {
+    disabled: {
       type: Boolean,
       default: false
     }
@@ -75,7 +76,7 @@ export default {
       };
     });
 
-    const validation = useValidation(rules, state);
+    const fieldsValidation = useFieldsValidation(rules, state);
 
     const onInput = async () => {
       context.emit('update:model-value', {
@@ -85,7 +86,7 @@ export default {
 
     return {
       state,
-      validation,
+      fieldsValidation,
       onInput,
       labels
     };
