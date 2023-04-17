@@ -1,76 +1,39 @@
 <template>
   <form class="form">
-    <h2 class="form__title" v-text="labels.SIGN_UP_VIEW.TITLE" />
+    <h2 class="form__title" v-text="labels.LOGIN_VIEW.TITLE" />
 
     <BaseInput
-      v-model="state.username"
+      v-model="state.login"
       class="form__field"
-      :placeholder="labels.SIGN_UP_VIEW.USER_NAME"
+      :placeholder="labels.LOGIN_VIEW.USER_NAME"
       :disabled="isDisabled"
-      :validation="validation['username']"
-      @input="onInput"
-    />
-
-    <BaseInput
-      v-model="state.email"
-      class="form__field"
-      type="email"
-      :placeholder="labels.SIGN_UP_VIEW.EMAIL"
-      :disabled="isDisabled"
-      :validation="validation['email']"
+      :validation="validation['login']"
       @input="onInput"
     />
 
     <BasePassword
       v-model="state.password"
       class="form__field"
-      create
-      :placeholder="labels.SIGN_UP_VIEW.PASSWORD"
+      :placeholder="labels.LOGIN_VIEW.PASSWORD"
       :disabled="isDisabled"
       :validation="validation['password']"
       @input="onInput"
     />
 
-    <BasePassword
-      v-model="state.passwordConfirmation"
-      class="form__field"
-      :placeholder="labels.SIGN_UP_VIEW.CONFIRMATION_PASSWORD"
-      :disabled="isDisabled"
-      :validation="validation['passwordConfirmation']"
-    />
-
     <div class="form__actions">
-      <BaseButton
-        full-width
-        :label="labels.SIGN_UP_VIEW.SIGN_UP"
-        :disabled="!flags.eula || isDisabled"
-        :loading="isLoading"
-      />
+      <BaseButton type="submit" :label="labels.LOGIN_VIEW.LOGIN" :disabled="isDisabled" :loading="isLoading" />
+
+      <BaseButton to="signup" theme="success" :label="labels.LOGIN_VIEW.SIGN_UP" :disabled="isDisabled" />
     </div>
 
-    <div class="form__eula">
-      <BaseCheckbox v-model="flags.eula" color="secondary" :label="labels.SIGN_UP_VIEW.EULA" :disabled="isDisabled">
-        <BaseLink
-          underline
-          href="terms"
-          target="_blank"
-          color="secondary"
-          :label="labels.SIGN_UP_VIEW.TERMS"
-          :disabled="isDisabled"
-        />
-
-        <br />и
-
-        <BaseLink
-          underline
-          href="privacy-policy"
-          target="_blank"
-          color="secondary"
-          :label="labels.SIGN_UP_VIEW.PRIVACY_POLICY"
-          :disabled="isDisabled"
-        />
-      </BaseCheckbox>
-    </div>
+    <BaseLink
+      class="form__reset-password"
+      href="reset-password"
+      color="secondary"
+      :label="labels.LOGIN_VIEW.RESET_PASSWORD"
+      :disabled="isDisabled"
+      icon-left="question"
+    />
   </form>
 </template>
 
@@ -80,20 +43,18 @@ import { useValidation } from '@/hooks/useValidation';
 import BaseInput from '@/components/base/BaseInput';
 import BasePassword from '@/components/base/BasePassword';
 import BaseButton from '@/components/base/BaseButton';
-import BaseCheckbox from '@/components/base/BaseCheckbox';
 import BaseLink from '@/components/base/BaseLink';
-import { allowedCharacters, email, maxLength, minLength, required, sameAs } from '@/helpers/validators';
 import { labels } from '@/utils/labels';
+import { allowedCharacters, maxLength, minLength, required } from '@/helpers/validators';
 import { validationMessages } from '@/utils/validation-messages';
 import { magicNumbers } from '@/utils/magic-numbers';
 
 export default {
-  name: 'SignupForm',
+  name: 'LoginForm',
   components: {
     BaseInput,
     BasePassword,
     BaseButton,
-    BaseCheckbox,
     BaseLink
   },
   props: {
@@ -109,37 +70,23 @@ export default {
   emits: ['update:model-value'],
   setup(props, context) {
     const state = reactive({
-      username: '',
-      email: '',
-      password: '',
-      passwordConfirmation: ''
-    });
-
-    const flags = reactive({
-      eula: true
+      login: '',
+      password: ''
     });
 
     const rules = computed(() => {
       return {
-        username: {
+        login: {
           required: required(validationMessages.BASE.REQUIRED),
           minLength: minLength(magicNumbers.LOGIN.MIN_LENGTH, validationMessages.LOGIN.MIN_LENGTH),
           maxLength: maxLength(magicNumbers.LOGIN.MAX_LENGTH, validationMessages.LOGIN.MAX_LENGTH),
           allowedCharacters: allowedCharacters(validationMessages.BASE.ALLOWED_CHARACTERS)
-        },
-        email: {
-          required: required(validationMessages.BASE.REQUIRED),
-          email: email(validationMessages.EMAIL.INCORRECT)
         },
         password: {
           required: required(validationMessages.BASE.REQUIRED),
           minLength: minLength(magicNumbers.PASSWORD.MIN_LENGTH, validationMessages.PASSWORD.MIN_LENGTH),
           maxLength: maxLength(magicNumbers.PASSWORD.MAX_LENGTH, validationMessages.PASSWORD.MAX_LENGTH),
           allowedCharacters: allowedCharacters(validationMessages.BASE.ALLOWED_CHARACTERS)
-        },
-        passwordConfirmation: {
-          required: required(validationMessages.BASE.REQUIRED),
-          sameAs: sameAs(state.password, validationMessages.CONFIRM_PASSWORD.SAME_AS)
         }
       };
     });
@@ -148,15 +95,13 @@ export default {
 
     const onInput = async () => {
       context.emit('update:model-value', {
-        username: state.username,
-        email: state.email,
+        login: state.login,
         password: state.password
       });
     };
 
     return {
       state,
-      flags,
       validation,
       onInput,
       labels
@@ -180,18 +125,19 @@ export default {
     &:nth-child(2) {
       margin-top: 24px;
     }
-
-    &:nth-child(5) {
-      margin-top: 8px;
-    }
   }
 
   &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-top: 24px;
+    gap: 16px;
   }
 
-  &__eula {
+  &__reset-password {
     margin-top: 16px;
+    font-size: $font-size-xs;
   }
 }
 </style>
