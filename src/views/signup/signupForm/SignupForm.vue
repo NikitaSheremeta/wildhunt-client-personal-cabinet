@@ -139,7 +139,8 @@ export default {
         },
         passwordConfirmation: {
           required: required(validationMessages.BASE.REQUIRED),
-          sameAs: sameAs(state.password, validationMessages.CONFIRM_PASSWORD.SAME_AS)
+          sameAs: sameAs(state.password, validationMessages.CONFIRM_PASSWORD.SAME_AS),
+          allowedCharacters: allowedCharacters(validationMessages.BASE.ALLOWED_CHARACTERS)
         }
       };
     });

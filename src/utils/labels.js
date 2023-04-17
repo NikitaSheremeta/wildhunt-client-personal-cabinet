@@ -22,7 +22,7 @@ export const labels = {
   },
   CAPTCHA: {
     TITLE: 'Каптча!',
-    DESCRIPTION: 'Введите код представленный ниже',
+    DESCRIPTION: 'Введите 4-х значный',
     RESET_CAPTCHA_LABEL: 'Сгенерировать новый код'
   },
   CONFIRMATION: {
@@ -62,6 +62,10 @@ export const labels = {
     EMAIL: 'Электронная почта',
     SUBMIT: 'Восстановить',
     ACCOUNT_RECOVER: 'Утрачен доступ к электронной почте?'
+  },
+  NEW_PASSWORD_VIEW: {
+    TITLE: 'Создание нового пароля',
+    SUBMIT: 'Сохранить новый пароль'
   },
   WIP: {
     DESCRIPTION: 'Данный раздел находится в разработке,\n <br>но не расстраивайтесь, в скором времени он появится!',

@@ -11,7 +11,6 @@
         :class="['input', 'code-item']"
         type="number"
         :data-id="index"
-        :autofocus="index === 0"
         placeholder="0"
         :disabled="disabled"
         :max-length="magicNumbers.CODE.MAX_LENGTH"
@@ -22,7 +21,7 @@
 </template>
 
 <script>
-import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue';
 import BaseInput from '@/components/base/BaseInput';
 import { magicNumbers } from '@/utils/magic-numbers';
 import { labels } from '@/utils/labels';
@@ -46,9 +45,12 @@ export default {
   setup(props, context) {
     const inputs = ref([]);
 
-    const state = reactive({ code: [] });
+    const state = reactive({
+      code: [],
+      autofocus: true
+    });
 
-    const codePreparation = () => {
+    const codePreparation = async () => {
       if (state.code.length) {
         state.code = [];
       }
@@ -56,6 +58,10 @@ export default {
       for (let i = 0; magicNumbers.CODE.NUMBERS_LENGTH > i; i++) {
         state.code.push('');
       }
+
+      await nextTick();
+
+      inputs.value[0].input.focus();
     };
 
     const focusOnPrevious = (currentIndex) => {

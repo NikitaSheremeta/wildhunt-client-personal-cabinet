@@ -13,11 +13,31 @@
       </transition>
 
       <transition name="fade-slide-up">
-        <BaseCaptcha v-if="flags.shouldDisplayCaptcha" @success="onSuccessCaptcha" @close="onCloseCaptcha" />
+        <BaseCaptcha
+          v-if="flags.shouldDisplayCaptcha"
+          :disabled="flags.disabled"
+          @success="onSuccessCaptcha"
+          @close="onCloseCaptcha"
+        />
       </transition>
 
       <transition name="fade-slide-up">
-        <BaseConfirmation v-if="flags.shouldDisplayConfirmation" @close="onCloseConfirmation" />
+        <BaseConfirmation
+          v-if="flags.shouldDisplayConfirmation"
+          :disabled="flags.disabled"
+          @close="onCloseConfirmation"
+        />
+      </transition>
+
+      <transition name="fade-slide-up">
+        <NewPasswordForm
+          v-if="flags.shouldDisplayNewPasswordForm"
+          ref="newPasswordForm"
+          :loading="flags.loading"
+          :disabled="flags.disabled"
+          @submit.prevent="onSubmitNewPasswordForm"
+          @close="onCloseNewPasswordForm"
+        />
       </transition>
     </div>
   </div>
@@ -30,6 +50,7 @@ import { useStore } from 'vuex';
 import ResetPasswordForm from '@/views/resetPassword/resetPasswordForm/ResetPasswordForm';
 import BaseCaptcha from '@/components/base/BaseCaptcha';
 import BaseConfirmation from '@/components/base/BaseConfirmation';
+import NewPasswordForm from '@/views/resetPassword/newPasswordForm/NewPasswordForm';
 import { debounce } from '@/helpers/debounce';
 import { magicNumbers } from '@/utils/magic-numbers';
 
@@ -38,12 +59,15 @@ export default {
   components: {
     ResetPasswordForm,
     BaseCaptcha,
-    BaseConfirmation
+    BaseConfirmation,
+    NewPasswordForm
   },
   setup() {
     const resetPasswordForm = ref(null);
+    const newPasswordForm = ref(null);
 
     const resetPasswordFormValidation = useFormValidation(resetPasswordForm);
+    const newPasswordFormValidation = useFormValidation(newPasswordForm);
 
     const store = useStore();
 
@@ -53,6 +77,9 @@ export default {
       shouldDisplayResetPasswordForm: true,
       shouldDisplayCaptcha: false,
       shouldDisplayConfirmation: false,
+      shouldDisplayNewPasswordForm: false,
+      shouldDisplayErrorNotice: false,
+      shouldDisplaySuccessNotice: false,
       loading: false,
       disabled: false
     });
@@ -93,6 +120,9 @@ export default {
         })();
 
         debounce(() => {
+          flags.loading = false;
+          flags.disabled = false;
+
           flags.shouldDisplayCaptcha = true;
         }, magicNumbers.FOUR_HUNDRED_MILLISECONDS)();
       }
@@ -130,14 +160,40 @@ export default {
       })();
     };
 
+    const onSubmitNewPasswordForm = () => {
+      newPasswordFormValidation.checkValidity();
+
+      if (newPasswordFormValidation.valid) {
+        flags.loading = true;
+        flags.disabled = true;
+
+        debounce(() => {
+          flags.shouldDisplayNewPasswordForm = false;
+        })();
+      }
+    };
+
+    const onCloseNewPasswordForm = () => {
+      flags.loading = false;
+      flags.disabled = false;
+      flags.shouldDisplayNewPasswordForm = false;
+
+      debounce(() => {
+        flags.shouldDisplayResetPasswordForm = true;
+      })();
+    };
+
     return {
       resetPasswordForm,
+      newPasswordForm,
       state,
       flags,
       onSubmitResetPasswordForm,
       onSuccessCaptcha,
       onCloseCaptcha,
-      onCloseConfirmation
+      onCloseConfirmation,
+      onSubmitNewPasswordForm,
+      onCloseNewPasswordForm
     };
   }
 };
