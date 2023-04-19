@@ -109,7 +109,7 @@ const routes = [
       title: labels.ROUTER.TERMS,
       layout: 'Article'
     },
-    component: () => import('@/views/terms/Terms')
+    component: () => import('@/views/Terms')
   },
   {
     path: '/privacy-policy',
@@ -118,7 +118,7 @@ const routes = [
       title: labels.ROUTER.PRIVACY_POLICY,
       layout: 'Article'
     },
-    component: () => import('@/views/privacyPolicy/privacyPolicy')
+    component: () => import('@/views/privacyPolicy')
   }
 ];
 
