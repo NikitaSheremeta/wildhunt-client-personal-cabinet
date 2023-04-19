@@ -15,6 +15,8 @@ body {
   height: 100vh;
 }
 
+// Main
+
 .content {
   flex: 1 0 auto;
   margin-top: 16px;
@@ -58,6 +60,57 @@ span {
   display: inline-block;
 }
 
+ul {
+  padding: 0;
+  margin: 0;
+
+  li  {
+    list-style: none;
+  }
+}
+
+
+// Sections
+
+.article {
+  width: 100%;
+
+  section {
+    margin-top: 32px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6  {
+      margin-left: 12px;
+    }
+
+    p {
+      color: $secondary;
+    }
+
+    article {
+      padding: 16px 32px;
+      background-color: $gray-900;
+      border-radius: $article-border-radius;
+
+      ul {
+        li {
+          margin-top: 16px;
+
+          &:first-child {
+            margin-top: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Animations
+
+// Fade slide up
 .fade-slide-up-enter-active,
 .fade-slide-up-leave-active {
   transition: 0.2s ease-out;

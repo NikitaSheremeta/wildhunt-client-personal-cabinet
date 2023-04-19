@@ -103,7 +103,7 @@ export default {
   }
 
   &__description {
-    margin-top: 8px;
+    margin-top: 12px;
     margin-bottom: 0;
     color: $font-color-secondary;
   }

@@ -83,9 +83,3 @@ export default {
   name: 'Terms'
 };
 </script>
-
-<style lang="scss">
-.article {
-  width: 100%;
-}
-</style>

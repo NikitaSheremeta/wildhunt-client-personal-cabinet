@@ -107,7 +107,7 @@ const routes = [
     name: 'Terms',
     meta: {
       title: labels.ROUTER.TERMS,
-      layout: 'Base'
+      layout: 'Article'
     },
     component: () => import('@/views/terms/Terms')
   },
@@ -116,7 +116,7 @@ const routes = [
     name: 'Privacy Policy',
     meta: {
       title: labels.ROUTER.PRIVACY_POLICY,
-      layout: 'Base'
+      layout: 'Article'
     },
     component: () => import('@/views/privacyPolicy/privacyPolicy')
   }

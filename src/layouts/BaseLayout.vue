@@ -1,5 +1,6 @@
 <template>
   <BaseHeader />
+
   <section class="content">
     <router-view />
   </section>
@@ -7,10 +8,11 @@
 </template>
 
 <script>
-import BaseHeader from '@/components/custom/CustomHeader';
-import BaseFooter from '@/components/custom/CustomFooter';
+import BaseHeader from '@/components/base/BaseHeader';
+import BaseFooter from '@/components/base/BaseFooter';
 
 export default {
+  name: 'BaseLayout',
   components: {
     BaseHeader,
     BaseFooter

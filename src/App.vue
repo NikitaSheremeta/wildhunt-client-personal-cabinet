@@ -1,32 +1,42 @@
 <template>
   <template v-if="isLoading"> Загрузка... </template>
 
-  <component :is="layout" v-else>
+  <component :is="state.layout" v-else>
     <router-view />
   </component>
 </template>
 
 <script>
-import { computed, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { computed, nextTick, reactive, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import BaseLayout from '@/layouts/BaseLayout';
+import ArticleLayout from '@/layouts/ArticleLayout';
 
 export default {
   components: {
-    BaseLayout
+    BaseLayout,
+    ArticleLayout
   },
   setup() {
-    const router = useRoute();
+    const router = useRouter();
 
     const store = useStore();
 
-    const layout = computed(() => (router.meta['layout'] || 'Base') + 'Layout');
+    const state = reactive({
+      layout: ''
+    });
 
     const isLoading = computed(() => store.getters.GET_IS_LOADING);
 
+    router.afterEach(async (to) => {
+      await nextTick();
+
+      state.layout = (to.meta['layout'] || 'Base') + 'Layout';
+    });
+
     watch(
-      () => layout.value,
+      () => state.layout,
       async () => {
         if (localStorage.getItem('token')) {
           await store.dispatch('CHECK_AUTH');
@@ -34,7 +44,7 @@ export default {
       }
     );
 
-    return { layout, isLoading };
+    return { state, isLoading };
   }
 };
 </script>

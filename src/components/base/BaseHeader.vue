@@ -3,12 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="grid">
-          <img
-            class="logo"
-            src="@/assets/img/logo.svg"
-            alt="Wild Hunt"
-            @click="onLogoClick"
-          >
+          <img class="logo" src="@/assets/img/logo.svg" alt="Wild Hunt" @click="onLogoClick" />
 
           <div class="controls">
             <BaseLink
@@ -50,7 +45,7 @@ export default {
   methods: {
     onLogoClick() {
       this.$router.push({ path: '/' });
-    },
+    }
     // defineAuthorizationButtons() {
     //   switch (this.$route.path) {
     //     case '/login':
@@ -68,7 +63,7 @@ export default {
 <style lang="scss" scoped>
 .header {
   margin-bottom: 8px;
-  padding: 24px 0;
+  padding: 16px 0;
   width: 100%;
 }
 

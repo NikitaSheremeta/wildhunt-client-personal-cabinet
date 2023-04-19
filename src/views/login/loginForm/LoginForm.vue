@@ -21,9 +21,7 @@
     />
 
     <div class="form__actions">
-      <BaseButton type="submit" :label="labels.LOGIN_VIEW.LOGIN" :disabled="disabled" :loading="loading" />
-
-      <BaseButton to="signup" theme="success" :label="labels.LOGIN_VIEW.SIGN_UP" :disabled="disabled" />
+      <BaseButton type="submit" full-width :label="labels.LOGIN_VIEW.LOGIN" :disabled="disabled" :loading="loading" />
     </div>
 
     <BaseLink
