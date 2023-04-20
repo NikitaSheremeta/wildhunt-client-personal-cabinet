@@ -7,7 +7,7 @@
 
           <div class="navigation">
             <BaseLink
-              v-for="item in navigation"
+              v-for="item in state.navigation"
               :key="item.label"
               color="secondary"
               :label="item.label"
@@ -27,7 +27,7 @@
 
           <div class="information">
             <BaseLink
-              v-for="item in information"
+              v-for="item in state.information"
               :key="item.label"
               color="secondary"
               :label="item.label"
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { computed, reactive } from 'vue';
 import BaseLink from '@/components/base/BaseLink';
 
 export default {
@@ -49,8 +50,8 @@ export default {
   components: {
     BaseLink
   },
-  data() {
-    return {
+  setup() {
+    const state = reactive({
       navigation: [
         {
           label: 'Главная',
@@ -98,12 +99,14 @@ export default {
           icon: 'file-lines'
         }
       ]
+    });
+
+    const copyright = computed(() => `© ${new Date().getFullYear()} minecraft-wildhunt.com`);
+
+    return {
+      state,
+      copyright
     };
-  },
-  computed: {
-    copyright() {
-      return `© ${new Date().getFullYear()} minecraft-wildhunt.com`;
-    }
   }
 };
 </script>
@@ -114,39 +117,37 @@ export default {
   padding: 32px 0;
   width: 100%;
   background-color: $gray-900;
-}
 
-.row {
   .grid {
     display: grid;
     grid-template-columns: repeat(2, auto);
     width: 100%;
   }
-}
 
-.navigation,
-.information {
-  display: flex;
-  justify-content: flex-end;
-  gap: 32px;
-}
-
-.information {
-  align-items: flex-end;
-
-  .base-link {
-    line-height: $line-height-secondary;
-    font-size: $font-size-xs;
+  .navigation,
+  .information {
+    display: flex;
+    justify-content: flex-end;
+    gap: 32px;
   }
-}
 
-.copyright,
-.policy {
-  color: $font-color-secondary;
-}
+  .information {
+    align-items: flex-end;
 
-.policy {
-  line-height: $line-height-secondary;
-  font-size: $font-size-xxs;
+    .base-link {
+      line-height: $line-height-secondary;
+      font-size: $font-size-xs;
+    }
+  }
+
+  .copyright,
+  .policy {
+    color: $font-color-secondary;
+  }
+
+  .policy {
+    line-height: $line-height-secondary;
+    font-size: $font-size-xxs;
+  }
 }
 </style>

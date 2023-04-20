@@ -1,10 +1,6 @@
 <template>
   <div :class="['base-confirmation']">
-    <div class="top-bar">
-      <BaseButton class="button" icon-button icon="arrow-left" theme="dark" @click.prevent="onClickBackButton" />
-
-      <h2 class="title" v-text="labels.CONFIRMATION.TITLE" />
-    </div>
+    <BaseTitle close-button :title="labels.CONFIRMATION.TITLE" @close="onClickCloseButton" />
 
     <p class="description" v-text="labels.CONFIRMATION.DESCRIPTION" />
 
@@ -26,7 +22,7 @@
 <script>
 import { computed, onMounted } from 'vue';
 import { useTimer } from '@/hooks/useTimer';
-import BaseButton from '@/components/base/BaseButton';
+import BaseTitle from '@/components/base/BaseTitle';
 import BaseCode from '@/components/base/BaseCode';
 import BaseLink from '@/components/base/BaseLink';
 import { magicNumbers } from '@/utils/magic-numbers';
@@ -35,7 +31,7 @@ import { labels } from '@/utils/labels';
 export default {
   name: 'BaseConfirmation',
   components: {
-    BaseButton,
+    BaseTitle,
     BaseCode,
     BaseLink
   },
@@ -45,7 +41,7 @@ export default {
 
     const notice = computed(() => String(labels.CONFIRMATION.RESEND_CODE_NOTICE) + ' ' + timer.time);
 
-    const onClickBackButton = () => {
+    const onClickCloseButton = () => {
       context.emit('close');
     };
 
@@ -60,7 +56,7 @@ export default {
     return {
       timer,
       notice,
-      onClickBackButton,
+      onClickCloseButton,
       onClickResendLink,
       labels
     };
@@ -71,17 +67,6 @@ export default {
 <style lang="scss" scoped>
 .base-confirmation {
   width: 320px;
-
-  .top-bar {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .title {
-    margin: 0;
-    font-weight: $font-weight-base;
-  }
 
   .description {
     margin-top: 12px;

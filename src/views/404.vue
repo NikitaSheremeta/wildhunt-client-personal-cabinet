@@ -13,7 +13,7 @@
         <!-- eslint-disable vue/no-v-html -->
         <p class="not-found__description" v-html="labels.NOT_FOUND.DESCRIPTION" />
 
-        <BaseButton :label="labels.NOT_FOUND.GO_BACK" @click="$router.go(-1)" />
+        <BaseButton :label="labels.NOT_FOUND.GO_BACK" @click="onClick" />
       </div>
     </div>
   </div>
@@ -22,13 +22,24 @@
 <script>
 import BaseButton from '@/components/base/BaseButton';
 import { labels } from '@/utils/labels';
+import { useRouter } from 'vue-router';
+
 export default {
   name: '404',
   components: {
     BaseButton
   },
   setup() {
-    return { labels };
+    const router = useRouter();
+
+    const onClick = () => {
+      router.back();
+    };
+
+    return {
+      onClick,
+      labels
+    };
   }
 };
 </script>

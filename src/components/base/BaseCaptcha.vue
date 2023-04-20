@@ -1,10 +1,6 @@
 <template>
   <div :class="['base-captcha']">
-    <div class="top-bar">
-      <BaseButton class="button" icon-button icon="arrow-left" theme="dark" @click.prevent="onClickBackButton" />
-
-      <h2 class="title" v-text="labels.CAPTCHA.TITLE" />
-    </div>
+    <BaseTitle close-button :title="labels.CAPTCHA.TITLE" @close="onClickCloseButton" />
 
     <p class="description" v-text="labels.CAPTCHA.DESCRIPTION" />
 
@@ -33,7 +29,7 @@
 
 <script>
 import { computed, onMounted, reactive, ref } from 'vue';
-import BaseButton from '@/components/base/BaseButton';
+import BaseTitle from '@/components/base/BaseTitle';
 import BaseCode from '@/components/base/BaseCode';
 import BaseLink from '@/components/base/BaseLink';
 import { valueRandomNumbers, arrayRandomNumbers } from '@/helpers/random-numbers';
@@ -43,7 +39,7 @@ import { labels } from '@/utils/labels';
 export default {
   name: 'BaseCaptcha',
   components: {
-    BaseButton,
+    BaseTitle,
     BaseCode,
     BaseLink
   },
@@ -119,7 +115,7 @@ export default {
       });
     };
 
-    const onClickBackButton = () => {
+    const onClickCloseButton = () => {
       context.emit('close');
     };
 
@@ -168,7 +164,7 @@ export default {
       captcha,
       state,
       codeListeners,
-      onClickBackButton,
+      onClickCloseButton,
       onClickResetIcon,
       labels
     };
@@ -179,17 +175,6 @@ export default {
 <style lang="scss" scoped>
 .base-captcha {
   width: 320px;
-
-  .top-bar {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-
-    .title {
-      margin: 0;
-      font-weight: $font-weight-base;
-    }
-  }
 
   .description {
     margin-top: 12px;
