@@ -10,6 +10,7 @@
       autofocus
       :placeholder="labels.RESET_PASSWORD_VIEW.EMAIL"
       :disabled="disabled"
+      trim
       :validation="fieldsValidation['email']"
       @input="onInput"
     />

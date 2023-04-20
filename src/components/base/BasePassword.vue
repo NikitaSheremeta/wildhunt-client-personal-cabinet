@@ -5,6 +5,7 @@
       :type="state.type"
       :placeholder="placeholder"
       :disabled="disabled"
+      trim
       :disable-notice="create"
       :validation="validation"
       v-on="inputListeners"

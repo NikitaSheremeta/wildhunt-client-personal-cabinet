@@ -100,7 +100,7 @@ const routes = [
       title: labels.ROUTER.SUPPORT,
       layout: 'Base'
     },
-    component: () => import('@/views/WIP')
+    component: () => import('@/views/support/Support')
   },
   {
     path: '/terms',

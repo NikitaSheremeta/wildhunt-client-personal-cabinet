@@ -2,13 +2,13 @@
   <div class="container">
     <div class="row">
       <transition name="fade-slide-up">
-        <SignupForm
-          v-if="flags.shouldDisplaySignupForm"
-          ref="signupForm"
-          v-model="state.signupFormData"
+        <SupportForm
+          v-if="flags.shouldDisplaySupportForm"
+          ref="supportForm"
+          v-model="state.supportFormData"
           :loading="flags.loading"
           :disabled="flags.disabled"
-          @submit.prevent="onSubmitSignupForm"
+          @submit.prevent="onSubmitSupportForm"
         />
       </transition>
 
@@ -20,14 +20,6 @@
           @close="onCloseCaptcha"
         />
       </transition>
-
-      <transition name="fade-slide-up">
-        <BaseConfirmation
-          v-if="flags.shouldDisplayConfirmation"
-          :disabled="flags.disabled"
-          @close="onCloseConfirmation"
-        />
-      </transition>
     </div>
   </div>
 </template>
@@ -36,43 +28,38 @@
 import { reactive, ref } from 'vue';
 import { useFormValidation } from '@/hooks/useFormValidation';
 import { useStore } from 'vuex';
-import SignupForm from '@/views/signup/signupForm/SignupForm';
+import SupportForm from '@/views/support/supportForm/SupportForm';
 import BaseCaptcha from '@/components/base/BaseCaptcha';
-import BaseConfirmation from '@/components/base/BaseConfirmation';
 import { debounce } from '@/helpers/debounce';
-import { validationMessages } from '@/utils/validation-messages';
 import { magicNumbers } from '@/utils/magic-numbers';
-import { labels } from '@/utils/labels';
 
 export default {
-  name: 'Signup',
+  name: 'Support',
   components: {
-    SignupForm,
-    BaseCaptcha,
-    BaseConfirmation
+    SupportForm,
+    BaseCaptcha
   },
   setup() {
-    const signupForm = ref(null);
+    const supportForm = ref(null);
 
-    const formValidation = useFormValidation(signupForm);
+    const supportFormValidation = useFormValidation(supportForm);
 
     const store = useStore();
 
     const state = reactive({
-      signupFormData: {}
+      supportFormData: {}
     });
 
     const flags = reactive({
-      shouldDisplaySignupForm: true,
+      shouldDisplaySupportForm: true,
       shouldDisplayCaptcha: false,
-      shouldDisplayConfirmation: false,
       loading: false,
       disabled: false
     });
 
-    const dispatchSignup = async () => {
+    const dispatchSupport = async () => {
       await store
-        .dispatch('SIGNUP', state.signupFormData)
+        .dispatch('SUPPORT', state.supportFormData)
         .then((result) =>
           debounce(() => {
             if (Object.prototype.hasOwnProperty.call(result, 'error')) {
@@ -92,15 +79,15 @@ export default {
         );
     };
 
-    const onSubmitSignupForm = async () => {
-      formValidation.checkValidity();
+    const onSubmitSupportForm = () => {
+      supportFormValidation.checkValidity();
 
-      if (formValidation.valid) {
+      if (supportFormValidation.valid) {
         flags.loading = true;
         flags.disabled = true;
 
         debounce(() => {
-          flags.shouldDisplaySignupForm = false;
+          flags.shouldDisplaySupportForm = false;
         })();
 
         debounce(() => {
@@ -113,15 +100,11 @@ export default {
     };
 
     const onSuccessCaptcha = () => {
-      dispatchSignup();
+      dispatchSupport();
 
       debounce(() => {
         flags.shouldDisplayCaptcha = false;
       })();
-
-      debounce(() => {
-        flags.shouldDisplayConfirmation = true;
-      }, magicNumbers.FOUR_HUNDRED_MILLISECONDS)();
     };
 
     const onCloseCaptcha = () => {
@@ -130,30 +113,17 @@ export default {
       flags.shouldDisplayCaptcha = false;
 
       debounce(() => {
-        flags.shouldDisplaySignupForm = true;
-      })();
-    };
-
-    const onCloseConfirmation = () => {
-      flags.loading = false;
-      flags.disabled = false;
-      flags.shouldDisplayConfirmation = false;
-
-      debounce(() => {
-        flags.shouldDisplaySignupForm = true;
+        flags.shouldDisplaySupportForm = true;
       })();
     };
 
     return {
-      signupForm,
+      supportForm,
       state,
       flags,
-      onSubmitSignupForm,
+      onSubmitSupportForm,
       onSuccessCaptcha,
-      onCloseCaptcha,
-      onCloseConfirmation,
-      labels,
-      validationMessages
+      onCloseCaptcha
     };
   }
 };

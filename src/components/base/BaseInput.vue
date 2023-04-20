@@ -102,6 +102,10 @@ export default {
       type: [Number, null],
       default: null
     },
+    trim: {
+      type: Boolean,
+      default: false
+    },
     notice: {
       type: String,
       default: ''
@@ -149,7 +153,9 @@ export default {
             event.target.value = event.target.value.substring(0, props.maxLength);
           }
 
-          event.target.value = event.target.value.replace(/\s/g, '');
+          if (props.trim) {
+            event.target.value = event.target.value.replace(/\s/g, '');
+          }
 
           context.emit('input', event);
           context.emit('update:model-value', event.target.value);

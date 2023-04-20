@@ -7,6 +7,7 @@
       class="form__field"
       :placeholder="labels.LOGIN_VIEW.USER_NAME"
       :disabled="disabled"
+      trim
       :validation="fieldsValidation['login']"
       @input="onInput"
     />

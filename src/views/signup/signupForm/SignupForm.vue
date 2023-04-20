@@ -7,6 +7,7 @@
       class="form__field"
       :placeholder="labels.SIGN_UP_VIEW.USER_NAME"
       :disabled="disabled"
+      trim
       :validation="fieldsValidation['username']"
       @input="onInput"
     />
@@ -17,6 +18,7 @@
       type="email"
       :placeholder="labels.SIGN_UP_VIEW.EMAIL"
       :disabled="disabled"
+      trim
       :validation="fieldsValidation['email']"
       @input="onInput"
     />
