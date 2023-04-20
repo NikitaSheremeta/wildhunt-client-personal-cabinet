@@ -1,0 +1,34 @@
+.article {
+  padding: 16px 0;
+  width: 100%;
+
+  section {
+    margin-top: 32px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6  {
+      margin-left: 12px;
+    }
+
+    p {
+      color: $secondary;
+    }
+
+    article {
+      padding: 16px 32px;
+      background-color: $gray-900;
+      border-radius: $article-border-radius;
+
+      p {
+        color: $font-color-base;
+      }
+
+      ul, ol {
+        padding-left: 12px;
+      }
+    }
+  }
+}

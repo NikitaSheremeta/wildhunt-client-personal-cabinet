@@ -3,16 +3,12 @@
     <div class="container">
       <div class="row">
         <div class="grid">
-          <img class="logo" src="@/assets/img/logo.svg" alt="Wild Hunt" @click="onLogoClick" />
+          <img class="logo" src="@/assets/img/logo.svg" alt="Wild Hunt" @click="onClickLogo" />
 
-          <div class="controls">
-            <BaseLink
-              v-for="button in authorizationButtons"
-              :key="button.to"
-              color="secondary"
-              :label="button.label"
-              :href="button.to"
-            />
+          <div class="authorization">
+            <template v-for="item in state.authorization" :key="item.to">
+              <BaseLink color="secondary" :label="item.label" :href="item.to" />
+            </template>
           </div>
         </div>
       </div>
@@ -21,6 +17,8 @@
 </template>
 
 <script>
+import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
 import BaseLink from '@/components/base/BaseLink';
 
 export default {
@@ -28,9 +26,11 @@ export default {
   components: {
     BaseLink
   },
-  data() {
-    return {
-      authorizationButtons: [
+  setup() {
+    const router = useRouter();
+
+    const state = reactive({
+      authorization: [
         {
           label: 'Вход в аккаунт',
           to: '/login'
@@ -40,22 +40,16 @@ export default {
           to: '/signup'
         }
       ]
+    });
+
+    const onClickLogo = () => {
+      router.push({ path: '/' });
     };
-  },
-  methods: {
-    onLogoClick() {
-      this.$router.push({ path: '/' });
-    }
-    // defineAuthorizationButtons() {
-    //   switch (this.$route.path) {
-    //     case '/login':
-    //       return this.authorizationButtons.filter((item) => item.to === '/signup');
-    //     case '/signup':
-    //       return this.authorizationButtons.filter((item) => item.to === '/login');
-    //     default:
-    //       return this.authorizationButtons;
-    //   }
-    // }
+
+    return {
+      state,
+      onClickLogo
+    };
   }
 };
 </script>
@@ -64,29 +58,30 @@ export default {
 .header {
   padding: 16px 0;
   width: 100%;
-}
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 48px;
-  width: 100%;
-}
+  .grid {
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 48px;
+    width: 100%;
 
-.logo {
-  width: 120px;
-  cursor: pointer;
-  transition: 0.2s;
+    .logo {
+      width: 120px;
+      cursor: pointer;
+      transition: 0.2s;
 
-  &:hover {
-    opacity: 0.56;
+      &:hover {
+        opacity: 0.56;
+      }
+    }
+
+    .authorization {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 32px;
+    }
   }
-}
-
-.controls {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 32px;
 }
 </style>

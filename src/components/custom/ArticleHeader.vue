@@ -5,20 +5,12 @@
         <div class="grid">
           <img class="logo" src="@/assets/img/logo.svg" alt="Wild Hunt" />
 
-          <div class="bar">
-            <BaseButton class="button" icon-button icon="arrow-left" theme="dark" />
+          <BaseTitle close-button @close="onClose" />
 
-            <h2 class="page-title" v-text="route.meta.title" />
-          </div>
-
-          <div class="controls">
-            <BaseLink
-              v-for="button in state.navigation"
-              :key="button.to"
-              color="secondary"
-              :label="button.label"
-              :href="button.to"
-            />
+          <div class="authorization">
+            <template v-for="item in state.authorization" :key="item.to">
+              <BaseLink color="secondary" :label="item.label" :href="item.to" />
+            </template>
           </div>
         </div>
       </div>
@@ -28,21 +20,21 @@
 
 <script>
 import { reactive } from 'vue';
-import { useRoute } from 'vue-router';
-import BaseButton from '@/components/base/BaseButton';
+import { useRouter } from 'vue-router';
+import BaseTitle from '@/components/base/BaseTitle';
 import BaseLink from '@/components/base/BaseLink';
 
 export default {
   name: 'ArticleHeader',
   components: {
-    BaseButton,
+    BaseTitle,
     BaseLink
   },
   setup() {
-    const route = useRoute();
+    const router = useRouter();
 
     const state = reactive({
-      navigation: [
+      authorization: [
         {
           label: 'Вход в аккаунт',
           to: '/login'
@@ -54,9 +46,18 @@ export default {
       ]
     });
 
+    const onClickLogo = () => {
+      router.push({ path: '/' });
+    };
+
+    const onClose = () => {
+      router.back();
+    };
+
     return {
-      route,
-      state
+      state,
+      onClickLogo,
+      onClose
     };
   }
 };
@@ -84,18 +85,7 @@ export default {
       }
     }
 
-    .bar {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-
-      .page-title {
-        font-weight: normal;
-        margin: 0;
-      }
-    }
-
-    .controls {
+    .authorization {
       display: flex;
       align-items: center;
       justify-content: flex-end;
