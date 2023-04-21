@@ -11,12 +11,10 @@ import { computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import BaseLayout from '@/layouts/BaseLayout';
-import ArticleLayout from '@/layouts/ArticleLayout';
 
 export default {
   components: {
-    BaseLayout,
-    ArticleLayout
+    BaseLayout
   },
   setup() {
     const route = useRoute();

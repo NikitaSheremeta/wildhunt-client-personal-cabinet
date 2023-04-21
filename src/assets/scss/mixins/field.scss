@@ -1,0 +1,8 @@
+@mixin field() {
+  padding: 6px 24px;
+  min-width: 0;
+  height: 40px;
+  background-color: $field-background;
+  border-radius: $field-border-radius;
+  border: none;
+}

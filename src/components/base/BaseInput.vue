@@ -200,13 +200,18 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 $colors: (
   primary: (
     background-color: $gray-800,
     color: $font-color-base,
     placeholder-color: $font-color-secondary,
     hover-placeholder-color: $gray-700
+  ),
+  disabled: (
+    background-color: $disabled-background,
+    color: $disabled-color,
+    placeholder-color: $disabled-color
   )
 );
 
@@ -225,17 +230,12 @@ $colors: (
 
     .field {
       display: block;
-      padding: 6px 24px;
       width: 100%;
-      min-width: 0;
-      height: 40px;
-      background-color: map-get($colors, primary, background-color);
-      border: none;
-      border-radius: 12px;
       color: map-get($colors, primary, color);
       font-family: inherit;
       font-size: $font-size-base;
       font-style: inherit;
+      @include field;
 
       @include placeholder() {
         line-height: 1;
@@ -255,11 +255,11 @@ $colors: (
       }
 
       &:disabled {
-        background-color: $disabled-background;
-        color: $disabled-color;
+        background-color: map-get($colors, disabled, background-color);
+        color: map-get($colors, disabled, color);
 
         @include placeholder() {
-          color: $disabled-color;
+          color: map-get($colors, disabled, placeholder-color);
         }
 
         &:focus {
@@ -268,8 +268,8 @@ $colors: (
 
         + .icon {
           .base-icon {
-            fill: $disabled-color;
-            stroke: $disabled-color;
+            fill: map-get($colors, disabled, color);
+            stroke: map-get($colors, disabled, color);
             cursor: default;
           }
         }

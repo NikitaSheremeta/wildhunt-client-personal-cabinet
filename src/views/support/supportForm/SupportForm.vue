@@ -19,6 +19,19 @@
       @input="onInput"
     />
 
+    <BaseSelect
+      v-model="state.category"
+      class="form__field"
+      :options="[
+        'Выбирете категорию вашего обращения',
+        'Проблема со входом в аккаунт',
+        'Кража аккаунта',
+        'Обжалование бана',
+        'Сообщить о баге'
+      ]"
+      :default="'go'"
+    />
+
     <div class="form__actions">
       <BaseButton label="Отправить" :disabled="disabled" :loading="loading" />
 
@@ -38,6 +51,7 @@
 import { reactive } from 'vue';
 import BaseTitle from '@/components/base/BaseTitle';
 import BaseInput from '@/components/base/BaseInput';
+import BaseSelect from '@/components/base/BaseSelect';
 import BaseButton from '@/components/base/BaseButton';
 import BaseLink from '@/components/base/BaseLink';
 
@@ -46,6 +60,7 @@ export default {
   components: {
     BaseTitle,
     BaseInput,
+    BaseSelect,
     BaseButton,
     BaseLink
   },
@@ -63,7 +78,8 @@ export default {
   setup(props, context) {
     const state = reactive({
       email: '',
-      topic: ''
+      topic: '',
+      category: ''
     });
 
     const onInput = () => {
