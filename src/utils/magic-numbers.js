@@ -3,6 +3,9 @@ export const magicNumbers = {
     MIN_LENGTH: 2,
     MAX_LENGTH: 24
   },
+  LOGIN_OR_EMAIL: {
+    MAX_LENGTH: 48
+  },
   PASSWORD: {
     MIN_LENGTH: 4,
     MAX_LENGTH: 24
@@ -15,6 +18,10 @@ export const magicNumbers = {
     NUMBERS_MIN_VALUE: 1,
     NUMBERS_MAX_VALUE: 10,
     NUMBERS_LENGTH: 4
+  },
+  TOPIC: {
+    MIN_LENGTH: 16,
+    MAX_LENGTH: 64
   },
   ONE_HUNDRED_TWENTY_MILLISECOND: 120,
   TWO_HUNDRED_MILLISECONDS: 200,

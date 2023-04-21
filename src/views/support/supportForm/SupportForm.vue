@@ -1,46 +1,44 @@
 <template>
   <form class="form">
-    <BaseTitle title="Техническая поддржка" />
+    <BaseTitle :title="labels.SUPPORT_VIEW.TITLE" />
 
     <BaseInput
-      v-model="state.email"
+      v-model="state.login"
       class="form__field"
-      placeholder="Электронная почта"
+      :placeholder="labels.SUPPORT_VIEW.LOGIN"
       :disabled="disabled"
       trim
+      :validation="fieldsValidation['login']"
       @input="onInput"
     />
 
     <BaseInput
       v-model="state.topic"
       class="form__field"
-      placeholder="Заголовок темы"
+      :placeholder="labels.SUPPORT_VIEW.TOPIC"
       :disabled="disabled"
+      :validation="fieldsValidation['topic']"
       @input="onInput"
     />
 
     <BaseSelect
       v-model="state.category"
       class="form__field"
-      :options="[
-        'Выбирете категорию вашего обращения',
-        'Проблема со входом в аккаунт',
-        'Кража аккаунта',
-        'Обжалование бана',
-        'Сообщить о баге'
-      ]"
-      :default="'go'"
+      :options="labels.SUPPORT_VIEW.CATEGORY_OPTIONS"
+      :placeholder="labels.SUPPORT_VIEW.CATEGORY"
+      :disabled="disabled"
+      :validation="fieldsValidation['category']"
     />
 
     <div class="form__actions">
-      <BaseButton label="Отправить" :disabled="disabled" :loading="loading" />
+      <BaseButton type="submit" :label="labels.SUPPORT_VIEW.SUBMIT" :disabled="disabled" :loading="loading" />
 
       <BaseLink
         class="link"
         underline
         href="terms-support"
         color="secondary"
-        label="условия предоставления технической поддержки"
+        :label="labels.SUPPORT_VIEW.TERMS_SUPPORT"
         :disabled="disabled"
       />
     </div>
@@ -48,12 +46,17 @@
 </template>
 
 <script>
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
+import { useFieldsValidation } from '@/hooks/useFieldsValidation';
 import BaseTitle from '@/components/base/BaseTitle';
 import BaseInput from '@/components/base/BaseInput';
 import BaseSelect from '@/components/base/BaseSelect';
 import BaseButton from '@/components/base/BaseButton';
 import BaseLink from '@/components/base/BaseLink';
+import { maxLength, minLength, required } from '@/helpers/validators';
+import { validationMessages } from '@/utils/validation-messages';
+import { magicNumbers } from '@/utils/magic-numbers';
+import { labels } from '@/utils/labels';
 
 export default {
   name: 'SupportForm',
@@ -77,10 +80,29 @@ export default {
   emits: ['update:model-value'],
   setup(props, context) {
     const state = reactive({
-      email: '',
+      login: '',
       topic: '',
       category: ''
     });
+
+    const rules = computed(() => {
+      return {
+        login: {
+          required: required(validationMessages.BASE.REQUIRED),
+          maxLength: maxLength(magicNumbers.LOGIN_OR_EMAIL.MAX_LENGTH, validationMessages.LOGIN_OR_EMAIL.MAX_LENGTH)
+        },
+        topic: {
+          required: required(validationMessages.BASE.REQUIRED),
+          minLength: minLength(magicNumbers.TOPIC.MIN_LENGTH, validationMessages.TOPIC.MIN_LENGTH),
+          maxLength: maxLength(magicNumbers.TOPIC.MAX_LENGTH, validationMessages.TOPIC.MAX_LENGTH)
+        },
+        category: {
+          required: required(validationMessages.BASE.REQUIRED)
+        }
+      };
+    });
+
+    const fieldsValidation = useFieldsValidation(rules, state);
 
     const onInput = () => {
       context.emit('update:model-value', {
@@ -90,7 +112,9 @@ export default {
 
     return {
       state,
-      onInput
+      fieldsValidation,
+      onInput,
+      labels
     };
   }
 };
@@ -121,7 +145,7 @@ export default {
 
     .link {
       margin-bottom: 2px;
-      font-size: $font-size-sm;
+      font-size: $font-size-xs;
       line-height: $line-height-secondary;
     }
   }

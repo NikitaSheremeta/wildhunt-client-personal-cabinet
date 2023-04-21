@@ -79,9 +79,7 @@ export default {
       return {
         login: {
           required: required(validationMessages.BASE.REQUIRED),
-          minLength: minLength(magicNumbers.LOGIN.MIN_LENGTH, validationMessages.LOGIN.MIN_LENGTH),
-          maxLength: maxLength(magicNumbers.LOGIN.MAX_LENGTH, validationMessages.LOGIN.MAX_LENGTH),
-          allowedCharacters: allowedCharacters(validationMessages.BASE.ALLOWED_CHARACTERS)
+          maxLength: maxLength(magicNumbers.LOGIN_OR_EMAIL.MAX_LENGTH, validationMessages.LOGIN_OR_EMAIL.MAX_LENGTH)
         },
         password: {
           required: required(validationMessages.BASE.REQUIRED),

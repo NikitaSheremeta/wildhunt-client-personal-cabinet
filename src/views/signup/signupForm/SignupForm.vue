@@ -43,6 +43,7 @@
 
     <div class="form__actions">
       <BaseButton
+        type="submit"
         full-width
         :label="labels.SIGN_UP_VIEW.SIGN_UP"
         :disabled="!flags.eula || disabled"

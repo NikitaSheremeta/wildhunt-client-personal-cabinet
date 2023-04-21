@@ -20,6 +20,8 @@
 
         <BaseIcon v-if="validation && validation.valid" icon="check" color="success" width="16" height="16" />
 
+        <BaseIcon v-if="icon" :icon="icon" color="secondary" />
+
         <BaseIcon
           v-if="validation && validation.touched && !validation.valid"
           icon="exclamation"
@@ -27,8 +29,6 @@
           width="16"
           height="16"
         />
-
-        <BaseIcon v-if="icon" :icon="icon" color="secondary" />
       </div>
     </div>
 
@@ -201,20 +201,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$colors: (
-  primary: (
-    background-color: $gray-800,
-    color: $font-color-base,
-    placeholder-color: $font-color-secondary,
-    hover-placeholder-color: $gray-700
-  ),
-  disabled: (
-    background-color: $disabled-background,
-    color: $disabled-color,
-    placeholder-color: $disabled-color
-  )
-);
-
 .base-input {
   display: block;
   position: relative;
@@ -231,7 +217,7 @@ $colors: (
     .field {
       display: block;
       width: 100%;
-      color: map-get($colors, primary, color);
+      color: map-get($field-palette, primary, color);
       font-family: inherit;
       font-size: $font-size-base;
       font-style: inherit;
@@ -239,7 +225,7 @@ $colors: (
 
       @include placeholder() {
         line-height: 1;
-        color: map-get($colors, primary, placeholder-color);
+        color: map-get($field-palette, primary, placeholder-color);
         font-family: inherit;
         font-size: inherit;
         transition: 0.2s;
@@ -251,15 +237,15 @@ $colors: (
       }
 
       &:focus::-webkit-input-placeholder {
-        color: map-get($colors, primary, hover-placeholder-color);
+        color: map-get($field-palette, primary, hover-placeholder-color);
       }
 
       &:disabled {
-        background-color: map-get($colors, disabled, background-color);
-        color: map-get($colors, disabled, color);
+        background-color: map-get($field-palette, disabled, background-color);
+        color: map-get($field-palette, disabled, color);
 
         @include placeholder() {
-          color: map-get($colors, disabled, placeholder-color);
+          color: map-get($field-palette, disabled, placeholder-color);
         }
 
         &:focus {
@@ -268,8 +254,8 @@ $colors: (
 
         + .icon {
           .base-icon {
-            fill: map-get($colors, disabled, color);
-            stroke: map-get($colors, disabled, color);
+            fill: map-get($field-palette, disabled, color);
+            stroke: map-get($field-palette, disabled, color);
             cursor: default;
           }
         }
@@ -308,7 +294,7 @@ $colors: (
         text-align: center;
 
         &:focus {
-          background-color: $gray-900;
+          background-color: map-get($field-palette, primary, hover-background-color);
         }
       }
     }
