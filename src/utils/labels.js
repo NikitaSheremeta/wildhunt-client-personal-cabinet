@@ -12,7 +12,8 @@ export const labels = {
     DOWNLOAD_LAUNCHER: 'Скачать лаунчер',
     SUPPORT: 'Техническая поддержка',
     TERMS: 'Пользовательское соглашение',
-    PRIVACY_POLICY: 'Политика конфиденциальности'
+    PRIVACY_POLICY: 'Политика конфиденциальности',
+    TERMS_SUPPORT: 'Условия предоставления технической поддержки'
   },
   PASSWORD_STRENGTH_NOTICE: {
     DEFAULT: 'Используйте латинские буквы, цифры и символы',

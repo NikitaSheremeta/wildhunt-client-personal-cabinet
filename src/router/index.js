@@ -119,6 +119,15 @@ const routes = [
       layout: 'Article'
     },
     component: () => import('@/views/privacyPolicy')
+  },
+  {
+    path: '/terms-support',
+    name: 'Terms Support',
+    meta: {
+      title: labels.ROUTER.TERMS_SUPPORT,
+      layout: 'Article'
+    },
+    component: () => import('@/views/TermsSupport')
   }
 ];
 

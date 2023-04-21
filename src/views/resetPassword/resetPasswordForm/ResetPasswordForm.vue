@@ -1,6 +1,6 @@
 <template>
   <form class="form">
-    <h2 class="form__title" v-text="labels.RESET_PASSWORD_VIEW.TITLE" />
+    <BaseTitle :title="labels.RESET_PASSWORD_VIEW.TITLE" />
 
     <p class="form__description" v-text="labels.RESET_PASSWORD_VIEW.DESCRIPTION" />
 
@@ -39,6 +39,7 @@
 <script>
 import { computed, reactive } from 'vue';
 import { useFieldsValidation } from '@/hooks/useFieldsValidation';
+import BaseTitle from '@/components/base/BaseTitle';
 import BaseInput from '@/components/base/BaseInput';
 import BaseButton from '@/components/base/BaseButton';
 import BaseLink from '@/components/base/BaseLink';
@@ -49,6 +50,7 @@ import { labels } from '@/utils/labels';
 export default {
   name: 'ResetPasswordForm',
   components: {
+    BaseTitle,
     BaseInput,
     BaseButton,
     BaseLink
@@ -97,11 +99,6 @@ export default {
 <style lang="scss" scoped>
 .form {
   width: 320px;
-
-  &__title {
-    margin: 0;
-    font-weight: $font-weight-base;
-  }
 
   &__description {
     margin-top: 12px;

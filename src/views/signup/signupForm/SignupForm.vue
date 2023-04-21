@@ -1,6 +1,6 @@
 <template>
   <form class="form">
-    <h2 class="form__title" v-text="labels.SIGN_UP_VIEW.TITLE" />
+    <BaseTitle :title="labels.SIGN_UP_VIEW.TITLE" />
 
     <BaseInput
       v-model="state.username"
@@ -52,21 +52,13 @@
 
     <div class="form__eula">
       <BaseCheckbox v-model="flags.eula" color="secondary" :label="labels.SIGN_UP_VIEW.EULA" :disabled="disabled">
-        <BaseLink
-          underline
-          href="terms"
-          target="_blank"
-          color="secondary"
-          :label="labels.SIGN_UP_VIEW.TERMS"
-          :disabled="disabled"
-        />
+        <BaseLink underline href="terms" color="secondary" :label="labels.SIGN_UP_VIEW.TERMS" :disabled="disabled" />
 
         <br />и
 
         <BaseLink
           underline
           href="privacy-policy"
-          target="_blank"
           color="secondary"
           :label="labels.SIGN_UP_VIEW.PRIVACY_POLICY"
           :disabled="disabled"
@@ -79,6 +71,7 @@
 <script>
 import { computed, reactive } from 'vue';
 import { useFieldsValidation } from '@/hooks/useFieldsValidation';
+import BaseTitle from '@/components/base/BaseTitle';
 import BaseInput from '@/components/base/BaseInput';
 import BasePassword from '@/components/base/BasePassword';
 import BaseButton from '@/components/base/BaseButton';
@@ -92,6 +85,7 @@ import { magicNumbers } from '@/utils/magic-numbers';
 export default {
   name: 'SignupForm',
   components: {
+    BaseTitle,
     BaseInput,
     BasePassword,
     BaseButton,
@@ -171,11 +165,6 @@ export default {
 <style lang="scss" scoped>
 .form {
   width: 320px;
-
-  &__title {
-    margin: 0;
-    font-weight: $font-weight-base;
-  }
 
   &__field {
     margin-top: 16px;

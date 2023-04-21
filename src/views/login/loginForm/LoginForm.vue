@@ -1,6 +1,6 @@
 <template>
   <form class="form">
-    <h2 class="form__title" v-text="labels.LOGIN_VIEW.TITLE" />
+    <BaseTitle :title="labels.LOGIN_VIEW.TITLE" />
 
     <BaseInput
       v-model="state.login"
@@ -39,6 +39,7 @@
 <script>
 import { computed, reactive } from 'vue';
 import { useFieldsValidation } from '@/hooks/useFieldsValidation';
+import BaseTitle from '@/components/base/BaseTitle';
 import BaseInput from '@/components/base/BaseInput';
 import BasePassword from '@/components/base/BasePassword';
 import BaseButton from '@/components/base/BaseButton';
@@ -51,6 +52,7 @@ import { magicNumbers } from '@/utils/magic-numbers';
 export default {
   name: 'LoginForm',
   components: {
+    BaseTitle,
     BaseInput,
     BasePassword,
     BaseButton,
@@ -112,11 +114,6 @@ export default {
 <style lang="scss" scoped>
 .form {
   width: 320px;
-
-  &__title {
-    margin: 0;
-    font-weight: $font-weight-base;
-  }
 
   &__field {
     margin-top: 16px;

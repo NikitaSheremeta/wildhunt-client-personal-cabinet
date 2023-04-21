@@ -19,17 +19,17 @@
       @input="onInput"
     />
 
-    <div class="form__eula">
-      <BaseCheckbox v-model="flags.eula" color="secondary" label="Я принимаю" :disabled="disabled">
-        <BaseLink
-          underline
-          href="terms"
-          target="_blank"
-          color="secondary"
-          label="условия предоставления технической поддержки"
-          :disabled="disabled"
-        />
-      </BaseCheckbox>
+    <div class="form__actions">
+      <BaseButton label="Отправить" :disabled="disabled" :loading="loading" />
+
+      <BaseLink
+        class="link"
+        underline
+        href="terms-support"
+        color="secondary"
+        label="условия предоставления технической поддержки"
+        :disabled="disabled"
+      />
     </div>
   </form>
 </template>
@@ -38,7 +38,7 @@
 import { reactive } from 'vue';
 import BaseTitle from '@/components/base/BaseTitle';
 import BaseInput from '@/components/base/BaseInput';
-import BaseCheckbox from '@/components/base/BaseCheckbox';
+import BaseButton from '@/components/base/BaseButton';
 import BaseLink from '@/components/base/BaseLink';
 
 export default {
@@ -46,7 +46,7 @@ export default {
   components: {
     BaseTitle,
     BaseInput,
-    BaseCheckbox,
+    BaseButton,
     BaseLink
   },
   props: {
@@ -66,10 +66,6 @@ export default {
       topic: ''
     });
 
-    const flags = reactive({
-      eula: true
-    });
-
     const onInput = () => {
       context.emit('update:model-value', {
         topic: state.topic
@@ -78,7 +74,6 @@ export default {
 
     return {
       state,
-      flags,
       onInput
     };
   }
@@ -103,11 +98,16 @@ export default {
   }
 
   &__actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
     margin-top: 24px;
-  }
 
-  &__eula {
-    margin-top: 16px;
+    .link {
+      margin-bottom: 2px;
+      font-size: $font-size-sm;
+      line-height: $line-height-secondary;
+    }
   }
 }
 </style>

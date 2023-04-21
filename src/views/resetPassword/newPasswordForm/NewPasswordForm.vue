@@ -1,10 +1,6 @@
 <template>
   <form class="form">
-    <div class="form__top-bar">
-      <BaseButton class="button" icon-button icon="arrow-left" theme="dark" @click.prevent="onClickBackButton" />
-
-      <h2 class="form__title" v-text="labels.NEW_PASSWORD_VIEW.TITLE" />
-    </div>
+    <BaseTitle close-button :title="labels.NEW_PASSWORD_VIEW.TITLE" @close="onClickCloseButton" />
 
     <BasePassword
       v-model="state.password"
@@ -33,6 +29,7 @@
 <script>
 import { computed, onMounted, reactive } from 'vue';
 import { useFieldsValidation } from '@/hooks/useFieldsValidation';
+import BaseTitle from '@/components/base/BaseTitle';
 import BasePassword from '@/components/base/BasePassword';
 import BaseButton from '@/components/base/BaseButton';
 import { allowedCharacters, maxLength, minLength, required, sameAs } from '@/helpers/validators';
@@ -43,6 +40,7 @@ import { labels } from '@/utils/labels';
 export default {
   name: 'NewPasswordForm',
   components: {
+    BaseTitle,
     BasePassword,
     BaseButton
   },
@@ -80,7 +78,7 @@ export default {
 
     const fieldsValidation = useFieldsValidation(rules, state);
 
-    const onClickBackButton = () => {
+    const onClickCloseButton = () => {
       context.emit('close');
     };
 
@@ -97,7 +95,7 @@ export default {
     return {
       state,
       fieldsValidation,
-      onClickBackButton,
+      onClickCloseButton,
       onInput,
       labels
     };
@@ -108,17 +106,6 @@ export default {
 <style lang="scss" scoped>
 .form {
   width: 320px;
-
-  &__top-bar {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  &__title {
-    margin: 0;
-    font-weight: $font-weight-base;
-  }
 
   &__field {
     margin-top: 16px;
