@@ -10,7 +10,7 @@ const routes = [
       title: labels.ROUTER.NOT_FOUND,
       layout: 'Base'
     },
-    component: () => import('@/views/404')
+    component: () => import('@/components/base/Base404')
   },
   {
     path: '/login',
@@ -46,7 +46,10 @@ const routes = [
       title: labels.ROUTER.SHOP,
       layout: 'Base'
     },
-    component: () => import('@/views/WIP')
+    props: {
+      description: labels.WIP.DESCRIPTION
+    },
+    component: () => import('@/components/base/Base404')
   },
   {
     path: '/forum',
@@ -55,7 +58,10 @@ const routes = [
       title: labels.ROUTER.FORUM,
       layout: 'Base'
     },
-    component: () => import('@/views/WIP')
+    props: {
+      description: labels.WIP.DESCRIPTION
+    },
+    component: () => import('@/components/base/Base404')
   },
   {
     path: '/news',
@@ -64,7 +70,10 @@ const routes = [
       title: labels.ROUTER.NEWS,
       layout: 'Base'
     },
-    component: () => import('@/views/WIP')
+    props: {
+      description: labels.WIP.DESCRIPTION
+    },
+    component: () => import('@/components/base/Base404')
   },
   {
     path: '/wiki',
@@ -73,7 +82,10 @@ const routes = [
       title: labels.ROUTER.WIKI,
       layout: 'Base'
     },
-    component: () => import('@/views/WIP')
+    props: {
+      description: labels.WIP.DESCRIPTION
+    },
+    component: () => import('@/components/base/Base404')
   },
   {
     path: '/faq',
@@ -82,7 +94,10 @@ const routes = [
       title: labels.ROUTER.FAQ,
       layout: 'Base'
     },
-    component: () => import('@/views/WIP')
+    props: {
+      description: labels.WIP.DESCRIPTION
+    },
+    component: () => import('@/components/base/Base404')
   },
   {
     path: '/download-launcher',
@@ -91,7 +106,10 @@ const routes = [
       title: labels.ROUTER.DOWNLOAD_LAUNCHER,
       layout: 'Base'
     },
-    component: () => import('@/views/WIP')
+    props: {
+      description: labels.WIP.DESCRIPTION
+    },
+    component: () => import('@/components/base/Base404')
   },
   {
     path: '/support',

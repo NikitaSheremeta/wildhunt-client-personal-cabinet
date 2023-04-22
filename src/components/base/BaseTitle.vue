@@ -51,26 +51,8 @@ export default {
   gap: 16px;
 
   .title {
-    z-index: 9;
-    position: relative;
-    font-weight: normal;
+    font-weight: $font-weight-regular;
     margin: 0;
-  }
-
-  &.underline {
-    .title {
-      &:before {
-        z-index: 1;
-        content: '';
-        position: absolute;
-        left: 0;
-        bottom: 10px;
-        opacity: 0.75;
-        width: 100%;
-        height: 8px;
-        background-color: $warning;
-      }
-    }
   }
 }
 </style>
