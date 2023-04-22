@@ -123,7 +123,7 @@ export default {
         justify-content: space-between;
         width: 320px;
         height: 320px;
-        background-image: url('../../assets/img/enderman.svg');
+        background-image: url('../../assets/img/enderman-head.svg');
         background-size: 100%;
         background-repeat: no-repeat;
 
