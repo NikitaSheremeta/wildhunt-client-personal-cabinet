@@ -8,6 +8,7 @@
       trim
       :disable-notice="create"
       :validation="validation"
+      :disable-success-icon="disableSuccessIcon"
       v-on="inputListeners"
     >
       <template #icon>
@@ -57,6 +58,10 @@ export default {
     validation: {
       type: [Object, null],
       default: null
+    },
+    disableSuccessIcon: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['update:model-value'],

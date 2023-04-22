@@ -18,9 +18,15 @@
       <div class="icon" @mousedown="onMousedownIcon" @mouseup="onMouseupIcon">
         <slot v-if="!!$slots.icon" name="icon" />
 
-        <BaseIcon v-if="validation && validation.valid" icon="check" color="success" width="16" height="16" />
-
         <BaseIcon v-if="icon" :icon="icon" color="secondary" />
+
+        <BaseIcon
+          v-if="validation && !disableSuccessIcon && validation.valid"
+          icon="check"
+          color="success"
+          width="16"
+          height="16"
+        />
 
         <BaseIcon
           v-if="validation && validation.touched && !validation.valid"
@@ -117,6 +123,10 @@ export default {
     validation: {
       type: [Object, null],
       default: null
+    },
+    disableSuccessIcon: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['keydown', 'input', 'update:model-value', 'click', 'focus', 'blur'],

@@ -9,6 +9,7 @@
       :disabled="disabled"
       trim
       :validation="fieldsValidation['login']"
+      disable-success-icon
       @input="onInput"
     />
 
@@ -18,6 +19,7 @@
       :placeholder="labels.LOGIN_VIEW.PASSWORD"
       :disabled="disabled"
       :validation="fieldsValidation['password']"
+      disable-success-icon
       @input="onInput"
     />
 
