@@ -20,6 +20,7 @@
       :disabled="disabled"
       trim
       :validation="fieldsValidation['email']"
+      disable-success-icon
       @input="onInput"
     />
 

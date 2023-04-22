@@ -25,5 +25,9 @@ export const validationMessages = {
   TOPIC: {
     MIN_LENGTH: `Заголовок темы должен быть не менее ${magicNumbers.TOPIC.MIN_LENGTH}-и символов`,
     MAX_LENGTH: `Заголовок темы должен быть не более ${magicNumbers.TOPIC.MAX_LENGTH}-и символов`
+  },
+  MESSAGE: {
+    MIN_LENGTH: `Описание проблемы должно быть не менее ${magicNumbers.MESSAGE.MIN_LENGTH}-и символов`,
+    MAX_LENGTH: `Описание проблемы должно быть не более ${magicNumbers.MESSAGE.MAX_LENGTH}-и символов`
   }
 };

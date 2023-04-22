@@ -2,6 +2,7 @@
   <div :class="['base-input', classes]">
     <div class="wrapper">
       <input
+        v-if="!textarea"
         ref="input"
         class="field"
         :value="modelValue"
@@ -9,6 +10,17 @@
         :data-id="dataId"
         :autofocus="autofocus"
         :autocomplete="autocomplete"
+        :placeholder="placeholder"
+        :disabled="disabled"
+        :maxlength="maxLength"
+        v-on="inputListeners"
+      />
+
+      <textarea
+        v-if="textarea"
+        class="field"
+        :value="modelValue"
+        :autofocus="autofocus"
         :placeholder="placeholder"
         :disabled="disabled"
         :maxlength="maxLength"
@@ -76,6 +88,10 @@ export default {
       type: String,
       default: ''
     },
+    textarea: {
+      type: Boolean,
+      default: false
+    },
     type: {
       type: String,
       default: 'text'
@@ -134,6 +150,7 @@ export default {
     const input = ref(null);
 
     const classes = computed(() => [
+      props.textarea ? 'textarea' : '',
       props.disabled ? 'disabled' : '',
       props.validation && props.validation.touched && props.validation.valid ? 'valid' : '',
       props.validation && props.validation.touched && !props.validation.valid ? 'invalid' : ''
@@ -226,12 +243,16 @@ export default {
 
     .field {
       display: block;
+      padding-left: 24px;
+      padding-right: 56px;
       width: 100%;
+      height: 52px;
       color: map-get($field-palette, primary, color);
       font-family: inherit;
       font-size: $font-size-base;
       font-style: inherit;
       @include field;
+      @include truncate;
 
       @include placeholder() {
         line-height: 1;
@@ -280,13 +301,24 @@ export default {
     }
 
     .icon {
-      z-index: 2;
+      position: absolute;
       display: flex;
       align-items: center;
-      align-self: center;
-      position: absolute;
+      margin-top: 18px;
       gap: 8px;
-      right: 16px;
+      right: 24px;
+    }
+  }
+
+  &.textarea {
+    .wrapper {
+      .field {
+        padding-top: 18px;
+        padding-bottom: 18px;
+        height: 160px;
+        white-space: normal;
+        resize: none;
+      }
     }
   }
 

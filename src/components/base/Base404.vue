@@ -109,10 +109,10 @@ export default {
     .code {
       display: flex;
       align-items: center;
-      gap: 32px;
+      gap: 40px;
 
       .number {
-        margin-bottom: 34px;
+        margin-bottom: 40px;
         line-height: 0;
         font-size: 280px;
         font-weight: $font-weight-bold;

@@ -11,8 +11,7 @@
 }
 
 // Троеточие в конце строки
-@mixin truncate($width) {
-  max-width: $width;
+@mixin truncate {
   white-space: nowrap;
   overflow: hidden;
   display: inline-block;

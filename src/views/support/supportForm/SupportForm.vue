@@ -30,6 +30,16 @@
       :validation="fieldsValidation['category']"
     />
 
+    <BaseInput
+      v-model="state.message"
+      class="form__field"
+      textarea
+      :placeholder="labels.SUPPORT_VIEW.MESSAGE"
+      :disabled="disabled"
+      :validation="fieldsValidation['message']"
+      disable-success-icon
+    />
+
     <div class="form__actions">
       <BaseButton type="submit" :label="labels.SUPPORT_VIEW.SUBMIT" :disabled="disabled" :loading="loading" />
 
@@ -82,7 +92,8 @@ export default {
     const state = reactive({
       login: '',
       topic: '',
-      category: ''
+      category: '',
+      message: ''
     });
 
     const rules = computed(() => {
@@ -98,6 +109,11 @@ export default {
         },
         category: {
           required: required(validationMessages.BASE.REQUIRED)
+        },
+        message: {
+          required: required(validationMessages.BASE.REQUIRED),
+          minLength: minLength(magicNumbers.MESSAGE.MIN_LENGTH, validationMessages.MESSAGE.MIN_LENGTH),
+          maxLength: maxLength(magicNumbers.MESSAGE.MAX_LENGTH, validationMessages.MESSAGE.MAX_LENGTH)
         }
       };
     });

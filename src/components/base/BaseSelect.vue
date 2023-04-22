@@ -171,6 +171,8 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0 24px;
+    height: 52px;
     cursor: pointer;
     user-select: none;
     @include field;

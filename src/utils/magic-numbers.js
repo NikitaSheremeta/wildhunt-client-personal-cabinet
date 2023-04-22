@@ -20,8 +20,12 @@ export const magicNumbers = {
     NUMBERS_LENGTH: 4
   },
   TOPIC: {
-    MIN_LENGTH: 16,
+    MIN_LENGTH: 4,
     MAX_LENGTH: 64
+  },
+  MESSAGE: {
+    MIN_LENGTH: 56,
+    MAX_LENGTH: 1028
   },
   ONE_HUNDRED_TWENTY_MILLISECOND: 120,
   TWO_HUNDRED_MILLISECONDS: 200,
