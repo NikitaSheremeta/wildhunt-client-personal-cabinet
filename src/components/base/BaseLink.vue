@@ -135,6 +135,11 @@ $color-palette: (
   &.active {
     &.secondary {
       color: map-get($color-palette, primary, color);
+
+      .base-icon {
+        fill: map-get($color-palette, primary, color);
+        stroke: map-get($color-palette, primary, color);
+      }
     }
   }
 

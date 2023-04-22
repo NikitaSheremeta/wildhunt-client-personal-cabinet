@@ -3,19 +3,9 @@
     <div class="container">
       <div class="row">
         <div class="grid">
-          <img class="logo" src="@/assets/img/logo.svg" alt="Wild Hunt" @click="onClickLogo" />
+          <BaseLogo />
 
-          <div class="authorization">
-            <template v-for="item in state.authorization" :key="item.to">
-              <BaseLink
-                :class="[route.path === item.to ? 'active' : '']"
-                color="secondary"
-                :label="item.label"
-                :href="item.to"
-                @click="onClickLink(route.path === item.to, $event)"
-              />
-            </template>
-          </div>
+          <BaseNavigation class="navigation" inline :list="state.navigation" />
         </div>
       </div>
     </div>
@@ -24,21 +14,22 @@
 
 <script>
 import { reactive } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import BaseLink from '@/components/base/BaseLink';
+import { useRouter } from 'vue-router';
+import BaseLogo from '@/components/base/BaseLogo';
+import BaseNavigation from '@/components/base/BaseNavigation';
 import { labels } from '@/utils/labels';
 
 export default {
   name: 'BaseHeader',
   components: {
-    BaseLink
+    BaseLogo,
+    BaseNavigation
   },
   setup() {
-    const route = useRoute();
     const router = useRouter();
 
     const state = reactive({
-      authorization: [
+      navigation: [
         {
           label: labels.ROUTER.LOGIN,
           to: router.options.routes[2].path
@@ -50,21 +41,8 @@ export default {
       ]
     });
 
-    const onClickLogo = () => {
-      router.push({ path: '/' });
-    };
-
-    const onClickLink = (active, event) => {
-      if (active) {
-        return event.preventDefault();
-      }
-    };
-
     return {
-      route,
-      state,
-      onClickLogo,
-      onClickLink
+      state
     };
   }
 };
@@ -82,21 +60,9 @@ export default {
     gap: 48px;
     width: 100%;
 
-    .logo {
-      width: 120px;
-      cursor: pointer;
-      transition: 0.2s;
-
-      &:hover {
-        opacity: 0.56;
-      }
-    }
-
-    .authorization {
+    .navigation {
       display: flex;
-      align-items: center;
       justify-content: flex-end;
-      gap: 32px;
     }
   }
 }

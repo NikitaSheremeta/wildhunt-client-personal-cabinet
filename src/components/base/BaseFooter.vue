@@ -5,36 +5,17 @@
         <div class="grid">
           <span class="copyright" v-text="copyright" />
 
-          <div class="navigation">
-            <BaseLink
-              v-for="item in state.navigation"
-              :key="item.label"
-              color="secondary"
-              :label="item.label"
-              :href="item.to"
-            />
-          </div>
+          <BaseNavigation class="navigation" inline :list="state.navigation" />
         </div>
       </div>
 
       <div class="row">
         <div class="grid">
-          <span class="policy">
-            Все права защищены. Копирование материалов сайта запрещено.
-            <br />Мы предоставляем ознакомительный и бесплатный вариант игры Minecraft. <br />Приобрести полную весрию
-            можно на сайте Minecraft.net'
-          </span>
-
-          <div class="information">
-            <BaseLink
-              v-for="item in state.information"
-              :key="item.label"
-              color="secondary"
-              :label="item.label"
-              :href="item.to"
-              :icon-left="item.icon"
-            />
+          <div class="policy">
+            <template v-for="(value, index) in labels.POLICY" :key="index"> <span v-text="value" /><br /> </template>
           </div>
+
+          <BaseNavigation class="information" inline size="xs" :list="state.information" />
         </div>
       </div>
     </div>
@@ -43,59 +24,59 @@
 
 <script>
 import { computed, reactive } from 'vue';
-import BaseLink from '@/components/base/BaseLink';
+import { useRouter } from 'vue-router';
+import BaseNavigation from '@/components/base/BaseNavigation';
+import { labels } from '@/utils/labels';
 
 export default {
   name: 'BaseFooter',
   components: {
-    BaseLink
+    BaseNavigation
   },
   setup() {
+    const router = useRouter();
+
     const state = reactive({
       navigation: [
         {
-          label: 'Главная',
-          to: '/'
+          label: labels.ROUTER.SHOP,
+          to: router.options.routes[5].path
         },
         {
-          label: 'Магазин',
-          to: 'shop'
+          label: labels.ROUTER.FORUM,
+          to: router.options.routes[6].path
         },
         {
-          label: 'Форум',
-          to: 'forum'
+          label: labels.ROUTER.NEWS,
+          to: router.options.routes[7].path
         },
         {
-          label: 'Новости',
-          to: 'news'
+          label: labels.ROUTER.WIKI,
+          to: router.options.routes[8].path
         },
         {
-          label: 'Wiki',
-          to: 'wiki'
+          label: labels.ROUTER.FAQ,
+          to: router.options.routes[9].path
         },
         {
-          label: 'FAQ',
-          to: 'faq'
-        },
-        {
-          label: 'Скачать лаунчер',
-          to: 'download-launcher'
+          label: labels.ROUTER.DOWNLOAD_LAUNCHER,
+          to: router.options.routes[10].path
         }
       ],
       information: [
         {
-          label: 'Техническая поддержка',
-          to: 'support',
+          label: labels.ROUTER.SUPPORT,
+          to: router.options.routes[11].path,
           icon: 'chat-messages'
         },
         {
-          label: 'Пользовательское соглашение',
-          to: 'terms',
+          label: labels.ROUTER.TERMS,
+          to: router.options.routes[12].path,
           icon: 'file-contract'
         },
         {
-          label: 'Политика конфиденциальности',
-          to: 'privacy-policy',
+          label: labels.ROUTER.PRIVACY_POLICY,
+          to: router.options.routes[13].path,
           icon: 'file-lines'
         }
       ]
@@ -105,7 +86,8 @@ export default {
 
     return {
       state,
-      copyright
+      copyright,
+      labels
     };
   }
 };
@@ -133,11 +115,6 @@ export default {
 
   .information {
     align-items: flex-end;
-
-    .base-link {
-      line-height: $line-height-secondary;
-      font-size: $font-size-xs;
-    }
   }
 
   .copyright,
