@@ -56,7 +56,7 @@ export default {
   .grid {
     display: grid;
     align-items: center;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 120px 1fr;
     gap: 48px;
     width: 100%;
 

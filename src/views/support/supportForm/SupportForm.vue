@@ -165,5 +165,9 @@ export default {
       line-height: $line-height-secondary;
     }
   }
+
+  @include media-breakpoint-down(sm) {
+    width: 100%;
+  }
 }
 </style>

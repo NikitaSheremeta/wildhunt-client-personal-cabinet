@@ -152,6 +152,15 @@ const routes = [
       layout: 'Base'
     },
     component: () => import('@/views/TermsSupport')
+  },
+  {
+    path: '/rules',
+    name: 'Rules',
+    meta: {
+      title: labels.ROUTER.RULES,
+      layout: 'Base'
+    },
+    component: () => import('@/components/base/Base404')
   }
 ];
 

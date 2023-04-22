@@ -19,6 +19,10 @@ export default {
     BaseIcon
   },
   props: {
+    small: {
+      type: Boolean,
+      default: false
+    },
     fullWidth: {
       type: Boolean,
       default: false
@@ -56,6 +60,7 @@ export default {
     const router = useRouter();
 
     const classes = computed(() => [
+      props.small ? 'small' : '',
       props.theme ? props.theme : '',
       props.fullWidth ? 'full-width' : '',
       props.iconButton ? 'icon-button' : '',
@@ -89,6 +94,11 @@ $theme-palette: (
     hover-background: $black,
     active-background: $black
   ),
+  dark-inverse: (
+    background-color: $black,
+    hover-background: $gray-800,
+    active-background: $gray-800
+  ),
   success: (
     background-color: $success,
     hover-background: darken($success, 6%),
@@ -111,8 +121,8 @@ $theme-palette: (
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 24px 48px;
-  height: 32px;
+  padding: 0 48px;
+  height: 48px;
   border: 0;
   border-radius: 12px;
   background-color: map-get($theme-palette, primary, background-color);
@@ -148,6 +158,18 @@ $theme-palette: (
     }
   }
 
+  &.dark-inverse {
+    background-color: map-get($theme-palette, dark-inverse, background-color);
+
+    &:hover {
+      background-color: map-get($theme-palette, dark-inverse, hover-background);
+    }
+
+    &:active {
+      background-color: map-get($theme-palette, dark-inverse, active-background);
+    }
+  }
+
   &.success {
     background-color: map-get($theme-palette, success, background-color);
 
@@ -170,6 +192,12 @@ $theme-palette: (
     &:active {
       background-color: map-get($theme-palette, danger, active-background);
     }
+  }
+
+  &.small {
+    padding: 0 24px;
+    height: 40px;
+    font-size: $font-size-xs;
   }
 
   &.full-width {

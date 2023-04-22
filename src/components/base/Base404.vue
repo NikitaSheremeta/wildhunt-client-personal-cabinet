@@ -93,7 +93,6 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 96px;
 
     .title {
       font-weight: $font-weight-regular;

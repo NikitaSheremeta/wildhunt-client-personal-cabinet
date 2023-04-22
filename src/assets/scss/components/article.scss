@@ -1,5 +1,4 @@
 .article {
-  padding: 16px 0;
   width: 100%;
 
   section {
@@ -11,20 +10,19 @@
 
     h1, h2, h3, h4, h5, h6  {
       margin-left: 12px;
+      margin-bottom: 12px;
+      font-weight: $font-weight-regular;
     }
 
-    p {
-      color: $secondary;
+    > p {
+      color: $font-color-secondary;
     }
 
     article {
       padding: 16px 32px;
       background-color: $gray-900;
       border-radius: $article-border-radius;
-
-      p {
-        color: $font-color-base;
-      }
+      color: $font-color-article;
 
       ul, ol {
         padding-left: 12px;

@@ -243,10 +243,9 @@ export default {
 
     .field {
       display: block;
-      padding-left: 24px;
-      padding-right: 56px;
+      padding: 0 56px 0 24px;
       width: 100%;
-      height: 52px;
+      height: 56px;
       color: map-get($field-palette, primary, color);
       font-family: inherit;
       font-size: $font-size-base;
