@@ -112,8 +112,9 @@ export default {
       gap: 32px;
 
       .number {
+        margin-bottom: 34px;
         line-height: 0;
-        font-size: 320px;
+        font-size: 280px;
         font-weight: $font-weight-bold;
       }
 

@@ -6,6 +6,8 @@
       {{ label }}
     </template>
 
+    <span v-if="active" class="point" />
+
     <BaseIcon v-if="iconRight" :icon="iconRight" />
   </a>
 </template>
@@ -40,6 +42,10 @@ export default {
       type: String,
       default: ''
     },
+    active: {
+      type: Boolean,
+      default: false
+    },
     disabled: {
       type: Boolean,
       default: false
@@ -58,6 +64,7 @@ export default {
       props.underline ? 'underline' : '',
       props.color ? props.color : '',
       props.disabled ? 'disabled' : '',
+      props.active ? 'active' : '',
       props.iconLeft ? 'icon-left' : '',
       props.iconRight ? 'icon-right' : ''
     ]);
@@ -89,6 +96,14 @@ $color-palette: (
 
   .base-icon {
     transition: 0.2s;
+  }
+
+  .point {
+    margin-left: 8px;
+    width: 6px;
+    height: 6px;
+    background-color: $success;
+    border-radius: 50%;
   }
 
   &.primary {

@@ -3,10 +3,10 @@
     <ul class="list">
       <li v-for="(item, index) in list" :key="index" class="item">
         <BaseLink
-          :class="[route.path === item.to ? 'active' : '']"
           color="secondary"
           :href="item.to"
           :label="item.label"
+          :active="route.path === item.to"
           :icon-left="item.icon"
           @click="onClickLink(route.path === item.to, $event)"
         />
