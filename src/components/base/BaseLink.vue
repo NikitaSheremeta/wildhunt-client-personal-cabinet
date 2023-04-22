@@ -132,6 +132,12 @@ $color-palette: (
     }
   }
 
+  &.active {
+    &.secondary {
+      color: map-get($color-palette, primary, color);
+    }
+  }
+
   &.underline {
     text-decoration: underline;
   }

@@ -7,7 +7,13 @@
 
           <div class="authorization">
             <template v-for="item in state.authorization" :key="item.to">
-              <BaseLink color="secondary" :label="item.label" :href="item.to" />
+              <BaseLink
+                :class="[route.path === item.to ? 'active' : '']"
+                color="secondary"
+                :label="item.label"
+                :href="item.to"
+                @click="onClickLink(route.path === item.to, $event)"
+              />
             </template>
           </div>
         </div>
@@ -18,8 +24,9 @@
 
 <script>
 import { reactive } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import BaseLink from '@/components/base/BaseLink';
+import { labels } from '@/utils/labels';
 
 export default {
   name: 'BaseHeader',
@@ -27,17 +34,18 @@ export default {
     BaseLink
   },
   setup() {
+    const route = useRoute();
     const router = useRouter();
 
     const state = reactive({
       authorization: [
         {
-          label: 'Вход в аккаунт',
-          to: '/login'
+          label: labels.ROUTER.LOGIN,
+          to: router.options.routes[2].path
         },
         {
-          label: 'Регистрация аккаунта',
-          to: '/signup'
+          label: labels.ROUTER.SIGN_UP,
+          to: router.options.routes[3].path
         }
       ]
     });
@@ -46,9 +54,17 @@ export default {
       router.push({ path: '/' });
     };
 
+    const onClickLink = (active, event) => {
+      if (active) {
+        return event.preventDefault();
+      }
+    };
+
     return {
+      route,
       state,
-      onClickLogo
+      onClickLogo,
+      onClickLink
     };
   }
 };
