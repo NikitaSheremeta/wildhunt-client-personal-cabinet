@@ -251,14 +251,6 @@ export default {
         &:focus {
           cursor: default;
         }
-
-        + .icon {
-          .base-icon {
-            fill: map-get($field-palette, disabled, color);
-            stroke: map-get($field-palette, disabled, color);
-            cursor: default;
-          }
-        }
       }
 
       &[type='password']:not(:placeholder-shown) {
@@ -315,6 +307,20 @@ export default {
   &.valid {
     .validation-notice {
       color: $success;
+    }
+  }
+
+  &.disabled {
+    .icon {
+      .base-icon {
+        fill: map-get($field-palette, disabled, color);
+        stroke: map-get($field-palette, disabled, color);
+        cursor: default;
+      }
+    }
+
+    .validation-notice {
+      color: map-get($field-palette, disabled, color);
     }
   }
 }

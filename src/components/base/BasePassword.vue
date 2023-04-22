@@ -250,8 +250,16 @@ export default {
   }
 
   &.disabled {
+    .icon {
+      .base-icon {
+        fill: map-get($field-palette, disabled, color);
+        stroke: map-get($field-palette, disabled, color);
+        cursor: default;
+      }
+    }
+
     .notice {
-      color: $disabled-color;
+      color: $disabled-color !important;
     }
 
     .meter__item {

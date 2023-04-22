@@ -232,6 +232,24 @@ export default {
     }
   }
 
+  .validation-notice {
+    margin-top: 8px;
+    font-size: $font-size-xs;
+    user-select: none;
+  }
+
+  &.invalid {
+    .validation-notice {
+      color: $danger;
+    }
+  }
+
+  &.valid {
+    .validation-notice {
+      color: $success;
+    }
+  }
+
   &.disabled {
     .field {
       background-color: map-get($field-palette, disabled, background-color);
@@ -250,23 +268,9 @@ export default {
         }
       }
     }
-  }
 
-  .validation-notice {
-    margin-top: 8px;
-    font-size: $font-size-xs;
-    user-select: none;
-  }
-
-  &.invalid {
     .validation-notice {
-      color: $danger;
-    }
-  }
-
-  &.valid {
-    .validation-notice {
-      color: $success;
+      color: map-get($field-palette, disabled, color);
     }
   }
 }
