@@ -47,6 +47,7 @@ const routes = [
       layout: 'Base'
     },
     props: {
+      title: labels.ROUTER.SHOP,
       description: labels.WIP.DESCRIPTION
     },
     component: () => import('@/components/base/Base404')
@@ -59,6 +60,7 @@ const routes = [
       layout: 'Base'
     },
     props: {
+      title: labels.ROUTER.FORUM,
       description: labels.WIP.DESCRIPTION
     },
     component: () => import('@/components/base/Base404')
@@ -71,6 +73,7 @@ const routes = [
       layout: 'Base'
     },
     props: {
+      title: labels.ROUTER.NEWS,
       description: labels.WIP.DESCRIPTION
     },
     component: () => import('@/components/base/Base404')
@@ -83,6 +86,7 @@ const routes = [
       layout: 'Base'
     },
     props: {
+      title: labels.ROUTER.WIKI,
       description: labels.WIP.DESCRIPTION
     },
     component: () => import('@/components/base/Base404')
@@ -95,6 +99,7 @@ const routes = [
       layout: 'Base'
     },
     props: {
+      title: labels.ROUTER.FAQ,
       description: labels.WIP.DESCRIPTION
     },
     component: () => import('@/components/base/Base404')
@@ -107,6 +112,7 @@ const routes = [
       layout: 'Base'
     },
     props: {
+      title: labels.ROUTER.DOWNLOAD_LAUNCHER,
       description: labels.WIP.DESCRIPTION
     },
     component: () => import('@/components/base/Base404')

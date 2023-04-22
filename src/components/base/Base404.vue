@@ -3,7 +3,7 @@
     <div class="row">
       <div class="not-found">
         <div class="wrapper">
-          <h2 class="title" v-text="labels.NOT_FOUND.TITLE" />
+          <h2 class="title" v-text="computedTitle" />
 
           <p class="description" v-text="computedDescription" />
 
@@ -41,6 +41,10 @@ export default {
     BaseLink
   },
   props: {
+    title: {
+      type: String,
+      default: ''
+    },
     description: {
       type: String,
       default: ''
@@ -49,6 +53,8 @@ export default {
   setup(props) {
     const leftEye = ref(null);
     const rightEye = ref(null);
+
+    const computedTitle = computed(() => (props.title ? props.title : labels.NOT_FOUND.TITLE));
 
     const computedDescription = computed(() => (props.description ? props.description : labels.NOT_FOUND.DESCRIPTION));
 
@@ -63,6 +69,7 @@ export default {
     return {
       leftEye,
       rightEye,
+      computedTitle,
       computedDescription,
       labels
     };
