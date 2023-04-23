@@ -40,9 +40,9 @@ export default {
     top: -1px;
     width: 12px;
     height: 12px;
-    background-color: $danger;
+    background-color: $success;
     border-radius: 50%;
-    box-shadow: 0 0 0 0 rgba(255, 118, 76, 1);
+    box-shadow: 0 0 0 0 rgba(108, 176, 102, 1);
     transform: scale(1);
     animation: pulse 2s infinite;
     @include pulse;

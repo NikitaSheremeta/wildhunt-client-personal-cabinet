@@ -113,13 +113,29 @@ export default {
 
 <style lang="scss" scoped>
 .footer {
+  position: relative;
+  background-image: url('../../assets/img/grass.svg');
+  background-size: 96px;
+  background-repeat: repeat-x;
   margin-top: 96px;
-  padding: 32px 0;
+  padding-top: 80px;
+  padding-bottom: 48px;
   width: 100%;
-  background-color: $gray-900;
+  overflow: hidden;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $gray-900;
+  }
 
   .row {
     .grid {
+      z-index: 9;
       display: grid;
       grid-template-columns: 1fr 320px 1fr;
       gap: 32px;
