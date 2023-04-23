@@ -44,7 +44,7 @@ body {
   justify-content: center;
 }
 
-@include media-breakpoint-down(xxs) {
+@include media-breakpoint-down(sm) {
   .container {
     &-fluid {
       padding: 0;

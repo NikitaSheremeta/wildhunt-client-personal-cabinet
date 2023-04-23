@@ -41,7 +41,13 @@
     />
 
     <div class="form__actions">
-      <BaseButton type="submit" :label="labels.SUPPORT_VIEW.SUBMIT" :disabled="disabled" :loading="loading" />
+      <BaseButton
+        type="submit"
+        class="button"
+        :label="labels.SUPPORT_VIEW.SUBMIT"
+        :disabled="disabled"
+        :loading="loading"
+      />
 
       <BaseLink
         class="link"
@@ -138,7 +144,7 @@ export default {
 
 <style lang="scss" scoped>
 .form {
-  width: map-get($container-width, 'xs');
+  width: 448px;
 
   &__title {
     margin: 0;
@@ -165,8 +171,17 @@ export default {
     }
   }
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(xxs) {
     width: 100%;
+
+    &__actions {
+      flex-direction: column;
+      align-items: inherit;
+
+      .button {
+        width: 100%;
+      }
+    }
   }
 }
 </style>

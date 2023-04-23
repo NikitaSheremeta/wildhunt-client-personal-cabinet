@@ -122,5 +122,9 @@ export default {
   &__actions {
     margin-top: 24px;
   }
+
+  @include media-breakpoint-down(xxs) {
+    width: 100%;
+  }
 }
 </style>

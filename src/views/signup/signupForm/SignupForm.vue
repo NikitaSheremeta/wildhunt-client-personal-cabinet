@@ -187,5 +187,9 @@ export default {
   &__eula {
     margin-top: 16px;
   }
+
+  @include media-breakpoint-down(xxs) {
+    width: 100%;
+  }
 }
 </style>

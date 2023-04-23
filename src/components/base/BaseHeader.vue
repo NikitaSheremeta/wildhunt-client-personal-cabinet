@@ -5,9 +5,13 @@
         <div class="grid">
           <BaseLogo />
 
-          <BaseOnline />
-
           <BaseNavigation class="navigation" inline :list="state.navigation" />
+
+          <div class="menu-button">
+            <span class="item"></span>
+            <span class="item"></span>
+            <span class="item"></span>
+          </div>
         </div>
       </div>
     </div>
@@ -18,14 +22,12 @@
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import BaseLogo from '@/components/base/BaseLogo';
-import BaseOnline from '@/components/base/BaseOnline';
 import BaseNavigation from '@/components/base/BaseNavigation';
 import { labels } from '@/utils/labels';
 
 export default {
   name: 'BaseHeader',
   components: {
-    BaseOnline,
     BaseLogo,
     BaseNavigation
   },
@@ -60,13 +62,46 @@ export default {
   .grid {
     display: grid;
     align-items: center;
-    grid-template-columns: 120px 1fr 1fr;
+    grid-template-columns: 120px 1fr auto;
     gap: 48px;
     width: 100%;
 
     .navigation {
       display: flex;
       justify-content: flex-end;
+    }
+
+    .menu-button {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 24px 0;
+      cursor: pointer;
+
+      .item {
+        width: 7px;
+        height: 7px;
+        background-color: $gray-600;
+        border-radius: 50%;
+        transition: 0.2s;
+      }
+
+      &:hover {
+        .item {
+          background-color: $white;
+        }
+      }
+    }
+  }
+
+  @include media-breakpoint-down(sm) {
+    .grid {
+      grid-template-columns: 120px auto;
+
+      .online,
+      .navigation {
+        display: none;
+      }
     }
   }
 }

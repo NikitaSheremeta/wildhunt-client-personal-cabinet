@@ -11,10 +11,10 @@ $grid-breakpoints: (
 
 // Container width dimensions
 $container-width: (
-  xxs: 320px,
-  xs : 448px,
+  xxs: 100%, // 320px,
+  xs : 100%, // 448px,
   sm : 619px,
   md : 960px,
   lg : 1080px,
   xl : 1200px
-) !default;
+);
