@@ -2,9 +2,13 @@
   <button :class="['base-button', classes]" :disabled="disabled" @click="onClick">
     <BaseIcon v-if="loading" spin icon="preloader" />
 
-    <BaseIcon v-if="icon" color="secondary" :icon="icon" :width="computedIconSize" :height="computedIconSize" />
+    <BaseIcon v-if="iconLeft" :color="color" :icon="iconLeft" :width="computedIconSize" :height="computedIconSize" />
+
+    <BaseIcon v-if="icon" :icon="icon" :color="color" :width="computedIconSize" :height="computedIconSize" />
 
     <span v-if="label" v-text="label" />
+
+    <BaseIcon v-if="iconRight" :color="color" :icon="iconRight" :width="computedIconSize" :height="computedIconSize" />
   </button>
 </template>
 
@@ -23,6 +27,10 @@ export default {
       type: Boolean,
       default: false
     },
+    outline: {
+      type: Boolean,
+      default: false
+    },
     fullWidth: {
       type: Boolean,
       default: false
@@ -31,11 +39,27 @@ export default {
       type: Boolean,
       default: false
     },
+    theme: {
+      type: String,
+      default: 'primary'
+    },
+    color: {
+      type: String,
+      default: 'primary'
+    },
+    to: {
+      type: String,
+      default: ''
+    },
     label: {
       type: String,
       default: ''
     },
-    to: {
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    iconSize: {
       type: String,
       default: ''
     },
@@ -43,17 +67,13 @@ export default {
       type: String,
       default: ''
     },
-    iconSize: {
+    iconLeft: {
       type: String,
       default: ''
     },
-    theme: {
+    iconRight: {
       type: String,
-      default: 'primary'
-    },
-    disabled: {
-      type: Boolean,
-      default: false
+      default: ''
     },
     loading: {
       type: Boolean,
@@ -65,14 +85,17 @@ export default {
 
     const classes = computed(() => [
       props.small ? 'small' : '',
-      props.theme ? props.theme : '',
+      props.outline ? 'outline' : '',
       props.fullWidth ? 'full-width' : '',
       props.iconButton ? 'icon-button' : '',
+      props.theme ? props.theme : '',
       props.disabled ? 'disabled' : '',
+      props.iconLeft ? 'icon-left' : '',
+      props.iconRight ? 'icon-right' : '',
       props.loading ? 'loading' : ''
     ]);
 
-    const computedIconSize = computed(() => (props.iconSize ? props.iconSize : '14'));
+    const computedIconSize = computed(() => (props.small ? '14' : '18'));
 
     const onClick = () => {
       if (props.to) {
@@ -93,26 +116,27 @@ export default {
 $theme-palette: (
   primary: (
     background-color: $primary,
-    hover-background: darken($primary, 6%),
-    active-background: lighten($primary, 6%)
+    border-color: $primary,
+    hover-background: darken($primary, 6%)
   ),
   dark: (
     background-color: $gray-800,
-    hover-background: $black,
-    active-background: $black
+    border-color: $gray-600,
+    hover-background: $black
   ),
   success: (
     background-color: $success,
-    hover-background: darken($success, 6%),
-    active-background: lighten($success, 6%)
+    border-color: $success,
+    hover-background: darken($success, 6%)
   ),
   danger: (
     background-color: $danger,
-    hover-background: darken($danger, 6%),
-    active-background: lighten($danger, 6%)
+    border-color: $danger,
+    hover-background: darken($danger, 6%)
   ),
   disabled: (
     background-color: $disabled-background,
+    border-color: $disabled-background,
     font-color: $disabled-color
   ),
   transparent: (
@@ -147,65 +171,20 @@ $theme-palette: (
     background-color: map-get($theme-palette, primary, hover-background);
   }
 
-  &:active {
-    background-color: map-get($theme-palette, primary, active-background);
-  }
-
-  &.dark {
-    background-color: map-get($theme-palette, dark, background-color);
-
-    &:hover {
-      background-color: map-get($theme-palette, dark, hover-background);
-    }
-
-    &:active {
-      background-color: map-get($theme-palette, dark, active-background);
-    }
-  }
-
-  &.success {
-    background-color: map-get($theme-palette, success, background-color);
-
-    &:hover {
-      background-color: map-get($theme-palette, success, hover-background);
-    }
-
-    &:active {
-      background-color: map-get($theme-palette, success, active-background);
-    }
-  }
-
-  &.danger {
-    background-color: map-get($theme-palette, danger, background-color);
-
-    &:hover {
-      background-color: map-get($theme-palette, danger, hover-background);
-    }
-
-    &:active {
-      background-color: map-get($theme-palette, danger, active-background);
-    }
-  }
-
-  &.transparent {
-    background-color: map-get($theme-palette, transparent, background-color);
-  }
-
-  &.small {
-    padding: 0 24px;
-    height: 40px;
-    font-size: $font-size-xs;
-  }
-
   &.full-width {
     width: 100%;
   }
 
   &.icon-button {
     padding: 0;
-    width: 32px;
-    height: 32px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
+
+    &.small {
+      width: 32px;
+      height: 32px;
+    }
 
     .base-icon {
       transition: 0.2s;
@@ -218,6 +197,48 @@ $theme-palette: (
     }
   }
 
+  &:active {
+    background-color: map-get($theme-palette, primary, active-background);
+  }
+
+  &.dark {
+    background-color: map-get($theme-palette, dark, background-color);
+
+    &:hover {
+      background-color: map-get($theme-palette, dark, hover-background);
+    }
+
+    &.outline {
+      border: 1px solid map-get($theme-palette, dark, border-color);
+      background-color: transparent;
+      color: $font-color-secondary;
+
+      &:hover {
+        background-color: map-get($theme-palette, dark, background-color);
+      }
+    }
+  }
+
+  &.success {
+    background-color: map-get($theme-palette, success, background-color);
+
+    &:hover {
+      background-color: map-get($theme-palette, success, hover-background);
+    }
+  }
+
+  &.danger {
+    background-color: map-get($theme-palette, danger, background-color);
+
+    &:hover {
+      background-color: map-get($theme-palette, danger, hover-background);
+    }
+  }
+
+  &.transparent {
+    background-color: map-get($theme-palette, transparent, background-color);
+  }
+
   &.disabled {
     cursor: default;
     background-color: map-get($theme-palette, disabled, background-color);
@@ -225,6 +246,18 @@ $theme-palette: (
 
     &:hover {
       background-color: map-get($theme-palette, disabled, background-color);
+    }
+  }
+
+  &.icon-left {
+    .base-icon {
+      margin-right: 12px;
+    }
+  }
+
+  &.icon-right {
+    .base-icon {
+      margin-left: 12px;
     }
   }
 
