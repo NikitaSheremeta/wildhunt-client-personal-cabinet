@@ -113,37 +113,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$theme-palette: (
-  primary: (
-    background-color: $primary,
-    border-color: $primary,
-    hover-background: darken($primary, 6%)
-  ),
-  dark: (
-    background-color: $gray-800,
-    border-color: $gray-600,
-    hover-background: $black
-  ),
-  success: (
-    background-color: $success,
-    border-color: $success,
-    hover-background: darken($success, 6%)
-  ),
-  danger: (
-    background-color: $danger,
-    border-color: $danger,
-    hover-background: darken($danger, 6%)
-  ),
-  disabled: (
-    background-color: $disabled-background,
-    border-color: $disabled-background,
-    font-color: $disabled-color
-  ),
-  transparent: (
-    background-color: transparent
-  )
-);
-
 .base-button {
   position: relative;
   display: inline-flex;
@@ -154,7 +123,7 @@ $theme-palette: (
   height: 48px;
   border: 0;
   border-radius: 12px;
-  background-color: map-get($theme-palette, primary, background-color);
+  background-color: map-get($button-palette, primary, background-color);
   line-height: $line-height-base;
   color: $font-color-base;
   font-family: $font-family-base;
@@ -168,7 +137,7 @@ $theme-palette: (
 
   &:hover,
   &:focus {
-    background-color: map-get($theme-palette, primary, hover-background);
+    background-color: map-get($button-palette, primary, hover-background);
   }
 
   &.full-width {
@@ -198,54 +167,54 @@ $theme-palette: (
   }
 
   &:active {
-    background-color: map-get($theme-palette, primary, active-background);
+    background-color: map-get($button-palette, primary, active-background);
   }
 
   &.dark {
-    background-color: map-get($theme-palette, dark, background-color);
+    background-color: map-get($button-palette, dark, background-color);
 
     &:hover {
-      background-color: map-get($theme-palette, dark, hover-background);
+      background-color: map-get($button-palette, dark, hover-background);
     }
 
     &.outline {
-      border: 1px solid map-get($theme-palette, dark, border-color);
+      border: 1px solid map-get($button-palette, dark, border-color);
       background-color: transparent;
       color: $font-color-secondary;
 
       &:hover {
-        background-color: map-get($theme-palette, dark, background-color);
+        background-color: map-get($button-palette, dark, background-color);
       }
     }
   }
 
   &.success {
-    background-color: map-get($theme-palette, success, background-color);
+    background-color: map-get($button-palette, success, background-color);
 
     &:hover {
-      background-color: map-get($theme-palette, success, hover-background);
+      background-color: map-get($button-palette, success, hover-background);
     }
   }
 
   &.danger {
-    background-color: map-get($theme-palette, danger, background-color);
+    background-color: map-get($button-palette, danger, background-color);
 
     &:hover {
-      background-color: map-get($theme-palette, danger, hover-background);
+      background-color: map-get($button-palette, danger, hover-background);
     }
   }
 
   &.transparent {
-    background-color: map-get($theme-palette, transparent, background-color);
+    background-color: map-get($button-palette, transparent, background-color);
   }
 
   &.disabled {
     cursor: default;
-    background-color: map-get($theme-palette, disabled, background-color);
-    color: map-get($theme-palette, disabled, font-color);
+    background-color: map-get($button-palette, disabled, background-color);
+    color: map-get($button-palette, disabled, font-color);
 
     &:hover {
-      background-color: map-get($theme-palette, disabled, background-color);
+      background-color: map-get($button-palette, disabled, background-color);
     }
   }
 

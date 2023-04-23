@@ -10,7 +10,15 @@
               <span class="description" v-text="labels.FOOTER.POLICY" />
             </div>
 
-            <BaseOnline class="online" small />
+            <div class="wrapper">
+              <BaseLink
+                class="link"
+                :href="`mailto:${labels.EMAILS.ADMIN}`"
+                color="secondary"
+                :label="labels.EMAILS.ADMIN"
+                icon-left="envelope"
+              />
+            </div>
           </div>
 
           <div class="info">
@@ -20,7 +28,9 @@
               <BaseNavigation class="navigation" small :list="state.navigation" />
             </div>
 
-            <BaseSocialNetworks class="social-networks" small />
+            <div class="wrapper">
+              <BaseSocialNetworks class="social-networks" />
+            </div>
           </div>
 
           <div class="info">
@@ -30,13 +40,17 @@
               <span class="description" v-text="labels.FOOTER.SHOP_DESCRIPTION" />
             </div>
 
-            <BaseButton
-              class="button"
-              small
-              theme="dark"
-              :label="labels.FOOTER.SHOP_LABEL"
-              :to="router.options.routes[5].path"
-            />
+            <div class="wrapper">
+              <BaseButton
+                class="button"
+                outline
+                theme="dark"
+                color="secondary"
+                :to="router.options.routes[5].path"
+                :label="labels.FOOTER.SHOP_LABEL"
+                icon-left="store"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -47,7 +61,7 @@
 <script>
 import { computed, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import BaseOnline from '@/components/base/BaseOnline';
+import BaseLink from '@/components/base/BaseLink';
 import BaseNavigation from '@/components/base/BaseNavigation';
 import BaseSocialNetworks from '@/components/base/BaseSocialNetworks';
 import BaseButton from '@/components/base/BaseButton';
@@ -56,7 +70,7 @@ import { labels } from '@/utils/labels';
 export default {
   name: 'BaseFooter',
   components: {
-    BaseOnline,
+    BaseLink,
     BaseNavigation,
     BaseSocialNetworks,
     BaseButton
@@ -115,30 +129,36 @@ export default {
 
   .info {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-between;
 
     .title {
       margin-top: 0;
-      margin-bottom: 8px;
       font-size: $font-size-h6;
       font-weight: $font-weight-regular;
     }
 
     .description {
       color: $font-color-secondary;
-      line-height: $line-height-secondary;
       font-size: $font-size-xs;
     }
 
-    .social-networks {
-      display: flex;
-      align-self: end;
+    .link {
+      padding: 10px 0;
     }
 
-    .online,
+    .link,
     .social-networks,
     .button {
       margin-top: 16px;
+    }
+  }
+
+  @include media-breakpoint-down(md) {
+    .row {
+      .grid {
+        gap: 24px;
+      }
     }
   }
 

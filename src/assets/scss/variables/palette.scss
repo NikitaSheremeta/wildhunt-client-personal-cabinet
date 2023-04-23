@@ -1,3 +1,4 @@
+// Field palette
 $field-palette: (
   primary: (
     background-color: $gray-800,
@@ -10,5 +11,50 @@ $field-palette: (
     background-color: $disabled-background,
     color: $disabled-color,
     placeholder-color: $disabled-color
+  )
+);
+
+// Link Palette
+$link-palette: (
+  primary: (
+    color: $font-color-base
+  ),
+  secondary: (
+    color: $font-color-secondary
+  ),
+  disabled: (
+    color: $disabled-color
+  )
+);
+
+// Button palette
+$button-palette: (
+  primary: (
+    background-color: $primary,
+    border-color: $primary,
+    hover-background: darken($primary, 6%)
+  ),
+  dark: (
+    background-color: $gray-800,
+    border-color: $gray-600,
+    hover-background: $black
+  ),
+  success: (
+    background-color: $success,
+    border-color: $success,
+    hover-background: darken($success, 6%)
+  ),
+  danger: (
+    background-color: $danger,
+    border-color: $danger,
+    hover-background: darken($danger, 6%)
+  ),
+  disabled: (
+    background-color: $disabled-background,
+    border-color: $disabled-background,
+    font-color: $disabled-color
+  ),
+  transparent: (
+    background-color: transparent
   )
 );

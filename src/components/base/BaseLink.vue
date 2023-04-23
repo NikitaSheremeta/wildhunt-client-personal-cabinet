@@ -1,6 +1,6 @@
 <template>
   <a :class="['base-link', classes]" :href="href" :target="target">
-    <BaseIcon v-if="iconLeft" :icon="iconLeft" width="14" height="14px" />
+    <BaseIcon v-if="iconLeft" :icon="iconLeft" :width="computedIconSize" :height="computedIconSize" />
 
     <template v-if="label">
       {{ label }}
@@ -8,7 +8,7 @@
 
     <span v-if="active" class="point" />
 
-    <BaseIcon v-if="iconRight" :icon="iconRight" />
+    <BaseIcon v-if="iconRight" :icon="iconRight" :width="computedIconSize" :height="computedIconSize" />
   </a>
 </template>
 
@@ -22,6 +22,10 @@ export default {
     BaseIcon
   },
   props: {
+    small: {
+      type: Boolean,
+      default: false
+    },
     underline: {
       type: Boolean,
       default: false
@@ -61,32 +65,26 @@ export default {
   },
   setup(props) {
     const classes = computed(() => [
+      props.small ? 'small' : '',
       props.underline ? 'underline' : '',
       props.color ? props.color : '',
-      props.disabled ? 'disabled' : '',
       props.active ? 'active' : '',
+      props.disabled ? 'disabled' : '',
       props.iconLeft ? 'icon-left' : '',
       props.iconRight ? 'icon-right' : ''
     ]);
 
-    return { classes };
+    const computedIconSize = computed(() => (props.small ? '14' : '18'));
+
+    return {
+      classes,
+      computedIconSize
+    };
   }
 };
 </script>
 
 <style lang="scss" scoped>
-$color-palette: (
-  primary: (
-    color: $font-color-base
-  ),
-  secondary: (
-    color: $font-color-secondary
-  ),
-  disabled: (
-    color: $disabled-color
-  )
-);
-
 .base-link {
   display: inline-flex;
   align-items: center;
@@ -106,77 +104,73 @@ $color-palette: (
     border-radius: 50%;
   }
 
-  &.primary {
-    color: map-get($color-palette, primary, color);
-
-    &:hover {
-      color: map-get($color-palette, secondary, color);
-
-      .base-icon {
-        fill: map-get($color-palette, secondary, color);
-        stroke: map-get($color-palette, secondary, color);
-      }
-    }
-  }
-
-  &.secondary {
-    color: map-get($color-palette, secondary, color);
-
-    .base-icon {
-      fill: map-get($color-palette, secondary, color);
-      stroke: map-get($color-palette, secondary, color);
-    }
-
-    &:hover {
-      color: map-get($color-palette, primary, color);
-
-      .base-icon {
-        fill: map-get($color-palette, primary, color);
-        stroke: map-get($color-palette, primary, color);
-      }
-    }
-  }
-
-  &.disabled {
-    pointer-events: none;
-    color: map-get($color-palette, disabled, color);
-
-    .base-icon {
-      fill: map-get($color-palette, disabled, color);
-      stroke: map-get($color-palette, disabled, color);
-    }
-  }
-
-  &.active {
-    &.secondary {
-      color: map-get($color-palette, primary, color);
-
-      .base-icon {
-        fill: map-get($color-palette, primary, color);
-        stroke: map-get($color-palette, primary, color);
-      }
-    }
+  &.small {
+    font-size: $font-size-xs;
   }
 
   &.underline {
     text-decoration: underline;
   }
 
-  &.icon-left {
-    span {
-      margin-top: 1px;
+  &.primary {
+    color: map-get($link-palette, primary, color);
+
+    &:hover {
+      color: map-get($link-palette, secondary, color);
+
+      .base-icon {
+        fill: map-get($link-palette, secondary, color);
+        stroke: map-get($link-palette, secondary, color);
+      }
+    }
+  }
+
+  &.secondary {
+    color: map-get($link-palette, secondary, color);
+
+    .base-icon {
+      fill: map-get($link-palette, secondary, color);
+      stroke: map-get($link-palette, secondary, color);
     }
 
+    &:hover {
+      color: map-get($link-palette, primary, color);
+
+      .base-icon {
+        fill: map-get($link-palette, primary, color);
+        stroke: map-get($link-palette, primary, color);
+      }
+    }
+  }
+
+  &.disabled {
+    pointer-events: none;
+    color: map-get($link-palette, disabled, color);
+
+    .base-icon {
+      fill: map-get($link-palette, disabled, color);
+      stroke: map-get($link-palette, disabled, color);
+    }
+  }
+
+  &.active {
+    &.secondary {
+      color: map-get($link-palette, primary, color);
+
+      .base-icon {
+        fill: map-get($link-palette, primary, color);
+        stroke: map-get($link-palette, primary, color);
+      }
+    }
+  }
+
+  &.icon-left {
     .base-icon {
       margin-right: 12px;
     }
   }
 
   &.icon-right {
-    span {
-      margin-top: 1px;
-    }
-
     .base-icon {
       margin-left: 12px;
     }
