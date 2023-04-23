@@ -162,7 +162,6 @@ export default {
     .link {
       margin-bottom: 2px;
       font-size: $font-size-xs;
-      line-height: $line-height-secondary;
     }
   }
 

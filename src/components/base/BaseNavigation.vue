@@ -3,8 +3,8 @@
     <ul class="list">
       <li v-for="(item, index) in list" :key="index" class="item">
         <BaseLink
-          color="secondary"
           :href="item.to"
+          color="secondary"
           :label="item.label"
           :active="route.path === item.to"
           :icon-left="item.icon"
@@ -78,7 +78,6 @@ export default {
   &.small {
     .list {
       .item {
-        line-height: $line-height-secondary;
         font-size: $font-size-xs;
       }
     }

@@ -134,6 +134,7 @@ export default {
 
     .title {
       margin-top: 0;
+      margin-bottom: 12px;
       font-size: $font-size-h6;
       font-weight: $font-weight-regular;
     }

@@ -5,6 +5,8 @@
         <div class="grid">
           <BaseLogo />
 
+          <BaseOnline />
+
           <BaseNavigation class="navigation" inline :list="state.navigation" />
         </div>
       </div>
@@ -16,12 +18,14 @@
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import BaseLogo from '@/components/base/BaseLogo';
+import BaseOnline from '@/components/base/BaseOnline';
 import BaseNavigation from '@/components/base/BaseNavigation';
 import { labels } from '@/utils/labels';
 
 export default {
   name: 'BaseHeader',
   components: {
+    BaseOnline,
     BaseLogo,
     BaseNavigation
   },
@@ -56,7 +60,7 @@ export default {
   .grid {
     display: grid;
     align-items: center;
-    grid-template-columns: 120px 1fr;
+    grid-template-columns: 120px 1fr 1fr;
     gap: 48px;
     width: 100%;
 

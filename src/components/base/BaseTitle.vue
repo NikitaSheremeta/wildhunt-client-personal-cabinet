@@ -1,6 +1,14 @@
 <template>
   <div :class="['base-title']">
-    <BaseButton v-if="closeButton" class="button" icon-button icon="arrow-left" theme="dark" @click="onClickButton" />
+    <BaseButton
+      v-if="closeButton"
+      class="button"
+      small
+      icon-button
+      icon="arrow-left"
+      theme="dark"
+      @click="onClickButton"
+    />
 
     <h2 class="title" v-text="computedTitle" />
   </div>

@@ -19,6 +19,7 @@
 
     <BaseLink
       class="link"
+      small
       color="secondary"
       :label="labels.CAPTCHA.RESET_CAPTCHA_LABEL"
       icon-left="redo"

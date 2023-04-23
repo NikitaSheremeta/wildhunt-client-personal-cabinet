@@ -29,6 +29,7 @@
 
     <BaseLink
       class="form__reset-password"
+      small
       href="reset-password"
       color="secondary"
       :label="labels.LOGIN_VIEW.RESET_PASSWORD"

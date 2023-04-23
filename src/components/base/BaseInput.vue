@@ -243,7 +243,7 @@ export default {
 
     .field {
       display: block;
-      padding: 0 56px 0 24px;
+      padding: 0 64px 0 24px;
       width: 100%;
       height: 52px;
       color: map-get($field-palette, primary, color);
@@ -251,7 +251,6 @@ export default {
       font-size: $font-size-base;
       font-style: inherit;
       @include field;
-      @include truncate;
 
       @include placeholder() {
         line-height: 1;
@@ -259,6 +258,14 @@ export default {
         font-family: inherit;
         font-size: inherit;
         transition: 0.2s;
+      }
+
+      &[type='text'] {
+        @include truncate;
+      }
+
+      &[type='email'] {
+        @include truncate;
       }
 
       &:focus {

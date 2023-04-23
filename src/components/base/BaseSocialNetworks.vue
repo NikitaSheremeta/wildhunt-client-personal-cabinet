@@ -1,13 +1,13 @@
 <template>
-  <div :class="['base-social-networks', classes]">
+  <div :class="['base-social-networks']">
     <template v-for="(item, index) in state.socialNetworks" :key="index">
-      <BaseButton class="link" icon-button :icon="item.icon" :icon-size="iconSize" theme="transparent" />
+      <BaseButton class="button" icon-button theme="transparent" color="secondary" :to="item.to" :icon="item.icon" />
     </template>
   </div>
 </template>
 
 <script>
-import { computed, reactive } from 'vue';
+import { reactive } from 'vue';
 import BaseButton from '@/components/base/BaseButton';
 
 export default {
@@ -15,21 +15,15 @@ export default {
   components: {
     BaseButton
   },
-  props: {
-    small: {
-      type: Boolean,
-      default: false
-    }
-  },
-  setup(props) {
+  setup() {
     const state = reactive({
       socialNetworks: [
         {
-          icon: 'discord',
+          icon: 'telegram',
           to: '/'
         },
         {
-          icon: 'telegram',
+          icon: 'discord',
           to: '/'
         },
         {
@@ -47,22 +41,12 @@ export default {
         {
           icon: 'you-tube',
           to: '/'
-        },
-        {
-          icon: 'envelope',
-          to: '/'
         }
       ]
     });
 
-    const classes = computed(() => [props.small ? 'small' : '']);
-
-    const iconSize = computed(() => (props.small ? '20' : '24'));
-
     return {
-      state,
-      classes,
-      iconSize
+      state
     };
   }
 };
@@ -71,7 +55,11 @@ export default {
 <style lang="scss" scoped>
 .base-social-networks {
   display: flex;
-  gap: 12px;
+  gap: 24px;
   width: 100%;
+
+  .button {
+    width: 24px;
+  }
 }
 </style>

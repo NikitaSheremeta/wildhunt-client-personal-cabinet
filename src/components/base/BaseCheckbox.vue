@@ -64,7 +64,6 @@ export default {
 <style lang="scss" scoped>
 .base-checkbox {
   user-select: none;
-  line-height: $line-height-secondary;
   font-size: $font-size-xs;
 
   .field {
@@ -78,6 +77,7 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-top: 2px;
         margin-right: 16px;
         padding: 4px;
         width: 12px;

@@ -26,6 +26,7 @@
 
     <BaseLink
       class="form__account-recover"
+      small
       href="support"
       color="secondary"
       :label="labels.RESET_PASSWORD_VIEW.ACCOUNT_RECOVER"
