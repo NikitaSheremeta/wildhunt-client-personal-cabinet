@@ -101,11 +101,6 @@ $theme-palette: (
     hover-background: $black,
     active-background: $black
   ),
-  dark-inverse: (
-    background-color: $black,
-    hover-background: $gray-800,
-    active-background: $gray-800
-  ),
   success: (
     background-color: $success,
     hover-background: darken($success, 6%),
@@ -165,18 +160,6 @@ $theme-palette: (
 
     &:active {
       background-color: map-get($theme-palette, dark, active-background);
-    }
-  }
-
-  &.dark-inverse {
-    background-color: map-get($theme-palette, dark-inverse, background-color);
-
-    &:hover {
-      background-color: map-get($theme-palette, dark-inverse, hover-background);
-    }
-
-    &:active {
-      background-color: map-get($theme-palette, dark-inverse, active-background);
     }
   }
 

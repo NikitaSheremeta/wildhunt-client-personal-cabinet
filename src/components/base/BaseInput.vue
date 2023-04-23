@@ -245,7 +245,7 @@ export default {
       display: block;
       padding: 0 56px 0 24px;
       width: 100%;
-      height: 56px;
+      height: 52px;
       color: map-get($field-palette, primary, color);
       font-family: inherit;
       font-size: $font-size-base;
@@ -303,7 +303,7 @@ export default {
       position: absolute;
       display: flex;
       align-items: center;
-      margin-top: 18px;
+      margin-top: 16px;
       gap: 8px;
       right: 24px;
     }

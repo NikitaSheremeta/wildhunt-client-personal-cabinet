@@ -33,7 +33,7 @@
             <BaseButton
               class="button"
               small
-              theme="dark-inverse"
+              theme="dark"
               :label="labels.FOOTER.SHOP_LABEL"
               :to="router.options.routes[5].path"
             />
@@ -107,7 +107,7 @@ export default {
   .row {
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 1fr 320px 1fr;
       gap: 32px;
       width: 100%;
     }
