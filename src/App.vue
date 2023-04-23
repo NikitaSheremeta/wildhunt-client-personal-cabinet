@@ -25,6 +25,12 @@ export default {
 
     const layout = computed(() => (route.meta['layout'] || 'Base') + 'Layout');
 
+    const storageMenu = localStorage.getItem('menu');
+
+    if (!storageMenu) {
+      localStorage.setItem('menu', 'active');
+    }
+
     watch(
       () => layout.value,
       async () => {

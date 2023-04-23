@@ -2,16 +2,12 @@
   <header class="header">
     <div class="container">
       <div class="row">
-        <div class="grid">
+        <div class="wrapper">
+          <BaseMenu />
+
           <BaseLogo />
 
           <BaseNavigation class="navigation" inline :list="state.navigation" />
-
-          <div class="menu-button">
-            <span class="item"></span>
-            <span class="item"></span>
-            <span class="item"></span>
-          </div>
         </div>
       </div>
     </div>
@@ -21,6 +17,7 @@
 <script>
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
+import BaseMenu from '@/components/base/BaseMenu';
 import BaseLogo from '@/components/base/BaseLogo';
 import BaseNavigation from '@/components/base/BaseNavigation';
 import { labels } from '@/utils/labels';
@@ -28,6 +25,7 @@ import { labels } from '@/utils/labels';
 export default {
   name: 'BaseHeader',
   components: {
+    BaseMenu,
     BaseLogo,
     BaseNavigation
   },
@@ -59,44 +57,24 @@ export default {
   padding: 16px 0;
   width: 100%;
 
-  .grid {
+  .wrapper {
     display: grid;
     align-items: center;
-    grid-template-columns: 120px 1fr auto;
-    gap: 48px;
+    grid-template-columns: 24px 120px 1fr;
+    gap: 24px;
     width: 100%;
 
     .navigation {
       display: flex;
       justify-content: flex-end;
     }
-
-    .menu-button {
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      padding: 24px 0;
-      cursor: pointer;
-
-      .item {
-        width: 7px;
-        height: 7px;
-        background-color: $gray-600;
-        border-radius: 50%;
-        transition: 0.2s;
-      }
-
-      &:hover {
-        .item {
-          background-color: $white;
-        }
-      }
-    }
   }
 
   @include media-breakpoint-down(sm) {
-    .grid {
-      grid-template-columns: 120px auto;
+    .wrapper {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
 
       .online,
       .navigation {

@@ -25,6 +25,7 @@ export default {
 
 <style lang="scss" scoped>
 .base-logo {
+  display: flex;
   width: 120px;
   cursor: pointer;
   transition: 0.2s;
