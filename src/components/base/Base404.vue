@@ -108,7 +108,7 @@ export default {
     .code {
       display: flex;
       align-items: center;
-      gap: 40px;
+      gap: 32px;
 
       .number {
         margin-bottom: 40px;

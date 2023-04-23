@@ -96,6 +96,10 @@ export const labels = {
     DESCRIPTION: 'Мы не можем найти нужную вам страницу',
     GO_HOME: 'Перейти на главную страницу'
   },
+  EMAILS: {
+    ADMIN: 'admin@minecraft-wildhunt.com',
+    SUPPORT: 'support@minecraft-wildhunt.com'
+  },
   FOOTER: {
     POLICY:
       'Все права защищены. Копирование материалов сайта запрещено. Мы предоставляем ознакомительный и бесплатный вариант игры Minecraft. Приобрести полную весрию можно на сайте Minecraft.net.',
