@@ -26,9 +26,9 @@ export default {
     BaseLink
   },
   props: {
-    size: {
-      type: String,
-      default: ''
+    small: {
+      type: Boolean,
+      default: false
     },
     inline: {
       type: Boolean,
@@ -42,7 +42,7 @@ export default {
   setup(props) {
     const route = useRoute();
 
-    const classes = computed(() => [props.size ? props.size : '', props.inline ? 'inline' : '']);
+    const classes = computed(() => [props.small ? 'small' : '', props.inline ? 'inline' : '']);
 
     const onClickLink = (active, event) => {
       if (active) {
@@ -75,7 +75,7 @@ export default {
     }
   }
 
-  &.xs {
+  &.small {
     .list {
       .item {
         line-height: $line-height-secondary;

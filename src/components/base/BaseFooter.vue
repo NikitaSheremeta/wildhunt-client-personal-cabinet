@@ -3,19 +3,41 @@
     <div class="container">
       <div class="row">
         <div class="grid">
-          <span class="copyright" v-text="copyright" />
+          <div class="info">
+            <div class="wrapper">
+              <h3 class="title" v-text="copyright" />
 
-          <BaseNavigation class="navigation" inline :list="state.navigation" />
-        </div>
-      </div>
+              <span class="description" v-text="labels.FOOTER.POLICY" />
+            </div>
 
-      <div class="row">
-        <div class="grid">
-          <div class="policy">
-            <template v-for="(value, index) in labels.POLICY" :key="index"> <span v-text="value" /><br /> </template>
+            <BaseOnline class="online" small />
           </div>
 
-          <BaseNavigation class="information" inline size="xs" :list="state.information" />
+          <div class="info">
+            <div class="wrapper">
+              <h3 class="title" v-text="labels.FOOTER.USEFUL_LINKS_TILE" />
+
+              <BaseNavigation class="navigation" small :list="state.navigation" />
+            </div>
+
+            <BaseSocialNetworks class="social-networks" small />
+          </div>
+
+          <div class="info">
+            <div class="wrapper">
+              <h3 class="title" v-text="labels.ROUTER.SHOP" />
+
+              <span class="description" v-text="labels.FOOTER.SHOP_DESCRIPTION" />
+            </div>
+
+            <BaseButton
+              class="button"
+              small
+              theme="dark-inverse"
+              :label="labels.FOOTER.SHOP_LABEL"
+              :to="router.options.routes[5].path"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -25,13 +47,19 @@
 <script>
 import { computed, reactive } from 'vue';
 import { useRouter } from 'vue-router';
+import BaseOnline from '@/components/base/BaseOnline';
 import BaseNavigation from '@/components/base/BaseNavigation';
+import BaseSocialNetworks from '@/components/base/BaseSocialNetworks';
+import BaseButton from '@/components/base/BaseButton';
 import { labels } from '@/utils/labels';
 
 export default {
   name: 'BaseFooter',
   components: {
-    BaseNavigation
+    BaseOnline,
+    BaseNavigation,
+    BaseSocialNetworks,
+    BaseButton
   },
   setup() {
     const router = useRouter();
@@ -39,45 +67,20 @@ export default {
     const state = reactive({
       navigation: [
         {
-          label: labels.ROUTER.SHOP,
-          to: router.options.routes[5].path
+          label: labels.ROUTER.RULES,
+          to: router.options.routes[15].path
         },
-        {
-          label: labels.ROUTER.FORUM,
-          to: router.options.routes[6].path
-        },
-        {
-          label: labels.ROUTER.NEWS,
-          to: router.options.routes[7].path
-        },
-        {
-          label: labels.ROUTER.WIKI,
-          to: router.options.routes[8].path
-        },
-        {
-          label: labels.ROUTER.FAQ,
-          to: router.options.routes[9].path
-        },
-        {
-          label: labels.ROUTER.DOWNLOAD_LAUNCHER,
-          to: router.options.routes[10].path
-        }
-      ],
-      information: [
         {
           label: labels.ROUTER.SUPPORT,
-          to: router.options.routes[11].path,
-          icon: 'chat-messages'
+          to: router.options.routes[11].path
         },
         {
           label: labels.ROUTER.TERMS,
-          to: router.options.routes[12].path,
-          icon: 'file-contract'
+          to: router.options.routes[12].path
         },
         {
           label: labels.ROUTER.PRIVACY_POLICY,
-          to: router.options.routes[13].path,
-          icon: 'file-lines'
+          to: router.options.routes[13].path
         }
       ]
     });
@@ -85,6 +88,7 @@ export default {
     const copyright = computed(() => `© ${new Date().getFullYear()} minecraft-wildhunt.com`);
 
     return {
+      router,
       state,
       copyright,
       labels
@@ -95,36 +99,55 @@ export default {
 
 <style lang="scss" scoped>
 .footer {
-  margin-top: 32px;
+  margin-top: 96px;
   padding: 32px 0;
   width: 100%;
   background-color: $gray-900;
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(2, auto);
-    width: 100%;
+  .row {
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      width: 100%;
+    }
   }
 
-  .navigation,
-  .information {
+  .info {
     display: flex;
-    justify-content: flex-end;
-    gap: 32px;
+    flex-wrap: wrap;
+
+    .title {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: $font-size-h6;
+      font-weight: $font-weight-regular;
+    }
+
+    .description {
+      color: $font-color-secondary;
+      line-height: $line-height-secondary;
+      font-size: $font-size-xs;
+    }
+
+    .social-networks {
+      display: flex;
+      align-self: end;
+    }
+
+    .online,
+    .social-networks,
+    .button {
+      margin-top: 16px;
+    }
   }
 
-  .information {
-    align-items: flex-end;
-  }
-
-  .copyright,
-  .policy {
-    color: $font-color-secondary;
-  }
-
-  .policy {
-    line-height: $line-height-secondary;
-    font-size: $font-size-xxs;
+  @include media-breakpoint-down(sm) {
+    .row {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
   }
 }
 </style>

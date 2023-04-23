@@ -2,7 +2,7 @@
   <div :class="['base-online', classes]">
     <span class="point"></span>
 
-    <span> Игроков на сервере: <b>OFF</b> </span>
+    <span> Игроков на сервере: <b>0</b> </span>
   </div>
 </template>
 

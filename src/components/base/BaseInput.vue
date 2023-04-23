@@ -324,6 +324,7 @@ export default {
   &.code-item {
     .wrapper {
       .field {
+        padding: 0;
         text-align: center;
 
         &:focus {

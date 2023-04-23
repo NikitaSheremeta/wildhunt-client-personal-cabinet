@@ -2,7 +2,7 @@
   <button :class="['base-button', classes]" :disabled="disabled" @click="onClick">
     <BaseIcon v-if="loading" spin icon="preloader" />
 
-    <BaseIcon v-if="icon" color="secondary" :icon="icon" width="14" height="14" />
+    <BaseIcon v-if="icon" color="secondary" :icon="icon" :width="computedIconSize" :height="computedIconSize" />
 
     <span v-if="label" v-text="label" />
   </button>
@@ -43,6 +43,10 @@ export default {
       type: String,
       default: ''
     },
+    iconSize: {
+      type: String,
+      default: ''
+    },
     theme: {
       type: String,
       default: 'primary'
@@ -68,6 +72,8 @@ export default {
       props.loading ? 'loading' : ''
     ]);
 
+    const computedIconSize = computed(() => (props.iconSize ? props.iconSize : '14'));
+
     const onClick = () => {
       if (props.to) {
         router.push(props.to);
@@ -76,6 +82,7 @@ export default {
 
     return {
       classes,
+      computedIconSize,
       onClick
     };
   }
@@ -112,6 +119,9 @@ $theme-palette: (
   disabled: (
     background-color: $disabled-background,
     font-color: $disabled-color
+  ),
+  transparent: (
+    background-color: transparent
   )
 );
 
@@ -192,6 +202,10 @@ $theme-palette: (
     &:active {
       background-color: map-get($theme-palette, danger, active-background);
     }
+  }
+
+  &.transparent {
+    background-color: map-get($theme-palette, transparent, background-color);
   }
 
   &.small {
