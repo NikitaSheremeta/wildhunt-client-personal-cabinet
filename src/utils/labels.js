@@ -1,5 +1,6 @@
 export const labels = {
   ROUTER: {
+    HOME: 'Главная',
     NOT_FOUND: 'Страница не найдена',
     LOGIN: 'Вход в аккаунт',
     SIGN_UP: 'Регистрация аккаунта',

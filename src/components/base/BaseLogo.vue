@@ -29,6 +29,7 @@ export default {
   width: 120px;
   cursor: pointer;
   transition: 0.2s;
+  transition-property: opacity;
 
   .image {
     width: 100%;
@@ -36,6 +37,10 @@ export default {
 
   &:hover {
     opacity: 0.56;
+  }
+
+  @include media-breakpoint-down(sm) {
+    width: 96px;
   }
 }
 </style>

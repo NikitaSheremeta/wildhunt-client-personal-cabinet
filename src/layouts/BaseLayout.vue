@@ -20,3 +20,18 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.content {
+  transition: 0.2s;
+  opacity: 1;
+  transform: translateX(0);
+
+  &.active {
+    @include media-breakpoint-down(sm) {
+      opacity: 0;
+      transform: translateX(-128px);
+    }
+  }
+}
+</style>

@@ -60,7 +60,7 @@ export default {
   .wrapper {
     display: grid;
     align-items: center;
-    grid-template-columns: 24px 120px 1fr;
+    grid-template-columns: auto 120px 1fr;
     gap: 24px;
     width: 100%;
 

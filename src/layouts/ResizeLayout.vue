@@ -32,22 +32,32 @@ $gap-width: 24px;
 $gap-width-xl: 32px;
 
 .content {
+  transition: 0.2s;
+  opacity: 1;
+  transform: translateX(0);
+
   &.active {
+    @include media-breakpoint-down(sm) {
+      opacity: 0;
+      transform: translateX(-128px);
+    }
+
     .container {
       &--external {
-        display: grid;
-
         @include media-breakpoint-only(md) {
+          display: grid;
           grid-template-columns: 240px calc(720px - $gap-width-xl);
           gap: $gap-width-xl;
         }
 
         @include media-breakpoint-only(lg) {
+          display: grid;
           grid-template-columns: 240px calc(840px - $gap-width-xl);
           gap: $gap-width-xl;
         }
 
         @include media-breakpoint-only(xl) {
+          display: grid;
           grid-template-columns: 240px calc(960px - $gap-width-xl);
           gap: $gap-width-xl;
         }
