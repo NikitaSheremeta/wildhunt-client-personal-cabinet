@@ -1,9 +1,10 @@
 <template>
   <BaseHeader />
 
-  <section class="content">
+  <section id="content" class="content">
     <router-view />
   </section>
+
   <BaseFooter />
 </template>
 
