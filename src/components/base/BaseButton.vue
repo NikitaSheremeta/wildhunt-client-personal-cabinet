@@ -95,7 +95,13 @@ export default {
       props.loading ? 'loading' : ''
     ]);
 
-    const computedIconSize = computed(() => (props.small ? '14' : '18'));
+    const computedIconSize = computed(() => {
+      if (!props.iconSize) {
+        return props.small ? '14' : '18';
+      }
+
+      return props.iconSize;
+    });
 
     const onClick = () => {
       if (props.to) {
