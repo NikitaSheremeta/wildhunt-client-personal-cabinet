@@ -44,10 +44,6 @@
         />
       </ul>
     </div>
-
-    <Teleport to="body">
-      <div v-if="flags.open" class="overlay"></div>
-    </Teleport>
   </div>
 </template>
 
@@ -189,7 +185,6 @@ export default {
   }
 
   .options {
-    z-index: 9;
     display: none;
     position: absolute;
     width: 100%;
@@ -218,7 +213,7 @@ export default {
   }
 
   &.open {
-    z-index: 999;
+    z-index: 9;
 
     .field {
       border-bottom-left-radius: 0;

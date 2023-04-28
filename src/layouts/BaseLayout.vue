@@ -23,6 +23,7 @@ export default {
 
 <style lang="scss" scoped>
 .content {
+  z-index: 9;
   transition: 0.2s;
   opacity: 1;
   transform: translateX(0);

@@ -46,19 +46,19 @@ $gap-width-xl: 32px;
       &--external {
         @include media-breakpoint-only(md) {
           display: grid;
-          grid-template-columns: 240px calc(720px - $gap-width-xl);
+          grid-template-columns: auto calc(720px - $gap-width-xl);
           gap: $gap-width-xl;
         }
 
         @include media-breakpoint-only(lg) {
           display: grid;
-          grid-template-columns: 240px calc(840px - $gap-width-xl);
+          grid-template-columns: auto calc(840px - $gap-width-xl);
           gap: $gap-width-xl;
         }
 
         @include media-breakpoint-only(xl) {
           display: grid;
-          grid-template-columns: 240px calc(960px - $gap-width-xl);
+          grid-template-columns: auto calc(960px - $gap-width-xl);
           gap: $gap-width-xl;
         }
       }
