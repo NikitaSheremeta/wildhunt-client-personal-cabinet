@@ -61,7 +61,7 @@ export default {
     display: grid;
     align-items: center;
     grid-template-columns: auto 120px 1fr;
-    gap: 24px;
+    gap: 8px;
     width: 100%;
 
     .navigation {

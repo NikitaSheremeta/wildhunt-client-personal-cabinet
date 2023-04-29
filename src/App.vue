@@ -12,6 +12,7 @@ import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import BaseLayout from '@/layouts/BaseLayout';
 import ResizeLayout from '@/layouts/ResizeLayout';
+import { magicNumbers } from '@/utils/magic-numbers';
 
 export default {
   components: {
@@ -31,6 +32,10 @@ export default {
 
     if (!storageMenu) {
       localStorage.setItem('menu', 'active');
+    }
+
+    if (window.innerWidth <= magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
+      localStorage.removeItem('menu');
     }
 
     watch(
