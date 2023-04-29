@@ -12,14 +12,6 @@
 
             <div class="wrapper">
               <BaseOnline class="online" />
-
-              <BaseLink
-                class="link"
-                :href="`mailto:${labels.EMAILS.ADMIN}`"
-                color="secondary"
-                :label="labels.EMAILS.ADMIN"
-                icon-left="envelope"
-              />
             </div>
           </div>
 
@@ -50,7 +42,6 @@
                 color="secondary"
                 :to="router.options.routes[5].path"
                 :label="labels.FOOTER.SHOP_LABEL"
-                icon-left="store"
               />
             </div>
           </div>
@@ -64,7 +55,6 @@
 import { computed, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import BaseOnline from '@/components/base/BaseOnline';
-import BaseLink from '@/components/base/BaseLink';
 import BaseNavigation from '@/components/base/BaseNavigation';
 import BaseSocialNetworks from '@/components/base/BaseSocialNetworks';
 import BaseButton from '@/components/base/BaseButton';
@@ -74,7 +64,6 @@ export default {
   name: 'BaseFooter',
   components: {
     BaseOnline,
-    BaseLink,
     BaseNavigation,
     BaseSocialNetworks,
     BaseButton
@@ -139,7 +128,6 @@ export default {
 
   .row {
     .grid {
-      z-index: 9;
       display: grid;
       grid-template-columns: 1fr 320px 1fr;
       gap: 32px;

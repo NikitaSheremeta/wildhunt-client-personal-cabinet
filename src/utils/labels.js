@@ -6,6 +6,7 @@ export const labels = {
     SIGN_UP: 'Регистрация аккаунта',
     RESET_PASSWORD: 'Восстановление аккаунта',
     SHOP: 'Донат магазин',
+    MAP: 'Карта',
     FORUM: 'Форум',
     NEWS: 'Новости',
     WIKI: 'Wiki',
