@@ -15,8 +15,6 @@ body {
   height: 100vh;
 }
 
-// Main
-
 .content {
   flex: 1 0 auto;
   padding: 16px 0;
@@ -80,4 +78,11 @@ ol > li {
   &:first-child {
     margin-top: 0;
   }
+}
+
+// Sticky block
+
+.sticky {
+  position: sticky;
+  top: 12px;
 }
