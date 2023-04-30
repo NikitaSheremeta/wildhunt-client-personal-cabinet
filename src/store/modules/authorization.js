@@ -25,8 +25,8 @@ const actions = {
       commit('SET_USER', response.data.user);
 
       return response.data;
-    } catch (err) {
-      console.log('[login]: ' + err.message);
+    } catch (error) {
+      console.log('[login]: ' + error.message);
     }
   },
   async SIGNUP({ commit }, req) {
@@ -39,8 +39,8 @@ const actions = {
       commit('SET_USER', response.data.user);
 
       return response.data;
-    } catch (err) {
-      console.log('[signup]: ' + err.message);
+    } catch (error) {
+      console.log('[signup]: ' + error.message);
     }
   },
   async LOGOUT({ commit }) {
@@ -53,8 +53,8 @@ const actions = {
       commit('SET_USER', {});
 
       return response.data;
-    } catch (err) {
-      console.log('[logout]: ' + err.message);
+    } catch (error) {
+      console.log('[logout]: ' + error.message);
     }
   },
   async FORGOT_PASSWORD(state, req) {
@@ -62,8 +62,8 @@ const actions = {
       const { data: response } = await auth.forgotPassword(req.email);
 
       return response.data;
-    } catch (err) {
-      console.log('[forgot-password]: ' + err.message);
+    } catch (error) {
+      console.log('[forgot-password]: ' + error.message);
     }
   },
   async CHECK_AUTH({ commit }) {
@@ -80,8 +80,8 @@ const actions = {
       commit('SET_USER', response.user);
 
       return response.data;
-    } catch (err) {
-      console.log('[check-auth]: ' + err.message);
+    } catch (error) {
+      console.log('[check-auth]: ' + error.message);
     } finally {
       debounce(() => commit('SET_LOADING', false))();
     }
