@@ -7,11 +7,11 @@
 </template>
 
 <script>
-import { computed, watch } from 'vue';
+import { computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import BaseLayout from '@/layouts/BaseLayout';
-import ResizeLayout from '@/layouts/ResizeLayout';
+import ResizeLayout from '@/layouts/BaseLayout';
 import { magicNumbers } from '@/utils/magic-numbers';
 
 export default {
@@ -28,15 +28,28 @@ export default {
 
     const layout = computed(() => (route.meta['layout'] || 'Base') + 'Layout');
 
-    const storageMenu = localStorage.getItem('menu');
+    onMounted(async () => {
+      const storageMenu = localStorage.getItem('menu');
 
-    if (!storageMenu) {
-      localStorage.setItem('menu', 'active');
-    }
+      // If there was no storage item before visiting the site, and this is not a mobile view
+      if (!storageMenu && window.innerWidth > magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
+        localStorage.setItem('menu', 'active');
 
-    if (window.innerWidth <= magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
-      localStorage.removeItem('menu');
-    }
+        await store.dispatch('MENU_ACTIVE', true);
+      }
+
+      // If there was storage item before visiting the site, and this is desktop view
+      if (storageMenu && window.innerWidth > magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
+        await store.dispatch('MENU_ACTIVE', storageMenu === 'active');
+      }
+
+      // If there was storage item before visiting the site, and this is a mobile view
+      if (storageMenu && window.innerWidth <= magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
+        localStorage.removeItem('menu');
+
+        await store.dispatch('MENU_ACTIVE', false);
+      }
+    });
 
     watch(
       () => layout.value,
@@ -47,7 +60,11 @@ export default {
       }
     );
 
-    return { layout, isLoading };
+    return {
+      isLoading,
+      layout,
+      route
+    };
   }
 };
 </script>

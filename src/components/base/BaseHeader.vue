@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="wrapper">
-          <BaseMenu />
+          <MenuButton />
 
           <BaseLogo />
 
@@ -17,7 +17,7 @@
 <script>
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import BaseMenu from '@/components/base/BaseMenu';
+import MenuButton from '@/components/menu/MenuButton';
 import BaseLogo from '@/components/base/BaseLogo';
 import BaseNavigation from '@/components/base/BaseNavigation';
 import { labels } from '@/utils/labels';
@@ -25,7 +25,7 @@ import { labels } from '@/utils/labels';
 export default {
   name: 'BaseHeader',
   components: {
-    BaseMenu,
+    MenuButton,
     BaseLogo,
     BaseNavigation
   },
@@ -54,6 +54,7 @@ export default {
 
 <style lang="scss" scoped>
 .header {
+  z-index: 99;
   padding: 16px 0;
   width: 100%;
 
@@ -71,6 +72,9 @@ export default {
   }
 
   @include media-breakpoint-down(sm) {
+    position: fixed;
+    background: linear-gradient(180deg, rgba(31, 33, 40, 1) 5%, rgba(255, 255, 255, 0) 100%);
+
     .wrapper {
       display: flex;
       flex-direction: row-reverse;
