@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { computed, reactive } from 'vue';
+import { computed, nextTick, onMounted, reactive } from 'vue';
 import { useStore } from 'vuex';
 import { disableAllScrollingKeepMenuScrolling, enableAllScrollingKeepMenuScrolling } from '@/helpers/scroll-handling';
 import { magicNumbers } from '@/utils/magic-numbers';
@@ -14,12 +14,10 @@ import { magicNumbers } from '@/utils/magic-numbers';
 export default {
   name: 'MenuButton',
   setup() {
-    const storageMenu = localStorage.getItem('menu');
-
     const store = useStore();
 
     const flags = reactive({
-      open: storageMenu === 'active'
+      open: false
     });
 
     const classes = computed(() => [flags.open ? 'active' : '']);
@@ -53,6 +51,12 @@ export default {
         }
       }
     };
+
+    onMounted(() => {
+      nextTick(() => {
+        flags.open = store.getters.GET_IS_MENU_ACTIVE;
+      });
+    });
 
     return {
       classes,
