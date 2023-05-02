@@ -12,6 +12,14 @@
 
             <div class="wrapper">
               <BaseOnline class="online" />
+
+              <BaseLink
+                class="link"
+                :href="`mailto:${labels.EMAILS.ADMIN}`"
+                color="secondary"
+                :label="labels.EMAILS.ADMIN"
+                icon-left="envelope"
+              />
             </div>
           </div>
 
@@ -54,6 +62,7 @@
 <script>
 import { computed, reactive } from 'vue';
 import { useRouter } from 'vue-router';
+import BaseLink from '@/components/base/BaseLink';
 import BaseOnline from '@/components/base/BaseOnline';
 import BaseNavigation from '@/components/base/BaseNavigation';
 import BaseSocialNetworks from '@/components/base/BaseSocialNetworks';
@@ -63,6 +72,7 @@ import { labels } from '@/utils/labels';
 export default {
   name: 'BaseFooter',
   components: {
+    BaseLink,
     BaseOnline,
     BaseNavigation,
     BaseSocialNetworks,

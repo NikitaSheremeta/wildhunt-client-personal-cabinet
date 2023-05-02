@@ -73,7 +73,8 @@ export default {
 
   @include media-breakpoint-down(sm) {
     position: fixed;
-    background: linear-gradient(180deg, rgba(31, 33, 40, 1) 5%, rgba(255, 255, 255, 0) 100%);
+    background-color: $midnight;
+    border-bottom: 1px solid $gray-800;
 
     .wrapper {
       display: flex;
