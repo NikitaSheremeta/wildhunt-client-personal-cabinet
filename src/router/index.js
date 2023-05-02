@@ -165,6 +165,7 @@ const routes = [
 ];
 
 const router = createRouter({
+  scrollBehavior: () => ({ top: 0 }),
   history: createWebHistory(process.env.BASE_URL),
   routes
 });
