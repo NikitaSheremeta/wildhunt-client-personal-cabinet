@@ -1,35 +1,27 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <transition name="fade-slide-up">
-        <SignupForm
-          v-if="flags.shouldDisplaySignupForm"
-          ref="signupForm"
-          v-model="state.signupFormData"
-          :loading="flags.loading"
-          :disabled="flags.disabled"
-          @submit.prevent="onSubmitSignupForm"
-        />
-      </transition>
+  <transition name="fade-slide-up">
+    <SignupForm
+      v-if="flags.shouldDisplaySignupForm"
+      ref="signupForm"
+      v-model="state.signupFormData"
+      :loading="flags.loading"
+      :disabled="flags.disabled"
+      @submit.prevent="onSubmitSignupForm"
+    />
+  </transition>
 
-      <transition name="fade-slide-up">
-        <BaseCaptcha
-          v-if="flags.shouldDisplayCaptcha"
-          :disabled="flags.disabled"
-          @success="onSuccessCaptcha"
-          @close="onCloseCaptcha"
-        />
-      </transition>
+  <transition name="fade-slide-up">
+    <BaseCaptcha
+      v-if="flags.shouldDisplayCaptcha"
+      :disabled="flags.disabled"
+      @success="onSuccessCaptcha"
+      @close="onCloseCaptcha"
+    />
+  </transition>
 
-      <transition name="fade-slide-up">
-        <BaseConfirmation
-          v-if="flags.shouldDisplayConfirmation"
-          :disabled="flags.disabled"
-          @close="onCloseConfirmation"
-        />
-      </transition>
-    </div>
-  </div>
+  <transition name="fade-slide-up">
+    <BaseConfirmation v-if="flags.shouldDisplayConfirmation" :disabled="flags.disabled" @close="onCloseConfirmation" />
+  </transition>
 </template>
 
 <script>

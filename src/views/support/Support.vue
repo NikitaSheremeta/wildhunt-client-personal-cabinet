@@ -1,27 +1,23 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <transition name="fade-slide-up">
-        <SupportForm
-          v-if="flags.shouldDisplaySupportForm"
-          ref="supportForm"
-          v-model="state.supportFormData"
-          :loading="flags.loading"
-          :disabled="flags.disabled"
-          @submit.prevent="onSubmitSupportForm"
-        />
-      </transition>
+  <transition name="fade-slide-up">
+    <SupportForm
+      v-if="flags.shouldDisplaySupportForm"
+      ref="supportForm"
+      v-model="state.supportFormData"
+      :loading="flags.loading"
+      :disabled="flags.disabled"
+      @submit.prevent="onSubmitSupportForm"
+    />
+  </transition>
 
-      <transition name="fade-slide-up">
-        <BaseCaptcha
-          v-if="flags.shouldDisplayCaptcha"
-          :disabled="flags.disabled"
-          @success="onSuccessCaptcha"
-          @close="onCloseCaptcha"
-        />
-      </transition>
-    </div>
-  </div>
+  <transition name="fade-slide-up">
+    <BaseCaptcha
+      v-if="flags.shouldDisplayCaptcha"
+      :disabled="flags.disabled"
+      @success="onSuccessCaptcha"
+      @close="onCloseCaptcha"
+    />
+  </transition>
 </template>
 
 <script>

@@ -1,18 +1,14 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <transition name="fade-slide-up">
-        <LoginForm
-          v-if="flags.shouldDisplayLoginForm"
-          ref="loginForm"
-          v-model="state.LoginFormData"
-          :loading="flags.loading"
-          :disabled="flags.disabled"
-          @submit.prevent="onSubmitLoginForm"
-        />
-      </transition>
-    </div>
-  </div>
+  <transition name="fade-slide-up">
+    <LoginForm
+      v-if="flags.shouldDisplayLoginForm"
+      ref="loginForm"
+      v-model="state.LoginFormData"
+      :loading="flags.loading"
+      :disabled="flags.disabled"
+      @submit.prevent="onSubmitLoginForm"
+    />
+  </transition>
 </template>
 
 <script>

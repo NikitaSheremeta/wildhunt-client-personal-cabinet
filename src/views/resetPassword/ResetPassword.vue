@@ -1,46 +1,38 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <transition name="fade-slide-up">
-        <ResetPasswordForm
-          v-if="flags.shouldDisplayResetPasswordForm"
-          ref="resetPasswordForm"
-          v-model="state.resetPasswordForm"
-          :loading="flags.loading"
-          :disabled="flags.disabled"
-          @submit.prevent="onSubmitResetPasswordForm"
-        />
-      </transition>
+  <transition name="fade-slide-up">
+    <ResetPasswordForm
+      v-if="flags.shouldDisplayResetPasswordForm"
+      ref="resetPasswordForm"
+      v-model="state.resetPasswordForm"
+      :loading="flags.loading"
+      :disabled="flags.disabled"
+      @submit.prevent="onSubmitResetPasswordForm"
+    />
+  </transition>
 
-      <transition name="fade-slide-up">
-        <BaseCaptcha
-          v-if="flags.shouldDisplayCaptcha"
-          :disabled="flags.disabled"
-          @success="onSuccessCaptcha"
-          @close="onCloseCaptcha"
-        />
-      </transition>
+  <transition name="fade-slide-up">
+    <BaseCaptcha
+      v-if="flags.shouldDisplayCaptcha"
+      :disabled="flags.disabled"
+      @success="onSuccessCaptcha"
+      @close="onCloseCaptcha"
+    />
+  </transition>
 
-      <transition name="fade-slide-up">
-        <BaseConfirmation
-          v-if="flags.shouldDisplayConfirmation"
-          :disabled="flags.disabled"
-          @close="onCloseConfirmation"
-        />
-      </transition>
+  <transition name="fade-slide-up">
+    <BaseConfirmation v-if="flags.shouldDisplayConfirmation" :disabled="flags.disabled" @close="onCloseConfirmation" />
+  </transition>
 
-      <transition name="fade-slide-up">
-        <NewPasswordForm
-          v-if="flags.shouldDisplayNewPasswordForm"
-          ref="newPasswordForm"
-          :loading="flags.loading"
-          :disabled="flags.disabled"
-          @submit.prevent="onSubmitNewPasswordForm"
-          @close="onCloseNewPasswordForm"
-        />
-      </transition>
-    </div>
-  </div>
+  <transition name="fade-slide-up">
+    <NewPasswordForm
+      v-if="flags.shouldDisplayNewPasswordForm"
+      ref="newPasswordForm"
+      :loading="flags.loading"
+      :disabled="flags.disabled"
+      @submit.prevent="onSubmitNewPasswordForm"
+      @close="onCloseNewPasswordForm"
+    />
+  </transition>
 </template>
 
 <script>

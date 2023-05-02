@@ -12,7 +12,9 @@
       </div>
 
       <div class="container container--content">
-        <router-view />
+        <div class="row">
+          <router-view />
+        </div>
       </div>
     </div>
   </section>
