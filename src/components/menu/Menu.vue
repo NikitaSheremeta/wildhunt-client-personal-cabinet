@@ -108,7 +108,6 @@ export default {
         display: flex;
         padding: 12px;
         border-radius: $menu-border-radius;
-        text-indent: 12px;
 
         &:hover {
           background-color: $gray-800;

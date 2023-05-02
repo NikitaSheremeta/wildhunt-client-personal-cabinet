@@ -31,12 +31,13 @@ export default {
 .base-online {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 26px;
   color: $font-color-secondary;
   font-size: $font-size-base;
 
   .point {
     position: relative;
+    margin-left: 3px;
     top: -1px;
     width: 12px;
     height: 12px;

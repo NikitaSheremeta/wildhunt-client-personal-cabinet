@@ -20,7 +20,7 @@
         <span class="number">4</span>
       </div>
 
-      <BaseButton class="button" theme="dark" :label="labels.NOT_FOUND.GO_BACK" />
+      <BaseLink class="button" color="secondary" :label="labels.NOT_FOUND.GO_BACK" icon-left="arrow-left" />
     </div>
   </div>
 </template>
@@ -28,13 +28,13 @@
 <script>
 import { computed, onMounted, ref } from 'vue';
 import Parallax from 'parallax-js';
-import BaseButton from '@/components/base/BaseButton';
+import BaseLink from '@/components/base/BaseLink';
 import { labels } from '@/utils/labels';
 
 export default {
   name: 'Base404',
   components: {
-    BaseButton
+    BaseLink
   },
   props: {
     title: {

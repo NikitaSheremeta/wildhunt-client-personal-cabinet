@@ -166,13 +166,13 @@ export default {
 
   &.icon-left {
     .base-icon {
-      margin-right: 12px;
+      margin-right: 24px;
     }
   }
 
   &.icon-right {
     .base-icon {
-      margin-left: 12px;
+      margin-left: 24px;
     }
   }
 }

@@ -166,11 +166,6 @@ export default {
       padding: 10px 0;
     }
 
-    .online {
-      padding: 2px 0;
-      margin-left: 2px;
-    }
-
     .online,
     .social-networks,
     .button {
