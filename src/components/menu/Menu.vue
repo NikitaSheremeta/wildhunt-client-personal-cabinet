@@ -2,11 +2,14 @@
   <div :class="['base-menu']">
     <ul class="list">
       <li v-for="(item, index) in state.menuList" :key="index" class="item">
-        <a :class="['link', route.path === item.to ? 'active' : '']" :href="item.to" @click="onClickLink">
-          <BaseIcon class="icon" color="secondary" :icon="item.icon" />
-
-          {{ item.label }}
-        </a>
+        <BaseLink
+          class="link"
+          :href="item.to"
+          color="secondary"
+          :label="item.label"
+          :active="route.path === item.to"
+          :icon-left="item.icon"
+        />
       </li>
     </ul>
   </div>
@@ -15,14 +18,14 @@
 <script>
 import { reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import BaseIcon from '@/components/base/BaseIcon';
+import BaseLink from '@/components/base/BaseLink';
 import { magicNumbers } from '@/utils/magic-numbers';
 import { labels } from '@/utils/labels';
 
 export default {
   name: 'Menu',
   components: {
-    BaseIcon
+    BaseLink
   },
   setup() {
     const route = useRoute();
@@ -103,12 +106,9 @@ export default {
 
       .link {
         display: flex;
-        align-items: center;
         padding: 12px;
         border-radius: $menu-border-radius;
-        color: $font-color-secondary;
-        text-decoration: none;
-        transition: 0.2s;
+        text-indent: 12px;
 
         &:hover {
           background-color: $gray-800;
@@ -118,20 +118,6 @@ export default {
             fill: map-get($link-palette, primary, color);
             stroke: map-get($link-palette, primary, color);
           }
-        }
-
-        &.active {
-          color: map-get($link-palette, primary, color);
-
-          .icon {
-            fill: map-get($link-palette, primary, color);
-            stroke: map-get($link-palette, primary, color);
-          }
-        }
-
-        .icon {
-          margin-right: 24px;
-          transition: 0.2s;
         }
       }
     }
