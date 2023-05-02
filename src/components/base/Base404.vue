@@ -1,30 +1,26 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="not-found">
-        <div class="wrapper">
-          <h2 class="title" v-text="computedTitle" />
+  <div class="not-found">
+    <div class="wrapper">
+      <h2 class="title" v-text="computedTitle" />
 
-          <p class="description" v-text="computedDescription" />
+      <p class="description" v-text="computedDescription" />
 
-          <div class="code">
-            <span class="number">4</span>
+      <div class="code">
+        <span class="number">4</span>
 
-            <div class="head">
-              <div ref="leftEye" class="eye">
-                <span data-depth="2" class="pupil"></span>
-              </div>
-              <div ref="rightEye" class="eye">
-                <span data-depth="2" class="pupil"></span>
-              </div>
-            </div>
-
-            <span class="number">4</span>
+        <div class="head">
+          <div ref="leftEye" class="eye">
+            <span data-depth="2" class="pupil"></span>
           </div>
-
-          <BaseLink class="link" href="/" color="secondary" :label="labels.NOT_FOUND.GO_HOME" />
+          <div ref="rightEye" class="eye">
+            <span data-depth="2" class="pupil"></span>
+          </div>
         </div>
+
+        <span class="number">4</span>
       </div>
+
+      <BaseButton class="button" theme="dark" :label="labels.NOT_FOUND.GO_BACK" />
     </div>
   </div>
 </template>
@@ -32,13 +28,13 @@
 <script>
 import { computed, onMounted, ref } from 'vue';
 import Parallax from 'parallax-js';
-import BaseLink from '@/components/base/BaseLink';
+import BaseButton from '@/components/base/BaseButton';
 import { labels } from '@/utils/labels';
 
 export default {
   name: 'Base404',
   components: {
-    BaseLink
+    BaseButton
   },
   props: {
     title: {
@@ -102,6 +98,7 @@ export default {
     .description {
       margin-top: 8px;
       margin-bottom: 24px;
+      color: $font-color-secondary;
       text-align: center;
     }
 
@@ -147,8 +144,51 @@ export default {
       }
     }
 
-    .link {
-      margin-top: 32px;
+    .button {
+      margin-top: 24px;
+    }
+  }
+
+  @include media-breakpoint-only(sm) {
+    .wrapper {
+      .code {
+        .number {
+          margin-top: 8px;
+          font-size: 212px;
+        }
+      }
+    }
+  }
+
+  @include media-breakpoint-down(sm) {
+    .wrapper {
+      .code {
+        .head {
+          width: 240px;
+          height: 240px;
+
+          .eye {
+            top: 119px;
+            width: 90px;
+            height: 30px;
+
+            .pupil {
+              width: 30px;
+              height: 30px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @include media-breakpoint-down(xs) {
+    .wrapper {
+      .code {
+        .number {
+          display: none;
+        }
+      }
     }
   }
 }

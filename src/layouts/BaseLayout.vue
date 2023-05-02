@@ -120,7 +120,7 @@ $gap-width-xl: 32px;
 
     &--content {
       @include media-breakpoint-down(sm) {
-        margin-top: $header-height;
+        margin-top: calc($header-height + 32px);
       }
     }
   }
@@ -138,7 +138,7 @@ $gap-width-xl: 32px;
     // Mobile setting
     @include media-breakpoint-down(sm) {
       position: fixed;
-      padding-top: $header-height;
+      padding-top: calc($header-height);
       top: 0;
       left: 0;
       width: 100%;

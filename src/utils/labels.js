@@ -97,7 +97,8 @@ export const labels = {
   NOT_FOUND: {
     TITLE: 'Страница не найдена',
     DESCRIPTION: 'Мы не можем найти нужную вам страницу',
-    GO_HOME: 'Перейти на главную страницу'
+    GO_BACK: 'Вернуться назад',
+    GO_HOME: 'На главную страницу'
   },
   EMAILS: {
     ADMIN: 'admin@minecraft-wildhunt.com',
