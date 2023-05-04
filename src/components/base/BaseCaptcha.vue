@@ -1,6 +1,6 @@
 <template>
   <div :class="['base-captcha']">
-    <BaseTitle close-button :title="labels.CAPTCHA.TITLE" @close="onClickCloseButton" />
+    <BaseTitle back-button :title="labels.CAPTCHA.TITLE" @close="onClickCloseButton" />
 
     <p class="description" v-text="labels.CAPTCHA.DESCRIPTION" />
 

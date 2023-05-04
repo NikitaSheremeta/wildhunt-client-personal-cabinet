@@ -1,7 +1,7 @@
 <template>
   <div :class="['base-title']">
     <BaseButton
-      v-if="closeButton"
+      v-if="backButton"
       class="button"
       icon-button
       theme="transparent"
@@ -29,7 +29,7 @@ export default {
       type: String,
       default: ''
     },
-    closeButton: {
+    backButton: {
       type: Boolean,
       default: false
     }

@@ -1,6 +1,6 @@
 <template>
   <form class="form">
-    <BaseTitle close-button :title="labels.NEW_PASSWORD_VIEW.TITLE" @close="onClickCloseButton" />
+    <BaseTitle back-button :title="labels.NEW_PASSWORD_VIEW.TITLE" @close="onClickCloseButton" />
 
     <BasePassword
       v-model="state.password"

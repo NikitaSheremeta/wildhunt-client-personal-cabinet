@@ -1,6 +1,6 @@
 <template>
   <div :class="['base-confirmation']">
-    <BaseTitle close-button :title="labels.CONFIRMATION.TITLE" @close="onClickCloseButton" />
+    <BaseTitle back-button :title="labels.CONFIRMATION.TITLE" @close="onClickCloseButton" />
 
     <p class="description" v-text="labels.CONFIRMATION.DESCRIPTION" />
 
