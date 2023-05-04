@@ -10,7 +10,7 @@ const routes = [
       title: labels.ROUTER.NOT_FOUND,
       layout: 'Base'
     },
-    component: () => import('@/components/base/Base404')
+    component: () => import('@/components/404')
   },
   {
     path: '/login',
@@ -50,7 +50,7 @@ const routes = [
       title: labels.ROUTER.SHOP,
       description: labels.WIP.DESCRIPTION
     },
-    component: () => import('@/components/base/Base404')
+    component: () => import('@/components/404')
   },
   {
     path: '/forum',
@@ -63,7 +63,7 @@ const routes = [
       title: labels.ROUTER.FORUM,
       description: labels.WIP.DESCRIPTION
     },
-    component: () => import('@/components/base/Base404')
+    component: () => import('@/components/404')
   },
   {
     path: '/news',
@@ -76,7 +76,7 @@ const routes = [
       title: labels.ROUTER.NEWS,
       description: labels.WIP.DESCRIPTION
     },
-    component: () => import('@/components/base/Base404')
+    component: () => import('@/components/404')
   },
   {
     path: '/wiki',
@@ -89,7 +89,7 @@ const routes = [
       title: labels.ROUTER.WIKI,
       description: labels.WIP.DESCRIPTION
     },
-    component: () => import('@/components/base/Base404')
+    component: () => import('@/components/404')
   },
   {
     path: '/faq',
@@ -102,7 +102,7 @@ const routes = [
       title: labels.ROUTER.FAQ,
       description: labels.WIP.DESCRIPTION
     },
-    component: () => import('@/components/base/Base404')
+    component: () => import('@/components/404')
   },
   {
     path: '/download-launcher',
@@ -115,7 +115,7 @@ const routes = [
       title: labels.ROUTER.DOWNLOAD_LAUNCHER,
       description: labels.WIP.DESCRIPTION
     },
-    component: () => import('@/components/base/Base404')
+    component: () => import('@/components/404')
   },
   {
     path: '/support',
@@ -160,7 +160,7 @@ const routes = [
       title: labels.ROUTER.RULES,
       layout: 'Base'
     },
-    component: () => import('@/components/base/Base404')
+    component: () => import('@/components/404')
   }
 ];
 

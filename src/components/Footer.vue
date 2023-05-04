@@ -70,7 +70,7 @@ import BaseButton from '@/components/base/BaseButton';
 import { labels } from '@/utils/labels';
 
 export default {
-  name: 'BaseFooter',
+  name: 'Footer',
   components: {
     BaseLink,
     BaseOnline,
@@ -117,7 +117,7 @@ export default {
 <style lang="scss" scoped>
 .footer {
   position: relative;
-  background-image: url('../../assets/img/grass.svg');
+  background-image: url('../assets/img/grass.svg');
   background-size: 96px;
   background-repeat: repeat-x;
   margin-top: 96px;
@@ -140,7 +140,7 @@ export default {
     .grid {
       display: grid;
       grid-template-columns: 1fr 320px 1fr;
-      gap: 32px;
+      gap: 24px;
       width: 100%;
     }
   }
@@ -170,14 +170,6 @@ export default {
     .social-networks,
     .button {
       margin-top: 16px;
-    }
-  }
-
-  @include media-breakpoint-down(md) {
-    .row {
-      .grid {
-        gap: 24px;
-      }
     }
   }
 

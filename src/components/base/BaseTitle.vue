@@ -3,10 +3,10 @@
     <BaseButton
       v-if="closeButton"
       class="button"
-      small
       icon-button
+      theme="transparent"
+      color="secondary"
       icon="arrow-left"
-      theme="dark"
       @click="onClickButton"
     />
 
@@ -54,9 +54,10 @@ export default {
 
 <style lang="scss" scoped>
 .base-title {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 
   .title {
     font-weight: $font-weight-regular;

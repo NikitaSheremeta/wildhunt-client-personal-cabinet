@@ -1,5 +1,5 @@
 <template>
-  <BaseHeader />
+  <Header />
 
   <section id="content" ref="content" :class="['content', classes]">
     <div class="container container--external">
@@ -19,24 +19,24 @@
     </div>
   </section>
 
-  <BaseFooter />
+  <Footer />
 </template>
 
 <script>
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useStore } from 'vuex';
-import BaseHeader from '@/components/base/BaseHeader';
+import Header from '@/components/Header';
 import Menu from '@/components/menu/Menu';
-import BaseFooter from '@/components/base/BaseFooter';
+import Footer from '@/components/Footer';
 import { disableAllScrollingKeepMenuScrolling, enableAllScrollingKeepMenuScrolling } from '@/helpers/scroll-handling';
 import { magicNumbers } from '@/utils/magic-numbers';
 
 export default {
   name: 'BaseLayout',
   components: {
-    BaseHeader,
+    Header,
     Menu,
-    BaseFooter
+    Footer
   },
   setup() {
     const content = ref(null);
@@ -107,8 +107,6 @@ export default {
 
 <style lang="scss" scoped>
 $header-height: 80px; // Because the header height is 80px
-$gap-width: 24px;
-$gap-width-xl: 32px;
 
 .content {
   .container {
@@ -159,23 +157,7 @@ $gap-width-xl: 32px;
   &.active {
     .container {
       &--external {
-        @include media-breakpoint-only(md) {
-          display: grid;
-          grid-template-columns: 240px calc(720px - $gap-width-xl);
-          gap: $gap-width-xl;
-        }
-
-        @include media-breakpoint-only(lg) {
-          display: grid;
-          grid-template-columns: 240px calc(840px - $gap-width-xl);
-          gap: $gap-width-xl;
-        }
-
-        @include media-breakpoint-only(xl) {
-          display: grid;
-          grid-template-columns: 240px calc(960px - $gap-width-xl);
-          gap: $gap-width-xl;
-        }
+        @include column-wrapper();
       }
 
       &--content {
