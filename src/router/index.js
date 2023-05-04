@@ -44,11 +44,8 @@ const routes = [
     name: 'Shop',
     meta: {
       title: labels.ROUTER.SHOP,
+      description: labels.WIP.DESCRIPTION,
       layout: 'Base'
-    },
-    props: {
-      title: labels.ROUTER.SHOP,
-      description: labels.WIP.DESCRIPTION
     },
     component: () => import('@/components/404')
   },
@@ -57,11 +54,8 @@ const routes = [
     name: 'Forum',
     meta: {
       title: labels.ROUTER.FORUM,
+      description: labels.WIP.DESCRIPTION,
       layout: 'Base'
-    },
-    props: {
-      title: labels.ROUTER.FORUM,
-      description: labels.WIP.DESCRIPTION
     },
     component: () => import('@/components/404')
   },
@@ -70,11 +64,8 @@ const routes = [
     name: 'News',
     meta: {
       title: labels.ROUTER.NEWS,
+      description: labels.WIP.DESCRIPTION,
       layout: 'Base'
-    },
-    props: {
-      title: labels.ROUTER.NEWS,
-      description: labels.WIP.DESCRIPTION
     },
     component: () => import('@/components/404')
   },
@@ -83,11 +74,8 @@ const routes = [
     name: 'Wiki',
     meta: {
       title: labels.ROUTER.WIKI,
+      description: labels.WIP.DESCRIPTION,
       layout: 'Base'
-    },
-    props: {
-      title: labels.ROUTER.WIKI,
-      description: labels.WIP.DESCRIPTION
     },
     component: () => import('@/components/404')
   },
@@ -96,11 +84,8 @@ const routes = [
     name: 'FAQ',
     meta: {
       title: labels.ROUTER.FAQ,
+      description: labels.WIP.DESCRIPTION,
       layout: 'Base'
-    },
-    props: {
-      title: labels.ROUTER.FAQ,
-      description: labels.WIP.DESCRIPTION
     },
     component: () => import('@/components/404')
   },
@@ -109,11 +94,8 @@ const routes = [
     name: 'Download Launcher',
     meta: {
       title: labels.ROUTER.DOWNLOAD_LAUNCHER,
+      description: labels.WIP.DESCRIPTION,
       layout: 'Base'
-    },
-    props: {
-      title: labels.ROUTER.DOWNLOAD_LAUNCHER,
-      description: labels.WIP.DESCRIPTION
     },
     component: () => import('@/components/404')
   },
@@ -131,7 +113,8 @@ const routes = [
     name: 'Terms',
     meta: {
       title: labels.ROUTER.TERMS,
-      layout: 'Resize'
+      layout: 'Base',
+      baseTitle: true
     },
     component: () => import('@/views/Terms')
   },
@@ -140,7 +123,8 @@ const routes = [
     name: 'Privacy Policy',
     meta: {
       title: labels.ROUTER.PRIVACY_POLICY,
-      layout: 'Resize'
+      layout: 'Base',
+      baseTitle: true
     },
     component: () => import('@/views/privacyPolicy')
   },
@@ -149,7 +133,8 @@ const routes = [
     name: 'Terms Support',
     meta: {
       title: labels.ROUTER.TERMS_SUPPORT,
-      layout: 'Resize'
+      layout: 'Base',
+      baseTitle: true
     },
     component: () => import('@/views/TermsSupport')
   },

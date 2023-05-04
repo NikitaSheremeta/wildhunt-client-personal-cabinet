@@ -10,8 +10,8 @@
           <BaseButton class="back-button" icon-button theme="transparent" color="secondary" icon="arrow-left" />
         </div>
 
-        <div class="wrapper">
-          <BaseTitle class="title" close-button />
+        <div :class="['wrapper', !!route.meta['baseTitle'] ? 'space-between' : 'flex-end']">
+          <BaseTitle v-if="!!route.meta['baseTitle']" class="title" back-button />
 
           <BaseNavigation class="navigation" inline :list="state.navigation" />
         </div>
@@ -22,7 +22,7 @@
 
 <script>
 import { reactive } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import MenuButton from '@/components/menu/MenuButton';
 import BaseButton from '@/components/base/BaseButton';
 import BaseLogo from '@/components/base/BaseLogo';
@@ -40,6 +40,8 @@ export default {
     BaseNavigation
   },
   setup() {
+    const route = useRoute();
+
     const router = useRouter();
 
     const state = reactive({
@@ -56,6 +58,7 @@ export default {
     });
 
     return {
+      route,
       state
     };
   }
@@ -78,12 +81,25 @@ export default {
         &:first-child {
           display: flex;
           gap: 8px;
+
+          @include media-breakpoint-down(sm) {
+            width: 100%;
+            justify-content: space-between;
+            flex-direction: row-reverse;
+          }
         }
 
         &:last-child {
           display: grid;
-          justify-content: space-between;
           grid-template-columns: auto auto;
+
+          &.space-between {
+            justify-content: space-between;
+          }
+
+          &.flex-end {
+            justify-content: flex-end;
+          }
         }
       }
     }
@@ -95,6 +111,8 @@ export default {
 
   .title {
     position: relative;
+    display: flex;
+    justify-content: flex-start;
     white-space: nowrap;
     overflow: hidden;
 
@@ -121,10 +139,19 @@ export default {
     }
   }
 
+  .navigation {
+    display: flex;
+    justify-content: flex-end;
+  }
+
   @include media-breakpoint-down(sm) {
     position: fixed;
     background-color: $midnight;
     border-bottom: 1px solid $gray-800;
+
+    .back-button {
+      display: flex;
+    }
 
     .title,
     .navigation {

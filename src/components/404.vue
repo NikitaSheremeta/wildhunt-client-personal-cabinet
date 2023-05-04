@@ -27,6 +27,7 @@
 
 <script>
 import { computed, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import Parallax from 'parallax-js';
 import BaseLink from '@/components/base/BaseLink';
 import { labels } from '@/utils/labels';
@@ -36,23 +37,17 @@ export default {
   components: {
     BaseLink
   },
-  props: {
-    title: {
-      type: String,
-      default: ''
-    },
-    description: {
-      type: String,
-      default: ''
-    }
-  },
-  setup(props) {
+  setup() {
     const leftEye = ref(null);
     const rightEye = ref(null);
 
-    const computedTitle = computed(() => (props.title ? props.title : labels.NOT_FOUND.TITLE));
+    const route = useRoute();
 
-    const computedDescription = computed(() => (props.description ? props.description : labels.NOT_FOUND.DESCRIPTION));
+    const computedTitle = computed(() => (route.meta['title'] ? route.meta['title'] : labels.NOT_FOUND.TITLE));
+
+    const computedDescription = computed(() =>
+      route.meta['description'] ? route.meta['description'] : labels.NOT_FOUND.DESCRIPTION
+    );
 
     onMounted(() => {
       const leftEyeParallax = new Parallax(leftEye.value);
