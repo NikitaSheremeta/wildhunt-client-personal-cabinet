@@ -35,12 +35,18 @@ export default {
     width: 100%;
   }
 
-  &:hover {
-    opacity: 0.56;
+  @include media-breakpoint-up(md) {
+    &:hover {
+      opacity: 0.56;
+    }
   }
 
   @include media-breakpoint-down(sm) {
     width: 96px;
+
+    &:active {
+      opacity: 0.56;
+    }
   }
 }
 </style>

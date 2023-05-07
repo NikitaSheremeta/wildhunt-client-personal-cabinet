@@ -114,13 +114,27 @@ export default {
         padding: 12px;
         border-radius: $menu-border-radius;
 
-        &:hover {
-          background-color: $gray-800;
-          color: map-get($link-palette, primary, color);
+        @include media-breakpoint-up(md) {
+          &:hover {
+            background-color: $gray-800;
+            color: map-get($link-palette, primary, color);
 
-          .icon {
-            fill: map-get($link-palette, primary, color);
-            stroke: map-get($link-palette, primary, color);
+            .icon {
+              fill: map-get($link-palette, primary, color);
+              stroke: map-get($link-palette, primary, color);
+            }
+          }
+        }
+
+        @include media-breakpoint-down(sm) {
+          &:active {
+            background-color: $gray-800;
+            color: map-get($link-palette, primary, color);
+
+            .icon {
+              fill: map-get($link-palette, primary, color);
+              stroke: map-get($link-palette, primary, color);
+            }
           }
         }
       }

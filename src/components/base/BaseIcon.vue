@@ -253,9 +253,11 @@ export default {
     stroke: $font-color-secondary;
 
     &.hover {
-      &:hover {
-        fill: $font-color-base;
-        stroke: $font-color-base;
+      @include media-breakpoint-up(md) {
+        &:hover {
+          fill: $font-color-base;
+          stroke: $font-color-base;
+        }
       }
     }
 

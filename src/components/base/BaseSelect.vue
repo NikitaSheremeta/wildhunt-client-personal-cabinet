@@ -205,8 +205,16 @@ export default {
         cursor: pointer;
         user-select: none;
 
-        &:hover {
-          background-color: map-get($field-palette, primary, hover-background-color);
+        @include media-breakpoint-up(md) {
+          &:hover {
+            background-color: map-get($field-palette, primary, hover-background-color);
+          }
+        }
+
+        @include media-breakpoint-down(sm) {
+          &:active {
+            background-color: map-get($field-palette, primary, hover-background-color);
+          }
         }
       }
     }

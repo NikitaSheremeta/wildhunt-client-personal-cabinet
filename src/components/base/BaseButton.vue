@@ -141,9 +141,17 @@ export default {
   user-select: none;
   transition: 0.2s;
 
-  &:hover,
-  &:focus {
-    background-color: map-get($button-palette, primary, hover-background);
+  @include media-breakpoint-up(md) {
+    &:hover,
+    &:focus {
+      background-color: map-get($button-palette, primary, hover-background);
+    }
+  }
+
+  @include media-breakpoint-down(sm) {
+    &:active {
+      background-color: map-get($button-palette, primary, hover-background);
+    }
   }
 
   &.full-width {
@@ -165,9 +173,19 @@ export default {
       transition: 0.2s;
     }
 
-    &:hover {
-      .base-icon {
-        fill: $white;
+    @include media-breakpoint-up(md) {
+      &:hover {
+        .base-icon {
+          fill: $white;
+        }
+      }
+    }
+
+    @include media-breakpoint-down(sm) {
+      &:active {
+        .base-icon {
+          fill: $white;
+        }
       }
     }
   }
@@ -179,8 +197,16 @@ export default {
   &.dark {
     background-color: map-get($button-palette, dark, background-color);
 
-    &:hover {
-      background-color: map-get($button-palette, dark, hover-background);
+    @include media-breakpoint-up(md) {
+      &:hover {
+        background-color: map-get($button-palette, dark, hover-background);
+      }
+    }
+
+    @include media-breakpoint-down(sm) {
+      &:active {
+        background-color: map-get($button-palette, dark, hover-background);
+      }
     }
 
     &.outline {
@@ -188,8 +214,16 @@ export default {
       background-color: transparent;
       color: $font-color-secondary;
 
-      &:hover {
-        background-color: map-get($button-palette, dark, background-color);
+      @include media-breakpoint-up(md) {
+        &:hover {
+          background-color: map-get($button-palette, dark, background-color);
+        }
+      }
+
+      @include media-breakpoint-down(sm) {
+        &:active {
+          background-color: map-get($button-palette, dark, background-color);
+        }
       }
     }
   }
@@ -197,16 +231,32 @@ export default {
   &.success {
     background-color: map-get($button-palette, success, background-color);
 
-    &:hover {
-      background-color: map-get($button-palette, success, hover-background);
+    @include media-breakpoint-up(md) {
+      &:hover {
+        background-color: map-get($button-palette, success, hover-background);
+      }
+    }
+
+    @include media-breakpoint-down(sm) {
+      &:active {
+        background-color: map-get($button-palette, success, hover-background);
+      }
     }
   }
 
   &.danger {
     background-color: map-get($button-palette, danger, background-color);
 
-    &:hover {
-      background-color: map-get($button-palette, danger, hover-background);
+    @include media-breakpoint-up(md) {
+      &:hover {
+        background-color: map-get($button-palette, danger, hover-background);
+      }
+    }
+
+    @include media-breakpoint-down(sm) {
+      &:active {
+        background-color: map-get($button-palette, danger, hover-background);
+      }
     }
   }
 
@@ -219,8 +269,10 @@ export default {
     background-color: map-get($button-palette, disabled, background-color);
     color: map-get($button-palette, disabled, font-color);
 
-    &:hover {
-      background-color: map-get($button-palette, disabled, background-color);
+    @include media-breakpoint-up(md) {
+      &:hover {
+        background-color: map-get($button-palette, disabled, background-color);
+      }
     }
   }
 

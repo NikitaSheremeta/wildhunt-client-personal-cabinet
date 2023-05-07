@@ -96,10 +96,21 @@ export default {
         }
       }
 
-      &:hover {
-        .base-icon {
-          visibility: visible;
-          opacity: 1;
+      @include media-breakpoint-up(md) {
+        &:hover {
+          .base-icon {
+            visibility: visible;
+            opacity: 1;
+          }
+        }
+      }
+
+      @include media-breakpoint-down(sm) {
+        &:active {
+          .base-icon {
+            visibility: visible;
+            opacity: 1;
+          }
         }
       }
     }

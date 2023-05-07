@@ -115,12 +115,25 @@ export default {
   &.primary {
     color: map-get($link-palette, primary, color);
 
-    &:hover {
-      color: map-get($link-palette, secondary, color);
+    @include media-breakpoint-up(md) {
+      &:hover {
+        color: map-get($link-palette, secondary, color);
 
-      .base-icon {
-        fill: map-get($link-palette, secondary, color);
-        stroke: map-get($link-palette, secondary, color);
+        .base-icon {
+          fill: map-get($link-palette, secondary, color);
+          stroke: map-get($link-palette, secondary, color);
+        }
+      }
+    }
+
+    @include media-breakpoint-down(sm) {
+      &:active {
+        color: map-get($link-palette, secondary, color);
+
+        .base-icon {
+          fill: map-get($link-palette, secondary, color);
+          stroke: map-get($link-palette, secondary, color);
+        }
       }
     }
   }
@@ -133,12 +146,25 @@ export default {
       stroke: map-get($link-palette, secondary, color);
     }
 
-    &:hover {
-      color: map-get($link-palette, primary, color);
+    @include media-breakpoint-up(md) {
+      &:hover {
+        color: map-get($link-palette, primary, color);
 
-      .base-icon {
-        fill: map-get($link-palette, primary, color);
-        stroke: map-get($link-palette, primary, color);
+        .base-icon {
+          fill: map-get($link-palette, primary, color);
+          stroke: map-get($link-palette, primary, color);
+        }
+      }
+    }
+
+    @include media-breakpoint-down(sm) {
+      &:active {
+        color: map-get($link-palette, primary, color);
+
+        .base-icon {
+          fill: map-get($link-palette, primary, color);
+          stroke: map-get($link-palette, primary, color);
+        }
       }
     }
   }

@@ -81,8 +81,6 @@ export default {
 
   &:hover {
     .item {
-      background-color: $white;
-
       &:first-child {
         transform: translateY(-2px);
       }
@@ -106,9 +104,23 @@ export default {
     }
   }
 
+  @include media-breakpoint-up(md) {
+    &:hover {
+      .item {
+        background-color: $white;
+      }
+    }
+  }
+
   @include media-breakpoint-down(sm) {
     .item {
       transition: 0.2s;
+    }
+
+    &:active {
+      .item {
+        background-color: $white;
+      }
     }
   }
 }
