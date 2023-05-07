@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import Header from '@/components/Header';
 import Menu from '@/components/menu/Menu';
@@ -95,6 +95,15 @@ export default {
       document.removeEventListener('resize', onResize);
       document.removeEventListener('scroll', onScroll);
     });
+
+    watch(
+      () => isMenuActive.value,
+      (value) => {
+        if (window.innerWidth <= magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
+          value ? disableAllScrollingKeepMenuScrolling() : enableAllScrollingKeepMenuScrolling();
+        }
+      }
+    );
 
     return {
       content,

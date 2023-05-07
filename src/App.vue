@@ -8,8 +8,8 @@
 
 <script>
 import { computed, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 import BaseLayout from '@/layouts/BaseLayout';
 import ResizeLayout from '@/layouts/BaseLayout';
 import { magicNumbers } from '@/utils/magic-numbers';
@@ -20,11 +20,13 @@ export default {
     ResizeLayout
   },
   setup() {
-    const route = useRoute();
-
     const store = useStore();
 
+    const route = useRoute();
+
     const isLoading = computed(() => store.getters.GET_IS_LOADING);
+
+    const isMenuActive = computed(() => store.getters.GET_IS_MENU_ACTIVE);
 
     const layout = computed(() => (route.meta['layout'] || 'Base') + 'Layout');
 
@@ -50,6 +52,15 @@ export default {
         await store.dispatch('MENU_ACTIVE', false);
       }
     });
+
+    watch(
+      () => isMenuActive.value,
+      async (value) => {
+        if (window.innerWidth > magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
+          value ? localStorage.setItem('menu', 'active') : localStorage.setItem('menu', 'inactive');
+        }
+      }
+    );
 
     watch(
       () => layout.value,

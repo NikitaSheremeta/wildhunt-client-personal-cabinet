@@ -6,10 +6,8 @@
 </template>
 
 <script>
-import { computed, nextTick, onMounted, reactive } from 'vue';
+import { computed, nextTick, onMounted, reactive, watch } from 'vue';
 import { useStore } from 'vuex';
-import { disableAllScrollingKeepMenuScrolling, enableAllScrollingKeepMenuScrolling } from '@/helpers/scroll-handling';
-import { magicNumbers } from '@/utils/magic-numbers';
 
 export default {
   name: 'MenuButton',
@@ -19,6 +17,8 @@ export default {
     const flags = reactive({
       open: false
     });
+
+    const isMenuActive = computed(() => store.getters.GET_IS_MENU_ACTIVE);
 
     const classes = computed(() => [flags.open ? 'active' : '']);
 
@@ -30,25 +30,13 @@ export default {
       if (flags.open) {
         contentElement.classList.add('active');
 
-        localStorage.setItem('menu', 'active');
-
         await store.dispatch('MENU_ACTIVE', true);
-
-        if (window.innerWidth <= magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
-          disableAllScrollingKeepMenuScrolling();
-        }
       }
 
       if (!flags.open) {
         contentElement.classList.remove('active');
 
-        localStorage.setItem('menu', 'inactive');
-
         await store.dispatch('MENU_ACTIVE', false);
-
-        if (window.innerWidth <= magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
-          enableAllScrollingKeepMenuScrolling();
-        }
       }
     };
 
@@ -57,6 +45,13 @@ export default {
         flags.open = store.getters.GET_IS_MENU_ACTIVE;
       });
     });
+
+    watch(
+      () => isMenuActive.value,
+      (value) => {
+        flags.open = value;
+      }
+    );
 
     return {
       classes,

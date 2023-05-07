@@ -9,6 +9,7 @@
           :label="item.label"
           :active="route.path === item.to"
           :icon-left="item.icon"
+          @click="onClickLink"
         />
       </li>
     </ul>
@@ -17,6 +18,7 @@
 
 <script>
 import { reactive } from 'vue';
+import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import BaseLink from '@/components/base/BaseLink';
 import { magicNumbers } from '@/utils/magic-numbers';
@@ -28,7 +30,10 @@ export default {
     BaseLink
   },
   setup() {
+    const store = useStore();
+
     const route = useRoute();
+
     const router = useRouter();
 
     const state = reactive({
@@ -77,9 +82,9 @@ export default {
       ]
     });
 
-    const onClickLink = () => {
+    const onClickLink = async () => {
       if (window.innerWidth <= magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
-        localStorage.setItem('menu', 'inactive');
+        await store.dispatch('MENU_ACTIVE', false);
       }
     };
 

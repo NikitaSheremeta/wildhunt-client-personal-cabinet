@@ -20,13 +20,7 @@
         <span class="number">4</span>
       </div>
 
-      <BaseLink
-        class="button"
-        color="secondary"
-        :label="labels.NOT_FOUND.GO_BACK"
-        icon-left="arrow-left"
-        @click="backButton"
-      />
+      <BaseLink class="button" color="secondary" :label="labels.NOT_FOUND.GO_BACK" @click="backButton" />
     </div>
   </div>
 </template>
