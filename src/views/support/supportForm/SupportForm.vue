@@ -63,6 +63,7 @@
 
 <script>
 import { computed, reactive } from 'vue';
+import { useRoute } from 'vue-router';
 import { useFieldsValidation } from '@/hooks/useFieldsValidation';
 import BaseTitle from '@/components/base/BaseTitle';
 import BaseInput from '@/components/base/BaseInput';
@@ -95,10 +96,12 @@ export default {
   },
   emits: ['update:model-value'],
   setup(props, context) {
+    const route = useRoute();
+
     const state = reactive({
       login: '',
       topic: '',
-      category: '',
+      category: route.params.category ?? '',
       message: ''
     });
 

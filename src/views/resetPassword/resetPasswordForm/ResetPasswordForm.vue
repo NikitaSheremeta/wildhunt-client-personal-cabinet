@@ -27,17 +27,18 @@
     <BaseLink
       class="form__account-recover"
       small
-      href="support"
       color="secondary"
       :label="labels.RESET_PASSWORD_VIEW.ACCOUNT_RECOVER"
       :disabled="disabled"
       icon-left="question"
+      @click="onClickAccountRecoverLink"
     />
   </form>
 </template>
 
 <script>
 import { computed, reactive } from 'vue';
+import { useRouter } from 'vue-router';
 import { useFieldsValidation } from '@/hooks/useFieldsValidation';
 import BaseTitle from '@/components/base/BaseTitle';
 import BaseInput from '@/components/base/BaseInput';
@@ -67,6 +68,8 @@ export default {
   },
   emits: ['update:model-value'],
   setup(props, context) {
+    const router = useRouter();
+
     const state = reactive({ email: '' });
 
     const rules = computed(() => {
@@ -86,10 +89,21 @@ export default {
       });
     };
 
+    const onClickAccountRecoverLink = () => {
+      router.push({
+        path: '/support',
+        name: 'Support',
+        params: {
+          category: labels.SUPPORT_VIEW.CATEGORY_OPTIONS[3]
+        }
+      });
+    };
+
     return {
       state,
       fieldsValidation,
       onInput,
+      onClickAccountRecoverLink,
       labels
     };
   }
