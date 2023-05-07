@@ -20,7 +20,13 @@
         <span class="number">4</span>
       </div>
 
-      <BaseLink class="button" color="secondary" :label="labels.NOT_FOUND.GO_BACK" icon-left="arrow-left" />
+      <BaseLink
+        class="button"
+        color="secondary"
+        :label="labels.NOT_FOUND.GO_BACK"
+        icon-left="arrow-left"
+        @click="backButton"
+      />
     </div>
   </div>
 </template>
@@ -28,6 +34,7 @@
 <script>
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { useBackButton } from '@/hooks/useBackButton';
 import Parallax from 'parallax-js';
 import BaseLink from '@/components/base/BaseLink';
 import { labels } from '@/utils/labels';
@@ -40,6 +47,8 @@ export default {
   setup() {
     const leftEye = ref(null);
     const rightEye = ref(null);
+
+    const backButton = useBackButton();
 
     const route = useRoute();
 
@@ -60,6 +69,7 @@ export default {
     return {
       leftEye,
       rightEye,
+      backButton,
       computedTitle,
       computedDescription,
       labels

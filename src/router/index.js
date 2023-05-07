@@ -1,8 +1,19 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { labels } from '@/utils/labels';
+import store from '@/store';
 
 const routes = [
-  { path: '/', redirect: '/login' },
+  {
+    path: '/',
+    name: 'Home',
+    redirect: (to) => {
+      return {
+        path: '/login',
+        name: 'Login',
+        ...to.params
+      };
+    }
+  },
   {
     path: '/:pathMatch(.*)*',
     name: 'Not Found',
@@ -151,14 +162,16 @@ const routes = [
 
 const router = createRouter({
   scrollBehavior: () => ({ top: 0 }),
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from) => {
   document.title = to.meta.title ? to.meta.title : 'Minecraft Wild Hunt - Личный кабинет';
 
-  next();
+  if (to.path !== '/login' && (to.params.back === undefined || !to.params.back)) {
+    await store.dispatch('ADD_HISTORY_ITEM', from.fullPath);
+  }
 });
 
 export default router;

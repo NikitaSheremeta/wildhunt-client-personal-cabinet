@@ -17,6 +17,7 @@
 <script>
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { useBackButton } from '@/hooks/useBackButton';
 import BaseButton from '@/components/base/BaseButton';
 
 export default {
@@ -38,9 +39,13 @@ export default {
   setup(props, context) {
     const route = useRoute();
 
+    const backButton = useBackButton();
+
     const computedTitle = computed(() => (props.title ? props.title : route.meta['title']));
 
     const onClickButton = () => {
+      backButton();
+
       context.emit('close');
     };
 

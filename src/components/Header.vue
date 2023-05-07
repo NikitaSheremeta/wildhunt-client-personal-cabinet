@@ -7,7 +7,15 @@
 
           <BaseLogo />
 
-          <BaseButton class="back-button" icon-button theme="transparent" color="secondary" icon="arrow-left" />
+          <BaseButton
+            v-if="shouldShowBackButton"
+            class="back-button"
+            icon-button
+            theme="transparent"
+            color="secondary"
+            icon="arrow-left"
+            @click="backButton"
+          />
         </div>
 
         <div :class="['wrapper', !!route.meta['baseTitle'] ? 'space-between' : 'flex-end']">
@@ -21,8 +29,10 @@
 </template>
 
 <script>
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
+import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
+import { useBackButton } from '@/hooks/useBackButton';
 import MenuButton from '@/components/menu/MenuButton';
 import BaseButton from '@/components/base/BaseButton';
 import BaseLogo from '@/components/base/BaseLogo';
@@ -40,9 +50,15 @@ export default {
     BaseNavigation
   },
   setup() {
+    const store = useStore();
+
     const route = useRoute();
 
     const router = useRouter();
+
+    const backButton = useBackButton();
+
+    const shouldShowBackButton = computed(() => Boolean(store.getters.GET_HISTORY.length));
 
     const state = reactive({
       navigation: [
@@ -59,6 +75,8 @@ export default {
 
     return {
       route,
+      backButton,
+      shouldShowBackButton,
       state
     };
   }

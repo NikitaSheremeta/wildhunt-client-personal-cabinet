@@ -1,5 +1,5 @@
 <template>
-  <a :class="['base-link', classes]" :href="href" :target="target">
+  <router-link :class="['base-link', classes]" :to="href" :target="target">
     <BaseIcon v-if="iconLeft" :icon="iconLeft" :width="computedIconSize" :height="computedIconSize" />
 
     <template v-if="label">
@@ -9,7 +9,7 @@
     <span v-if="active" class="point" />
 
     <BaseIcon v-if="iconRight" :icon="iconRight" :width="computedIconSize" :height="computedIconSize" />
-  </a>
+  </router-link>
 </template>
 
 <script>
