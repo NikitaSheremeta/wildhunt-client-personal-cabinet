@@ -173,12 +173,32 @@ export default {
     user-select: none;
     @include field;
 
+    @include media-breakpoint-down(xxs) {
+      .value {
+        position: absolute;
+        max-width: 220px;
+        white-space: nowrap;
+        overflow: hidden;
+
+        &:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 24px;
+          height: 100%;
+          background: linear-gradient(270deg, rgba(47, 50, 59, 1) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+      }
+    }
+
     .placeholder {
       color: map-get($field-palette, primary, placeholder-color);
     }
 
     .icon {
       display: flex;
+      margin-left: auto;
       align-items: center;
       gap: 12px;
     }
