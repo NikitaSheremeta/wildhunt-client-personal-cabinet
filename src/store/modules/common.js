@@ -1,16 +1,16 @@
 const state = {
-  isMenuActive: false,
+  isSideMenuActive: false,
   history: []
 };
 
 const getters = {
-  GET_IS_MENU_ACTIVE: (state) => state.isMenuActive,
+  GET_IS_SIDE_MENU_ACTIVE: (state) => state.isSideMenuActive,
   GET_HISTORY: (state) => state.history
 };
 
 const actions = {
-  async MENU_ACTIVE({ commit }, req) {
-    commit('SET_MENU_ACTIVE', req);
+  async SIDE_MENU_ACTIVE({ commit }, req) {
+    commit('SET_SIDE_MENU_ACTIVE', req);
   },
   async ADD_HISTORY_ITEM({ commit }, req) {
     commit('ADD_HISTORY_ITEM', req);
@@ -21,7 +21,7 @@ const actions = {
 };
 
 const mutations = {
-  SET_MENU_ACTIVE: (state, params) => (state.isMenuActive = params),
+  SET_SIDE_MENU_ACTIVE: (state, params) => (state.isSideMenuActive = params),
   ADD_HISTORY_ITEM: (state, params) => state.history.push(params),
   REMOVE_HISTORY_ITEM: (state) => state.history.pop()
 };

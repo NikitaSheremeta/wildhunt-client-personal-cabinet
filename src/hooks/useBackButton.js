@@ -22,13 +22,13 @@ export function useBackButton() {
       });
 
       await router.push({
-        path: previousRoutePath,
         name: previousRouteName,
         params: {
-          back: true
+          back: 'true'
         }
       });
 
+      await store.dispatch('SIDE_MENU_ACTIVE', false);
       await store.dispatch('REMOVE_HISTORY_ITEM');
     }
   };

@@ -70,7 +70,7 @@ import BaseButton from '@/components/base/BaseButton';
 import { labels } from '@/utils/labels';
 
 export default {
-  name: 'Footer',
+  name: 'DefaultFooter',
   components: {
     BaseLink,
     BaseOnline,
@@ -117,7 +117,7 @@ export default {
 <style lang="scss" scoped>
 .footer {
   position: relative;
-  background-image: url('../assets/img/grass.svg');
+  background-image: url('../../assets/img/grass.svg');
   background-size: 96px;
   background-repeat: repeat-x;
   margin-top: 96px;

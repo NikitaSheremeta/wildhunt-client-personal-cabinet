@@ -26,7 +26,7 @@ export default {
 
     const isLoading = computed(() => store.getters.GET_IS_LOADING);
 
-    const isMenuActive = computed(() => store.getters.GET_IS_MENU_ACTIVE);
+    const isSideMenuActive = computed(() => store.getters.GET_IS_SIDE_MENU_ACTIVE);
 
     const layout = computed(() => (route.meta['layout'] || 'Base') + 'Layout');
 
@@ -37,24 +37,24 @@ export default {
       if (!storageMenu && window.innerWidth > magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
         localStorage.setItem('menu', 'active');
 
-        await store.dispatch('MENU_ACTIVE', true);
+        await store.dispatch('SIDE_MENU_ACTIVE', true);
       }
 
       // If there was storage item before visiting the site, and this is desktop view
       if (storageMenu && window.innerWidth > magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
-        await store.dispatch('MENU_ACTIVE', storageMenu === 'active');
+        await store.dispatch('SIDE_MENU_ACTIVE', storageMenu === 'active');
       }
 
       // If there was storage item before visiting the site, and this is a mobile view
       if (storageMenu && window.innerWidth <= magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
         localStorage.removeItem('menu');
 
-        await store.dispatch('MENU_ACTIVE', false);
+        await store.dispatch('SIDE_MENU_ACTIVE', false);
       }
     });
 
     watch(
-      () => isMenuActive.value,
+      () => isSideMenuActive.value,
       async (value) => {
         if (window.innerWidth > magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
           value ? localStorage.setItem('menu', 'active') : localStorage.setItem('menu', 'inactive');

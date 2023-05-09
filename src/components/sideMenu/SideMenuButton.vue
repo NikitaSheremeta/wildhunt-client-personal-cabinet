@@ -1,5 +1,5 @@
 <template>
-  <div :class="['menu-button', classes]" @click="onClick">
+  <div :class="['side-menu-button', classes]" @click="onClick">
     <span class="item"></span>
     <span class="item"></span>
   </div>
@@ -10,7 +10,7 @@ import { computed, nextTick, onMounted, reactive, watch } from 'vue';
 import { useStore } from 'vuex';
 
 export default {
-  name: 'MenuButton',
+  name: 'SideMenuButton',
   setup() {
     const store = useStore();
 
@@ -18,7 +18,7 @@ export default {
       open: false
     });
 
-    const isMenuActive = computed(() => store.getters.GET_IS_MENU_ACTIVE);
+    const isSideMenuActive = computed(() => store.getters.GET_IS_SIDE_MENU_ACTIVE);
 
     const classes = computed(() => [flags.open ? 'active' : '']);
 
@@ -30,24 +30,24 @@ export default {
       if (flags.open) {
         contentElement.classList.add('active');
 
-        await store.dispatch('MENU_ACTIVE', true);
+        await store.dispatch('SIDE_MENU_ACTIVE', true);
       }
 
       if (!flags.open) {
         contentElement.classList.remove('active');
 
-        await store.dispatch('MENU_ACTIVE', false);
+        await store.dispatch('SIDE_MENU_ACTIVE', false);
       }
     };
 
     onMounted(() => {
       nextTick(() => {
-        flags.open = store.getters.GET_IS_MENU_ACTIVE;
+        flags.open = isSideMenuActive.value;
       });
     });
 
     watch(
-      () => isMenuActive.value,
+      () => isSideMenuActive.value,
       (value) => {
         flags.open = value;
       }
@@ -62,7 +62,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.menu-button {
+.side-menu-button {
   display: flex;
   flex-direction: column;
   gap: 8px;

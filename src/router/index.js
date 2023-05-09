@@ -6,11 +6,9 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    redirect: (to) => {
+    redirect: () => {
       return {
-        path: '/login',
-        name: 'Login',
-        ...to.params
+        path: '/login'
       };
     }
   },
@@ -21,7 +19,7 @@ const routes = [
       title: labels.ROUTER.NOT_FOUND,
       layout: 'Base'
     },
-    component: () => import('@/components/404')
+    component: () => import('@/components/default/DefaultNotFound')
   },
   {
     path: '/login',
@@ -58,7 +56,7 @@ const routes = [
       description: labels.WIP.DESCRIPTION,
       layout: 'Base'
     },
-    component: () => import('@/components/404')
+    component: () => import('@/components/default/DefaultNotFound')
   },
   {
     path: '/forum',
@@ -68,7 +66,7 @@ const routes = [
       description: labels.WIP.DESCRIPTION,
       layout: 'Base'
     },
-    component: () => import('@/components/404')
+    component: () => import('@/components/default/DefaultNotFound')
   },
   {
     path: '/news',
@@ -78,7 +76,7 @@ const routes = [
       description: labels.WIP.DESCRIPTION,
       layout: 'Base'
     },
-    component: () => import('@/components/404')
+    component: () => import('@/components/default/DefaultNotFound')
   },
   {
     path: '/wiki',
@@ -88,7 +86,7 @@ const routes = [
       description: labels.WIP.DESCRIPTION,
       layout: 'Base'
     },
-    component: () => import('@/components/404')
+    component: () => import('@/components/default/DefaultNotFound')
   },
   {
     path: '/faq',
@@ -98,7 +96,7 @@ const routes = [
       description: labels.WIP.DESCRIPTION,
       layout: 'Base'
     },
-    component: () => import('@/components/404')
+    component: () => import('@/components/default/DefaultNotFound')
   },
   {
     path: '/download-launcher',
@@ -108,7 +106,7 @@ const routes = [
       description: labels.WIP.DESCRIPTION,
       layout: 'Base'
     },
-    component: () => import('@/components/404')
+    component: () => import('@/components/default/DefaultNotFound')
   },
   {
     path: '/support',
@@ -156,7 +154,7 @@ const routes = [
       title: labels.ROUTER.RULES,
       layout: 'Base'
     },
-    component: () => import('@/components/404')
+    component: () => import('@/components/default/DefaultNotFound')
   }
 ];
 
@@ -169,7 +167,7 @@ const router = createRouter({
 router.beforeEach(async (to, from) => {
   document.title = to.meta.title ? to.meta.title : 'Minecraft Wild Hunt - Личный кабинет';
 
-  if (to.path !== '/login' && (to.params.back === undefined || !to.params.back)) {
+  if (to.path !== '/login' && to.params.back === undefined) {
     await store.dispatch('ADD_HISTORY_ITEM', from.fullPath);
   }
 });

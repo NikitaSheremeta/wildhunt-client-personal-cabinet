@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="wrapper">
-          <MenuButton />
+          <SideMenuButton />
 
           <BaseLogo />
 
@@ -33,7 +33,7 @@ import { computed, reactive } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import { useBackButton } from '@/hooks/useBackButton';
-import MenuButton from '@/components/menu/MenuButton';
+import SideMenuButton from '@/components/sideMenu/SideMenuButton';
 import BaseButton from '@/components/base/BaseButton';
 import BaseLogo from '@/components/base/BaseLogo';
 import BaseTitle from '@/components/base/BaseTitle';
@@ -41,9 +41,9 @@ import BaseNavigation from '@/components/base/BaseNavigation';
 import { labels } from '@/utils/labels';
 
 export default {
-  name: 'Header',
+  name: 'DefaultHeader',
   components: {
-    MenuButton,
+    SideMenuButton,
     BaseLogo,
     BaseButton,
     BaseTitle,

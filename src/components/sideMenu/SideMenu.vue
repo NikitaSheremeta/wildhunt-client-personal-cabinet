@@ -1,5 +1,5 @@
 <template>
-  <div :class="['base-menu']">
+  <div :class="['side-menu']">
     <ul class="list">
       <li v-for="(item, index) in state.menuList" :key="index" class="item">
         <BaseLink
@@ -25,7 +25,7 @@ import { magicNumbers } from '@/utils/magic-numbers';
 import { labels } from '@/utils/labels';
 
 export default {
-  name: 'Menu',
+  name: 'SideMenu',
   components: {
     BaseLink
   },
@@ -84,7 +84,7 @@ export default {
 
     const onClickLink = async () => {
       if (window.innerWidth <= magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
-        await store.dispatch('MENU_ACTIVE', false);
+        await store.dispatch('SIDE_MENU_ACTIVE', false);
       }
     };
 
@@ -98,7 +98,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.base-menu {
+.side-menu {
   width: 100%;
 
   .list {

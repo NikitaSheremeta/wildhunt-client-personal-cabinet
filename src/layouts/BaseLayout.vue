@@ -1,12 +1,12 @@
 <template>
-  <Header />
+  <DefaultHeader />
 
   <section id="content" ref="content" :class="['content', classes]">
     <div class="container container--external">
       <div class="aside">
         <div ref="stickyBlock" class="container container--aside">
           <div class="row">
-            <Menu id="menu" class="menu" />
+            <SideMenu id="side-menu" class="side-menu" />
           </div>
         </div>
       </div>
@@ -19,24 +19,24 @@
     </div>
   </section>
 
-  <Footer />
+  <DefaultFooter />
 </template>
 
 <script>
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
-import Header from '@/components/Header';
-import Menu from '@/components/menu/Menu';
-import Footer from '@/components/Footer';
+import DefaultHeader from '@/components/default/DefaultHeader';
+import SideMenu from '@/components/sideMenu/SideMenu';
+import DefaultFooter from '@/components/default/DefaultFooter';
 import { disableAllScrollingKeepMenuScrolling, enableAllScrollingKeepMenuScrolling } from '@/helpers/scroll-handling';
 import { magicNumbers } from '@/utils/magic-numbers';
 
 export default {
   name: 'BaseLayout',
   components: {
-    Header,
-    Menu,
-    Footer
+    DefaultHeader,
+    SideMenu,
+    DefaultFooter
   },
   setup() {
     const content = ref(null);
@@ -44,12 +44,12 @@ export default {
 
     const store = useStore();
 
-    const isMenuActive = computed(() => store.getters.GET_IS_MENU_ACTIVE);
+    const isSideMenuActive = computed(() => store.getters.GET_IS_SIDE_MENU_ACTIVE);
 
-    const classes = computed(() => [isMenuActive.value ? 'active' : '']);
+    const classes = computed(() => [isSideMenuActive.value ? 'active' : '']);
 
     const onScroll = () => {
-      if (isMenuActive.value) {
+      if (isSideMenuActive.value) {
         if (window.scrollY >= content.value.offsetTop) {
           stickyBlock.value.classList.add('sticky');
         }
@@ -71,13 +71,13 @@ export default {
         document.removeEventListener('scroll', onScroll);
       }
 
-      // If the menu is open and user switches from desktop view to mobile view
-      if (isMenuActive.value && window.innerWidth <= magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
+      // If the sideMenu is open and user switches from desktop view to mobile view
+      if (isSideMenuActive.value && window.innerWidth <= magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
         disableAllScrollingKeepMenuScrolling();
       }
 
-      // If the menu is open and user switches from mobile view to desktop view
-      if (isMenuActive.value && window.innerWidth > magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
+      // If the sideMenu is open and user switches from mobile view to desktop view
+      if (isSideMenuActive.value && window.innerWidth > magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
         enableAllScrollingKeepMenuScrolling();
       }
     };
@@ -97,7 +97,7 @@ export default {
     });
 
     watch(
-      () => isMenuActive.value,
+      () => isSideMenuActive.value,
       (value) => {
         if (window.innerWidth <= magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
           value ? disableAllScrollingKeepMenuScrolling() : enableAllScrollingKeepMenuScrolling();
@@ -157,7 +157,7 @@ $header-height: 80px; // Because the header height is 80px
       transition: 0.2s;
       transition-property: transform, opacity;
 
-      .menu {
+      .side-menu {
         padding: 24px 0;
       }
     }
