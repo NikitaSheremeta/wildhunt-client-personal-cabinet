@@ -3,8 +3,9 @@
     <BaseButton
       v-if="backButton"
       class="button"
+      small
       icon-button
-      theme="transparent"
+      theme="dark"
       color="secondary"
       icon="arrow-left"
       @click="onClickButton"
@@ -62,7 +63,7 @@ export default {
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
-  gap: 12px;
+  gap: 24px;
 
   .title {
     font-weight: $font-weight-regular;

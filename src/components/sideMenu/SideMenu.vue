@@ -70,6 +70,11 @@ export default {
           icon: 'question'
         },
         {
+          to: router.options.routes[11].path,
+          label: labels.ROUTER.SUPPORT,
+          icon: 'info'
+        },
+        {
           to: router.options.routes[9].path,
           label: labels.ROUTER.FAQ,
           icon: 'play'

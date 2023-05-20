@@ -129,7 +129,6 @@ export default {
 
   .title {
     position: relative;
-    display: flex;
     justify-content: flex-start;
     white-space: nowrap;
     overflow: hidden;

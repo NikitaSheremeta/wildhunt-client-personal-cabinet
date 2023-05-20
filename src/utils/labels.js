@@ -12,7 +12,7 @@ export const labels = {
     WIKI: 'Wiki',
     FAQ: 'Как начать играть',
     DOWNLOAD_LAUNCHER: 'Скачать лаунчер',
-    SUPPORT: 'Техническая поддержка',
+    SUPPORT: 'Support',
     RULES: 'Правила игры на серверах',
     TERMS: 'Пользовательское соглашение',
     PRIVACY_POLICY: 'Политика конфиденциальности',

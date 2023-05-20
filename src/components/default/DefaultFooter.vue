@@ -84,12 +84,8 @@ export default {
     const state = reactive({
       navigation: [
         {
-          label: labels.ROUTER.RULES,
-          to: router.options.routes[15].path
-        },
-        {
-          label: labels.ROUTER.SUPPORT,
-          to: router.options.routes[11].path
+          label: labels.ROUTER.TERMS_SUPPORT,
+          to: router.options.routes[14].path
         },
         {
           label: labels.ROUTER.TERMS,
@@ -98,6 +94,10 @@ export default {
         {
           label: labels.ROUTER.PRIVACY_POLICY,
           to: router.options.routes[13].path
+        },
+        {
+          label: labels.ROUTER.RULES,
+          to: router.options.routes[15].path
         }
       ]
     });
