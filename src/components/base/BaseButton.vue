@@ -97,7 +97,7 @@ export default {
 
     const computedIconSize = computed(() => {
       if (!props.iconSize) {
-        return props.small ? '14' : '18';
+        return props.small ? '16' : '18';
       }
 
       return props.iconSize;
@@ -165,8 +165,8 @@ export default {
     border-radius: 50%;
 
     &.small {
-      width: 32px;
-      height: 32px;
+      width: 40px;
+      height: 40px;
     }
 
     .base-icon {
