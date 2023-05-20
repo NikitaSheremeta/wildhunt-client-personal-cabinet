@@ -194,11 +194,21 @@ export default {
     .base-icon {
       margin-right: 24px;
     }
+
+    &.small {
+      .base-icon {
+        margin-right: 16px;
+      }
+    }
   }
 
   &.icon-right {
     .base-icon {
       margin-left: 24px;
+    }
+
+    &.small {
+      margin-left: 16px;
     }
   }
 }
