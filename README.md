@@ -20,14 +20,9 @@ npm run build
 npm run lint
 ```
 
-### Build docker image
+### Run docker compose (so far only production mode)
 ```
-docker build . -t wildhunt-client-personal-cabinet
-```
-  
-### Run docker image
-```
-docker run -d -p 8080:80 wildhunt-client-personal-cabinet
+docker-compose -f docker-compose.yml up -d
 ```
 
 ### Notes
