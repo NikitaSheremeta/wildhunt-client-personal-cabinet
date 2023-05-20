@@ -80,6 +80,15 @@ ol > li {
   }
 }
 
+ul.numbered {
+  list-style: none;
+
+  li {
+    display: flex;
+    gap: 4px;
+  }
+}
+
 .sticky {
   position: sticky;
   top: 12px;

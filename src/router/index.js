@@ -118,14 +118,14 @@ const routes = [
     component: () => import('@/views/support/Support')
   },
   {
-    path: '/terms',
-    name: 'Terms',
+    path: '/terms-use',
+    name: 'Terms Use',
     meta: {
       title: labels.ROUTER.TERMS,
       layout: 'Base',
       baseTitle: true
     },
-    component: () => import('@/views/Terms')
+    component: () => import('@/views/TermsUse')
   },
   {
     path: '/privacy-policy',
@@ -135,7 +135,7 @@ const routes = [
       layout: 'Base',
       baseTitle: true
     },
-    component: () => import('@/views/privacyPolicy')
+    component: () => import('@/views/PrivacyPolicy')
   },
   {
     path: '/terms-support',
@@ -148,13 +148,14 @@ const routes = [
     component: () => import('@/views/TermsSupport')
   },
   {
-    path: '/rules',
-    name: 'Rules',
+    path: '/game-rules',
+    name: 'Game Rules',
     meta: {
       title: labels.ROUTER.RULES,
-      layout: 'Base'
+      layout: 'Base',
+      baseTitle: true
     },
-    component: () => import('@/components/default/DefaultNotFound')
+    component: () => import('@/views/GameRules')
   }
 ];
 
