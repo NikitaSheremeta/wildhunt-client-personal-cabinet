@@ -1,15 +1,7 @@
 <template>
   <div :class="['base-social-networks']">
     <template v-for="(item, index) in state.socialNetworks" :key="index">
-      <BaseButton
-        class="button"
-        icon-button
-        theme="transparent"
-        color="secondary"
-        :to="item.to"
-        :icon="item.icon"
-        icon-size="20"
-      />
+      <BaseButton class="button" icon-button theme="transparent" color="secondary" :to="item.to" :icon="item.icon" />
     </template>
   </div>
 </template>
