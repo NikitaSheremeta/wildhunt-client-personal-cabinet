@@ -33,3 +33,6 @@ build
 build/*
 # Nuxt generate
 dist
+
+# Newrelic file
+public/js/newrelic.js
