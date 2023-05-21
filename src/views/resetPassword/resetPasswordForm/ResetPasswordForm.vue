@@ -30,7 +30,6 @@
       color="secondary"
       :label="labels.RESET_PASSWORD_VIEW.ACCOUNT_RECOVER"
       :disabled="disabled"
-      icon-left="question"
       @click="onClickAccountRecoverLink"
     />
   </form>
@@ -117,7 +116,6 @@ export default {
   &__description {
     margin-top: 12px;
     margin-bottom: 0;
-    color: $font-color-secondary;
   }
 
   &__field {

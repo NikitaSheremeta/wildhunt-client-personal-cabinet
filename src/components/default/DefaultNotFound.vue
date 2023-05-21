@@ -97,7 +97,6 @@ export default {
     .description {
       margin-top: 8px;
       margin-bottom: 24px;
-      color: $font-color-secondary;
       text-align: center;
     }
 

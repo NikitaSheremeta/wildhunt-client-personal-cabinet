@@ -34,7 +34,6 @@
       color="secondary"
       :label="labels.LOGIN_VIEW.RESET_PASSWORD"
       :disabled="disabled"
-      icon-left="question"
     />
   </form>
 </template>
