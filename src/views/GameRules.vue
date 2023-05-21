@@ -1,5 +1,7 @@
 <template>
   <div class="article">
+    <BaseTitle class="title" />
+
     <section>
       <h3>1. Общение в публичных чатах</h3>
 
@@ -219,7 +221,11 @@
 </template>
 
 <script>
+import BaseTitle from '@/components/base/BaseTitle';
 export default {
-  name: 'GameRules'
+  name: 'GameRules',
+  components: {
+    BaseTitle
+  }
 };
 </script>

@@ -1,5 +1,7 @@
 <template>
   <div class="article">
+    <BaseTitle class="title" />
+
     <section>
       <article>
         <h3>
@@ -127,7 +129,12 @@
 </template>
 
 <script>
+import BaseTitle from '@/components/base/BaseTitle';
+
 export default {
-  name: 'PrivacyPolicy'
+  name: 'PrivacyPolicy',
+  components: {
+    BaseTitle
+  }
 };
 </script>

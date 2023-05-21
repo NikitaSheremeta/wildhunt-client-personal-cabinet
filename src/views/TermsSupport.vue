@@ -1,5 +1,7 @@
 <template>
   <div class="article">
+    <BaseTitle class="title" />
+
     <section>
       <h3>Правила предоставления технической поддержки</h3>
 
@@ -63,7 +65,12 @@
 </template>
 
 <script>
+import BaseTitle from '@/components/base/BaseTitle';
+
 export default {
-  name: 'TermsSupport'
+  name: 'TermsSupport',
+  components: {
+    BaseTitle
+  }
 };
 </script>

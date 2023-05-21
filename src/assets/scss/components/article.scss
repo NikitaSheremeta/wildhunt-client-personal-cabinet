@@ -1,10 +1,19 @@
 .article {
   width: 100%;
 
+  .title {
+    display: none;
+    margin: 0 0 0 12px;
+
+    @include media-breakpoint-down(sm) {
+      display: block;
+    }
+  }
+
   section {
     margin-top: 32px;
 
-    &:first-child {
+    &:nth-child(2) {
       margin-top: 0;
     }
 
@@ -29,7 +38,7 @@
         margin: 0;
       }
 
-        ul, ol {
+      ul, ol {
         padding-left: 20px;
       }
 
@@ -40,6 +49,12 @@
       span.sub-text {
         display: block;
         color: $font-color-secondary;
+      }
+    }
+
+    @include media-breakpoint-down(sm) {
+      &:nth-child(2) {
+        margin-top: 12px;
       }
     }
   }
