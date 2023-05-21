@@ -3,7 +3,6 @@
 
   .title {
     display: none;
-    margin: 0 0 0 12px;
 
     @include media-breakpoint-down(sm) {
       display: block;
@@ -19,7 +18,6 @@
 
     h1, h2, h3, h4, h5, h6  {
       margin-top: 0;
-      margin-left: 12px;
       margin-bottom: 12px;
       font-weight: $font-weight-regular;
     }

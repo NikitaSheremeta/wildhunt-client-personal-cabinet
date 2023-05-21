@@ -68,7 +68,7 @@ export const labels = {
     ACCOUNT_RECOVER: 'Утрачен доступ к электронной почте?'
   },
   NEW_PASSWORD_VIEW: {
-    TITLE: 'Создание нового пароля',
+    TITLE: 'Введите новый пароль',
     SUBMIT: 'Сохранить новый пароль'
   },
   SUPPORT_VIEW: {

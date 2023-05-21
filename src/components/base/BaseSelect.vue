@@ -1,6 +1,6 @@
 <template>
   <div :class="['base-select', classes]" :tabindex="tabindex" @blur="onBlur">
-    <div class="field" @click="onClickSelect">
+    <div class="wrapper" @click="onClickSelect">
       <template v-if="placeholder && !state.selected">
         <span class="placeholder" v-text="placeholder" />
       </template>
@@ -163,7 +163,7 @@ export default {
   font-style: normal;
   outline: none;
 
-  .field {
+  .wrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -174,21 +174,11 @@ export default {
     @include field;
 
     @include media-breakpoint-down(xxs) {
-      .value {
-        position: absolute;
-        max-width: 220px;
+      .value,
+      .placeholder {
         white-space: nowrap;
         overflow: hidden;
-
-        &:before {
-          content: '';
-          position: absolute;
-          top: 0;
-          right: 0;
-          width: 24px;
-          height: 100%;
-          background: linear-gradient(270deg, rgba(47, 50, 59, 1) 0%, rgba(255, 255, 255, 0) 100%);
-        }
+        @include truncate;
       }
     }
 
@@ -198,9 +188,9 @@ export default {
 
     .icon {
       display: flex;
-      margin-left: auto;
       align-items: center;
       gap: 12px;
+      margin-left: 12px;
     }
   }
 
@@ -243,7 +233,7 @@ export default {
   &.open {
     z-index: 9;
 
-    .field {
+    .wrapper {
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
 
@@ -276,7 +266,7 @@ export default {
   }
 
   &.disabled {
-    .field {
+    .wrapper {
       background-color: map-get($field-palette, disabled, background-color);
       cursor: default;
 

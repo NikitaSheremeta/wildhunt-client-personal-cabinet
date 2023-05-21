@@ -180,5 +180,11 @@ export default {
       }
     }
   }
+
+  @include media-breakpoint-down(xxs) {
+    .button {
+      width: 100%;
+    }
+  }
 }
 </style>

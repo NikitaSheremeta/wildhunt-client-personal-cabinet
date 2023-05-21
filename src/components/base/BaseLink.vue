@@ -91,6 +91,7 @@ export default {
   text-decoration: none;
   cursor: pointer;
   transition: 0.2s;
+  outline: none;
 
   .base-icon {
     transition: 0.2s;

@@ -27,7 +27,7 @@
         v-on="inputListeners"
       />
 
-      <div class="icon" @mousedown="onMousedownIcon" @mouseup="onMouseupIcon">
+      <div v-if="shouldDisplayIcon" class="icon" @mousedown="onMousedownIcon" @mouseup="onMouseupIcon">
         <slot v-if="!!$slots.icon" name="icon" />
 
         <BaseIcon v-if="icon" :icon="icon" color="secondary" />
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue';
+import { computed, ref, useSlots } from 'vue';
 import BaseIcon from '@/components/base/BaseIcon';
 import { magicNumbers } from '@/utils/magic-numbers';
 
@@ -149,12 +149,22 @@ export default {
   setup: function (props, context) {
     const input = ref(null);
 
+    const slots = useSlots();
+
     const classes = computed(() => [
       props.textarea ? 'textarea' : '',
       props.disabled ? 'disabled' : '',
       props.validation && props.validation.touched && props.validation.valid ? 'valid' : '',
       props.validation && props.validation.touched && !props.validation.valid ? 'invalid' : ''
     ]);
+
+    const shouldDisplayIcon = computed(
+      () =>
+        Boolean(slots.icon) ||
+        props.icon ||
+        (props.validation && !props.disableSuccessIcon && props.validation.valid) ||
+        (props.validation && props.validation.touched && !props.validation.valid)
+    );
 
     const shouldDisplayValidationMessage = computed(
       () => props.validation && props.validation.touched && props.validation.notice && !props.disableNotice
@@ -217,6 +227,7 @@ export default {
     return {
       input,
       classes,
+      shouldDisplayIcon,
       shouldDisplayValidationMessage,
       inputListeners,
       onMousedownIcon,
@@ -229,8 +240,6 @@ export default {
 
 <style lang="scss" scoped>
 .base-input {
-  display: block;
-  position: relative;
   width: 100%;
   font-family: $font-family-base;
   font-weight: $font-weight-base;
@@ -238,19 +247,24 @@ export default {
 
   .wrapper {
     display: flex;
-    position: relative;
-    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    height: 52px;
+    user-select: none;
+    @include field;
 
     .field {
-      display: block;
-      padding: 0 64px 0 24px;
+      padding: 0 24px;
       width: 100%;
-      height: 52px;
+      height: 100%;
+      background-color: transparent;
+      border: none;
+      border-radius: $field-border-radius;
       color: map-get($field-palette, primary, color);
       font-family: inherit;
       font-size: $font-size-base;
       font-style: inherit;
-      @include field;
+      box-sizing: border-box;
 
       @include placeholder() {
         line-height: 1;
@@ -268,6 +282,15 @@ export default {
         @include truncate;
       }
 
+      &[type='password']:not(:placeholder-shown) {
+        font-weight: $font-weight-bold;
+        letter-spacing: -2px;
+      }
+
+      input[type='number'] {
+        -moz-appearance: textfield;
+      }
+
       &:focus {
         box-shadow: none;
         outline: none;
@@ -277,8 +300,13 @@ export default {
         color: map-get($field-palette, primary, hover-placeholder-color);
       }
 
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
       &:disabled {
-        background-color: map-get($field-palette, disabled, background-color);
         color: map-get($field-palette, disabled, color);
 
         @include placeholder() {
@@ -289,47 +317,40 @@ export default {
           cursor: default;
         }
       }
-
-      &[type='password']:not(:placeholder-shown) {
-        font-weight: $font-weight-bold;
-        letter-spacing: -2px;
-      }
-    }
-
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    input[type='number'] {
-      -moz-appearance: textfield;
     }
 
     .icon {
-      position: absolute;
       display: flex;
       align-items: center;
-      margin-top: 16px;
-      gap: 8px;
-      right: 24px;
+      gap: 12px;
+      margin-left: 12px;
+      padding-right: 24px;
     }
   }
 
   &.textarea {
     .wrapper {
+      align-items: inherit;
+      height: 160px;
+
       .field {
         padding-top: 18px;
         padding-bottom: 18px;
-        height: 160px;
         white-space: normal;
         resize: none;
+      }
+
+      .icon {
+        margin-top: 18px;
+        align-items: inherit;
       }
     }
   }
 
   &.code-item {
     .wrapper {
+      display: inherit;
+
       .field {
         padding: 0;
         text-align: center;
@@ -360,11 +381,15 @@ export default {
   }
 
   &.disabled {
-    .icon {
-      .base-icon {
-        fill: map-get($field-palette, disabled, color);
-        stroke: map-get($field-palette, disabled, color);
-        cursor: default;
+    .wrapper {
+      background-color: map-get($field-palette, disabled, background-color);
+
+      .icon {
+        .base-icon {
+          fill: map-get($field-palette, disabled, color);
+          stroke: map-get($field-palette, disabled, color);
+          cursor: default;
+        }
       }
     }
 
