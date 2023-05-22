@@ -30,6 +30,8 @@
       :validation="fieldsValidation['category']"
     />
 
+    <BaseFile v-model="state.file" class="form__field" :placeholder="labels.SUPPORT_VIEW.FILE" :disabled="disabled" />
+
     <BaseInput
       v-model="state.message"
       class="form__field"
@@ -67,6 +69,7 @@ import { useRoute } from 'vue-router';
 import { useFieldsValidation } from '@/hooks/useFieldsValidation';
 import BaseTitle from '@/components/base/BaseTitle';
 import BaseInput from '@/components/base/BaseInput';
+import BaseFile from '@/components/base/BaseFile';
 import BaseSelect from '@/components/base/BaseSelect';
 import BaseButton from '@/components/base/BaseButton';
 import BaseLink from '@/components/base/BaseLink';
@@ -80,6 +83,7 @@ export default {
   components: {
     BaseTitle,
     BaseInput,
+    BaseFile,
     BaseSelect,
     BaseButton,
     BaseLink
@@ -102,6 +106,7 @@ export default {
       login: '',
       topic: '',
       category: route.params.category ?? '',
+      file: null,
       message: ''
     });
 
