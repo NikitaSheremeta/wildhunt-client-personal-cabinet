@@ -323,7 +323,6 @@ export default {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-left: 12px;
       padding-right: 24px;
     }
   }

@@ -101,6 +101,7 @@ module.exports = {
     'no-else-return': ['error'],
     'no-empty-function': ['error'],
     'no-implicit-coercion': ['error'],
-    'no-implicit-globals': ['error']
+    'no-implicit-globals': ['error'],
+    'vue/multi-word-component-names': 'off'
   }
 };

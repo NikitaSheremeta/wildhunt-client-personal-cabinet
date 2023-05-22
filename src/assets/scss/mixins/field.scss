@@ -1,6 +1,5 @@
 @mixin field() {
-  min-width: 0;
   background-color: map-get($field-palette, primary, background-color);
-  border-radius: $field-border-radius;
   border: none;
+  border-radius: $field-border-radius;
 }
