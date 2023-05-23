@@ -1,5 +1,18 @@
+const CompressionWebpackPlugin = require('compression-webpack-plugin');
+
 module.exports = {
   lintOnSave: false,
+  configureWebpack: {
+    plugins: [
+      new CompressionWebpackPlugin({
+        filename: '[file].gz[query]',
+        algorithm: 'gzip',
+        test: new RegExp('\\.(' + ['js', 'css'].join('|') + ')$'),
+        threshold: 10240,
+        minRatio: 0.8
+      })
+    ]
+  },
   css: {
     loaderOptions: {
       sass: {

@@ -8,6 +8,7 @@
       theme="dark"
       color="secondary"
       icon="arrow-left"
+      aria-label="arrow-left"
       @click="onClickButton"
     />
 

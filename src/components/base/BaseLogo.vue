@@ -31,13 +31,13 @@ export default {
 <style lang="scss" scoped>
 .base-logo {
   display: flex;
-  width: 120px;
   cursor: pointer;
   transition: 0.2s;
   transition-property: opacity;
 
   .image {
-    width: 100%;
+    width: 120px;
+    height: 60px;
   }
 
   @include media-breakpoint-up(md) {
@@ -48,6 +48,7 @@ export default {
 
   @include media-breakpoint-down(sm) {
     width: 96px;
+    height: 48px;
 
     &:active {
       opacity: 0.56;
