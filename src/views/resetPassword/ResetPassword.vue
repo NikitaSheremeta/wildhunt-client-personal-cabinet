@@ -38,7 +38,7 @@
 <script>
 import { onMounted, reactive, ref } from 'vue';
 import { useFormValidation } from '@/hooks/useFormValidation';
-import { useStore } from 'vuex';
+// import { useStore } from 'vuex';
 import ResetPasswordForm from '@/views/resetPassword/resetPasswordForm/ResetPasswordForm';
 import BaseCaptcha from '@/components/base/BaseCaptcha';
 import BaseConfirmation from '@/components/base/BaseConfirmation';
@@ -61,7 +61,7 @@ export default {
     const resetPasswordFormValidation = useFormValidation(resetPasswordForm);
     const newPasswordFormValidation = useFormValidation(newPasswordForm);
 
-    const store = useStore();
+    // const store = useStore();
 
     const state = reactive({ resetPasswordForm: {} });
 
@@ -76,29 +76,29 @@ export default {
       disabled: false
     });
 
-    const dispatchForgotPassword = async () => {
-      await store
-        .dispatch('FORGOT_PASSWORD', state.resetPasswordForm)
-        .then((result) =>
-          debounce(() => {
-            flags.shouldDisplayResetPasswordForm = false;
-
-            if (Object.prototype.hasOwnProperty.call(result, 'error')) {
-              debounce(() => console.log(result))();
-            }
-          }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
-        )
-        .catch((error) =>
-          debounce(() => {
-            console.log(error);
-          })()
-        )
-        .finally(() =>
-          debounce(() => {
-            flags.loading = false;
-          }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
-        );
-    };
+    // const dispatchForgotPassword = async () => {
+    //   await store
+    //     .dispatch('FORGOT_PASSWORD', state.resetPasswordForm)
+    //     .then((result) =>
+    //       debounce(() => {
+    //         flags.shouldDisplayResetPasswordForm = false;
+    //
+    //         if (Object.prototype.hasOwnProperty.call(result, 'error')) {
+    //           debounce(() => console.log(result))();
+    //         }
+    //       }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
+    //     )
+    //     .catch((error) =>
+    //       debounce(() => {
+    //         console.log(error);
+    //       })()
+    //     )
+    //     .finally(() =>
+    //       debounce(() => {
+    //         flags.loading = false;
+    //       }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
+    //     );
+    // };
 
     const onSubmitResetPasswordForm = () => {
       resetPasswordFormValidation.checkValidity();
@@ -121,7 +121,7 @@ export default {
     };
 
     const onSuccessCaptcha = () => {
-      dispatchForgotPassword();
+      // dispatchForgotPassword();
 
       debounce(() => {
         flags.shouldDisplayCaptcha = false;
