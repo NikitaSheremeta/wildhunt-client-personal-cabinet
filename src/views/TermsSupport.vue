@@ -1,9 +1,9 @@
 <template>
   <div class="article">
-    <BaseTitle class="title" />
+    <BaseTitle class="title" back-button />
 
     <section>
-      <h3>Правила предоставления технической поддержки</h3>
+      <h3>Правила оказания технической поддержки</h3>
 
       <article>
         <ol>

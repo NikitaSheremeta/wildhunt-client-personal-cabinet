@@ -1,6 +1,6 @@
 <template>
   <div class="article">
-    <BaseTitle class="title" />
+    <BaseTitle class="title" back-button />
 
     <section>
       <article>

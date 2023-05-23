@@ -68,6 +68,10 @@ export default {
   .title {
     font-weight: $font-weight-regular;
     margin: 0;
+
+    @include media-breakpoint-up(md) {
+      @include truncate();
+    }
   }
 }
 </style>

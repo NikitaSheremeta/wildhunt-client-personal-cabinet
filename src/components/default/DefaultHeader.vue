@@ -6,16 +6,6 @@
           <SideMenuButton />
 
           <BaseLogo />
-
-          <BaseButton
-            v-if="shouldShowBackButton"
-            class="back-button"
-            icon-button
-            theme="transparent"
-            color="secondary"
-            icon="arrow-left"
-            @click="backButton"
-          />
         </div>
 
         <div :class="['wrapper', !!route.meta['baseTitle'] ? 'space-between' : 'flex-end']">
@@ -34,7 +24,6 @@ import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import { useBackButton } from '@/hooks/useBackButton';
 import SideMenuButton from '@/components/sideMenu/SideMenuButton';
-import BaseButton from '@/components/base/BaseButton';
 import BaseLogo from '@/components/base/BaseLogo';
 import BaseTitle from '@/components/base/BaseTitle';
 import BaseNavigation from '@/components/base/BaseNavigation';
@@ -45,7 +34,6 @@ export default {
   components: {
     SideMenuButton,
     BaseLogo,
-    BaseButton,
     BaseTitle,
     BaseNavigation
   },
@@ -123,25 +111,8 @@ export default {
     }
   }
 
-  .back-button {
-    display: none;
-  }
-
   .title {
-    position: relative;
     justify-content: flex-start;
-    white-space: nowrap;
-    overflow: hidden;
-
-    &:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 48px;
-      height: 100%;
-      background: linear-gradient(270deg, rgba(31, 33, 40, 1) 0%, rgba(255, 255, 255, 0) 100%);
-    }
 
     @include media-breakpoint-only(md) {
       width: 400px;
@@ -164,11 +135,6 @@ export default {
   @include media-breakpoint-down(sm) {
     position: fixed;
     background-color: $midnight;
-    border-bottom: 1px solid $gray-800;
-
-    .back-button {
-      display: flex;
-    }
 
     .title,
     .navigation {

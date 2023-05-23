@@ -4,8 +4,12 @@
   .title {
     display: none;
 
+    .title {
+      padding-left: 24px;
+    }
+
     @include media-breakpoint-down(sm) {
-      display: block;
+      display: inline;
     }
   }
 
