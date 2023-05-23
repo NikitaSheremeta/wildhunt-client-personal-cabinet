@@ -56,9 +56,7 @@ export default {
     watch(
       () => isSideMenuActive.value,
       async (value) => {
-        if (window.innerWidth > magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
-          value ? localStorage.setItem('menu', 'active') : localStorage.setItem('menu', 'inactive');
-        }
+        value ? localStorage.setItem('menu', 'active') : localStorage.setItem('menu', 'inactive');
       }
     );
 
