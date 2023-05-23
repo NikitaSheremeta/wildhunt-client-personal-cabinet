@@ -134,7 +134,7 @@ export default {
 
   @include media-breakpoint-down(sm) {
     position: fixed;
-    background-color: $midnight;
+    background: linear-gradient(180deg, $gray-800 5%, rgba(255, 255, 255, 0) 100%);
 
     .title,
     .navigation {
