@@ -5,15 +5,20 @@
 </template>
 
 <script>
+import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
 export default {
   name: 'BaseLogo',
   setup() {
+    const store = useStore();
+
     const router = useRouter();
 
-    const onClickLogo = () => {
-      router.push({ path: '/' });
+    const onClickLogo = async () => {
+      await store.dispatch('SIDE_MENU_ACTIVE', false);
+
+      await router.push({ path: '/' });
     };
 
     return {
