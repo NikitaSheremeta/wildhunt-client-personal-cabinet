@@ -1,6 +1,6 @@
 <template>
   <div class="article">
-    <BaseTitle class="title" back-button />
+    <BaseTitle v-if="isMobileView" class="title" back-button />
 
     <section>
       <h3>Правила оказания технической поддержки</h3>
@@ -65,12 +65,23 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 import BaseTitle from '@/components/base/BaseTitle';
 
 export default {
   name: 'TermsSupport',
   components: {
     BaseTitle
+  },
+  setup() {
+    const store = useStore();
+
+    const isMobileView = computed(() => store.getters.GET_IS_MOBILE_VIEW);
+
+    return {
+      isMobileView
+    };
   }
 };
 </script>

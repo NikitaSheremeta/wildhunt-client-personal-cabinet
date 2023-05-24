@@ -60,7 +60,15 @@ export default {
       }
     };
 
-    const onResize = () => {
+    const onResize = async () => {
+      if (window.innerWidth > magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
+        await store.dispatch('MOBILE_VIEW', false);
+      }
+
+      if (window.innerWidth <= magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
+        await store.dispatch('MOBILE_VIEW', true);
+      }
+
       // If the user switches from mobile view to desktop view
       if (window.innerWidth > magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
         document.addEventListener('scroll', onScroll);

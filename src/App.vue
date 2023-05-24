@@ -33,6 +33,14 @@ export default {
     onMounted(async () => {
       const storageMenu = localStorage.getItem('menu');
 
+      if (window.innerWidth > magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
+        await store.dispatch('MOBILE_VIEW', false);
+      }
+
+      if (window.innerWidth <= magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
+        await store.dispatch('MOBILE_VIEW', true);
+      }
+
       // If there was no storage item before visiting the site, and this is not a mobile view
       if (!storageMenu && window.innerWidth > magicNumbers.SWITCHING_WIDTH_ON_TABLET) {
         localStorage.setItem('menu', 'active');
