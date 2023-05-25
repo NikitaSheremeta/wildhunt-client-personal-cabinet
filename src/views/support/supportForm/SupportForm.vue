@@ -5,6 +5,7 @@
     <BaseInput
       v-model="state.login"
       class="form__field"
+      name="topic"
       :placeholder="labels.SUPPORT_VIEW.LOGIN"
       :disabled="disabled"
       trim
@@ -15,6 +16,7 @@
     <BaseInput
       v-model="state.topic"
       class="form__field"
+      name="topic"
       :placeholder="labels.SUPPORT_VIEW.TOPIC"
       :disabled="disabled"
       :validation="fieldsValidation['topic']"
@@ -36,6 +38,7 @@
       v-model="state.message"
       class="form__field"
       textarea
+      name="message"
       :placeholder="labels.SUPPORT_VIEW.MESSAGE"
       :disabled="disabled"
       :validation="fieldsValidation['message']"

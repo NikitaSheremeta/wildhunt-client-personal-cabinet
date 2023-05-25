@@ -3,6 +3,7 @@
     <BaseInput
       v-model="state.value"
       :type="state.type"
+      name="password"
       :placeholder="placeholder"
       :disabled="disabled"
       trim

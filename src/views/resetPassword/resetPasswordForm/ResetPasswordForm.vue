@@ -7,6 +7,7 @@
     <BaseInput
       v-model="state.email"
       class="form__field"
+      name="email"
       :placeholder="labels.RESET_PASSWORD_VIEW.EMAIL"
       :disabled="disabled"
       trim

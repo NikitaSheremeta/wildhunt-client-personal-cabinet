@@ -1,6 +1,13 @@
 <template>
   <label :class="['base-checkbox', classes]">
-    <input class="field" type="checkbox" :checked="modelValue" :disabled="disabled" @change="onChange" />
+    <input
+      class="field"
+      type="checkbox"
+      name="checkbox"
+      :checked="modelValue"
+      :disabled="disabled"
+      @change="onChange"
+    />
 
     <span class="wrapper">
       <span class="check-icon">

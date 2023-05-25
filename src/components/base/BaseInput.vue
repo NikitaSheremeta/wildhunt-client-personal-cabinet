@@ -8,6 +8,7 @@
         :value="modelValue"
         :type="type"
         :data-id="dataId"
+        :name="name"
         :autofocus="autofocus"
         :autocomplete="autocomplete"
         :placeholder="placeholder"
@@ -20,6 +21,7 @@
         v-if="textarea"
         class="field"
         :value="modelValue"
+        :name="name"
         :autofocus="autofocus"
         :placeholder="placeholder"
         :disabled="disabled"
@@ -99,6 +101,10 @@ export default {
     dataId: {
       type: [Number, null],
       default: null
+    },
+    name: {
+      type: String,
+      required: true
     },
     autofocus: {
       type: Boolean,

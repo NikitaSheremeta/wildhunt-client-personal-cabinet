@@ -5,6 +5,7 @@
     <BaseInput
       v-model="state.username"
       class="form__field"
+      name="username"
       :placeholder="labels.SIGN_UP_VIEW.USER_NAME"
       :disabled="disabled"
       trim
@@ -16,6 +17,7 @@
       v-model="state.email"
       class="form__field"
       type="email"
+      name="email"
       :placeholder="labels.SIGN_UP_VIEW.EMAIL"
       :disabled="disabled"
       trim
