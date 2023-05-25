@@ -27,6 +27,7 @@
     <NewPasswordForm
       v-if="flags.shouldDisplayNewPasswordForm"
       ref="newPasswordForm"
+      v-model="state.newPasswordForm"
       :loading="flags.loading"
       :disabled="flags.disabled"
       @submit.prevent="onSubmitNewPasswordForm"
@@ -63,10 +64,13 @@ export default {
 
     // const store = useStore();
 
-    const state = reactive({ resetPasswordForm: {} });
+    const state = reactive({
+      resetPasswordForm: {},
+      newPasswordForm: {}
+    });
 
     const flags = reactive({
-      shouldDisplayResetPasswordForm: false,
+      shouldDisplayResetPasswordForm: true,
       shouldDisplayCaptcha: false,
       shouldDisplayConfirmation: false,
       shouldDisplayNewPasswordForm: false,
@@ -181,11 +185,11 @@ export default {
       const storageNewPassword = localStorage.getItem('newPassword');
 
       if (storageNewPassword) {
-        flags.shouldDisplayNewPasswordForm = true;
-      }
+        flags.shouldDisplayResetPasswordForm = false;
 
-      if (!storageNewPassword) {
-        flags.shouldDisplayResetPasswordForm = true;
+        debounce(() => {
+          flags.shouldDisplayNewPasswordForm = true;
+        })();
       }
     });
 

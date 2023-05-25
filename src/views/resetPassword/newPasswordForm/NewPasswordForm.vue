@@ -1,6 +1,11 @@
 <template>
   <form class="form">
-    <BaseTitle back-button :title="labels.NEW_PASSWORD_VIEW.TITLE" @close="onClickCloseButton" />
+    <BaseTitle
+      back-button
+      tooltip
+      prevent-back-button:title="labels.NEW_PASSWORD_VIEW.TITLE"
+      @close="onClickCloseButton"
+    />
 
     <BasePassword
       v-model="state.password"

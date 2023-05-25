@@ -19,7 +19,9 @@
           @click.stop="onClickCrossIcons"
         />
 
-        <BaseIcon :icon="computedIcon" color="secondary" />
+        <BaseIcon :id="baseTooltipHash" :icon="computedIcon" color="secondary" />
+
+        <BaseTooltip v-if="!isMobileView" :target="baseTooltipHash" :label="computedTooltipLabel" placement="right" />
 
         <BaseIcon
           v-if="validation && validation.touched && !validation.valid"
@@ -49,12 +51,18 @@
 
 <script>
 import { computed, reactive } from 'vue';
+import { useStore } from 'vuex';
 import BaseIcon from '@/components/base/BaseIcon';
+import BaseTooltip from '@/components/base/BaseTooltip';
+import { randomHash } from '@/helpers/random-hash';
+import { labels } from '@/utils/labels';
+import { magicNumbers } from '@/utils/magic-numbers';
 
 export default {
   name: 'BaseSelect',
   components: {
-    BaseIcon
+    BaseIcon,
+    BaseTooltip
   },
   props: {
     modelValue: {
@@ -85,6 +93,10 @@ export default {
   },
   emits: ['update:model-value'],
   setup(props, context) {
+    const baseTooltipHash = randomHash(magicNumbers.THIRTY_TWO_PIXELS);
+
+    const store = useStore();
+
     const state = reactive({
       selected: props.modelValue
     });
@@ -103,6 +115,10 @@ export default {
     const computedOptions = computed(() => props.options.filter((item) => item !== state.selected));
 
     const computedIcon = computed(() => (flags.open ? 'chevron-top' : 'chevron-bottom'));
+
+    const isMobileView = computed(() => store.getters.GET_IS_MOBILE_VIEW);
+
+    const computedTooltipLabel = computed(() => (flags.open ? labels.CLOSE_LIST : labels.OPEN_LIST));
 
     const shouldDisplayValidationMessage = computed(
       () => props.validation && props.validation.touched && props.validation.notice
@@ -138,11 +154,14 @@ export default {
     };
 
     return {
+      baseTooltipHash,
       state,
       flags,
       classes,
       computedOptions,
       computedIcon,
+      isMobileView,
+      computedTooltipLabel,
       shouldDisplayValidationMessage,
       onBlur,
       onClickSelect,
@@ -202,6 +221,7 @@ export default {
     background-color: map-get($field-palette, primary, background-color);
     border-bottom-left-radius: $field-border-radius;
     border-bottom-right-radius: $field-border-radius;
+    box-shadow: 0 8px 6px rgba(19, 22, 24, 0.16), 0 8px 6px rgba(19, 22, 24, 0.23);
 
     .list {
       padding: 8px;

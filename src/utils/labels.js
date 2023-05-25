@@ -114,5 +114,10 @@ export const labels = {
   },
   GO_BACK: 'Вернуться назад',
   OPEN_SIDE_MENU: 'Открыть меню',
-  CLOSE_SIDE_MENU: 'Закрыть меню'
+  CLOSE_SIDE_MENU: 'Закрыть меню',
+  SHOW_PASSWORD: 'Показать пароль',
+  HIDE_PASSWORD: 'Скрыть пароль',
+  OPEN_LIST: 'Открыть список',
+  CLOSE_LIST: 'Закрыть список',
+  ATTACH: 'Прикрпеить файл'
 };

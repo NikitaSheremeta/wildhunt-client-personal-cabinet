@@ -56,7 +56,6 @@
 
       <BaseLink
         class="link"
-        underline
         href="terms-support"
         color="secondary"
         :label="labels.SUPPORT_VIEW.TERMS_SUPPORT"

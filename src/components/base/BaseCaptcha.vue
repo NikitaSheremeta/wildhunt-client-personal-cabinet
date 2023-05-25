@@ -1,6 +1,6 @@
 <template>
   <div :class="['base-captcha']">
-    <BaseTitle back-button :title="labels.CAPTCHA.TITLE" @close="onClickCloseButton" />
+    <BaseTitle back-button prevent-back-button :title="labels.CAPTCHA.TITLE" @close="onClickCloseButton" />
 
     <p class="description" v-text="labels.CAPTCHA.DESCRIPTION" />
 
@@ -22,7 +22,6 @@
       small
       color="secondary"
       :label="labels.CAPTCHA.RESET_CAPTCHA_LABEL"
-      icon-left="redo"
       @click.prevent="onClickResetIcon"
     />
   </div>
@@ -180,7 +179,7 @@ export default {
   .description {
     margin-top: 12px;
     margin-bottom: 0;
-    color: $font-color-secondary;
+    color: $font-color-base;
   }
 
   .captcha {

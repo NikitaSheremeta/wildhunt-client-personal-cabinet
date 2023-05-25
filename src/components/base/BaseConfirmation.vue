@@ -1,6 +1,6 @@
 <template>
   <div :class="['base-confirmation']">
-    <BaseTitle back-button :title="labels.CONFIRMATION.TITLE" @close="onClickCloseButton" />
+    <BaseTitle back-button tooltip :title="labels.CONFIRMATION.TITLE" @close="onClickCloseButton" />
 
     <p class="description" v-text="labels.CONFIRMATION.DESCRIPTION" />
 
@@ -11,7 +11,6 @@
       class="link"
       color="secondary"
       :label="labels.CONFIRMATION.RESEND_CODE_LABEL"
-      icon-left="redo"
       @click.prevent="onClickResendLink"
     />
 
@@ -71,7 +70,7 @@ export default {
   .description {
     margin-top: 12px;
     margin-bottom: 0;
-    color: $font-color-secondary;
+    color: $font-color-base;
   }
 
   .code {

@@ -21,7 +21,9 @@
           @click.stop="onClickCrossIcons"
         />
 
-        <BaseIcon icon="attach" color="secondary" />
+        <BaseIcon :id="baseTooltipHash" icon="attach" color="secondary" />
+
+        <BaseTooltip v-if="!isMobileView" :target="baseTooltipHash" :label="labels.ATTACH" placement="right" />
 
         <BaseIcon
           v-if="validation && validation.touched && !validation.valid"
@@ -39,12 +41,18 @@
 
 <script>
 import { computed, reactive, ref } from 'vue';
+import { useStore } from 'vuex';
 import BaseIcon from '@/components/base/BaseIcon';
+import BaseTooltip from '@/components/base/BaseTooltip';
+import { randomHash } from '@/helpers/random-hash';
+import { labels } from '@/utils/labels';
+import { magicNumbers } from '@/utils/magic-numbers';
 
 export default {
   name: 'BaseFile',
   components: {
-    BaseIcon
+    BaseIcon,
+    BaseTooltip
   },
   props: {
     placeholder: {
@@ -66,6 +74,10 @@ export default {
   },
   emits: ['update:model-value'],
   setup(props) {
+    const baseTooltipHash = randomHash(magicNumbers.THIRTY_TWO_PIXELS);
+
+    const store = useStore();
+
     const field = ref(null);
 
     const state = reactive({
@@ -73,6 +85,8 @@ export default {
     });
 
     const classes = computed(() => [props.disabled ? 'disabled' : '']);
+
+    const isMobileView = computed(() => store.getters.GET_IS_MOBILE_VIEW);
 
     const shouldDisplayValidationMessage = computed(
       () => props.validation && props.validation.touched && props.validation.notice
@@ -99,15 +113,16 @@ export default {
     };
 
     return {
+      baseTooltipHash,
       field,
       state,
       classes,
-      // computedAccept,
-      // computedIcon,
+      isMobileView,
       shouldDisplayValidationMessage,
       onClickWrapper,
       onClickCrossIcons,
-      onChange
+      onChange,
+      labels
     };
   }
 };

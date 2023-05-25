@@ -10,6 +10,7 @@
         v-model="state.code[index]"
         :class="['input', 'code-item']"
         type="number"
+        name="code"
         :data-id="index"
         placeholder="0"
         :disabled="disabled"

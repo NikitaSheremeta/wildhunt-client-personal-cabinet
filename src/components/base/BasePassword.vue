@@ -13,7 +13,14 @@
       v-on="inputListeners"
     >
       <template #icon>
-        <BaseIcon color="secondary" :icon="state.type === 'password' ? 'eye' : 'eye-slash'" @click="onClickIcon" />
+        <BaseIcon
+          :id="baseTooltipHash"
+          color="secondary"
+          :icon="state.type === 'password' ? 'eye' : 'eye-slash'"
+          @click="onClickIcon"
+        />
+
+        <BaseTooltip v-if="!isMobileView" :target="baseTooltipHash" :label="computedTooltipLabel" placement="right" />
       </template>
 
       <template v-if="create" #extension>
@@ -31,8 +38,11 @@
 
 <script>
 import { computed, reactive, watch } from 'vue';
+import { useStore } from 'vuex';
 import BaseInput from '@/components/base/BaseInput';
 import BaseIcon from '@/components/base/BaseIcon';
+import BaseTooltip from '@/components/base/BaseTooltip';
+import { randomHash } from '@/helpers/random-hash';
 import { magicNumbers } from '@/utils/magic-numbers';
 import { regularExpressions } from '@/utils/regular-expressions';
 import { labels } from '@/utils/labels';
@@ -41,7 +51,8 @@ export default {
   name: 'BasePassword',
   components: {
     BaseInput,
-    BaseIcon
+    BaseIcon,
+    BaseTooltip
   },
   props: {
     create: {
@@ -67,6 +78,10 @@ export default {
   },
   emits: ['update:model-value'],
   setup(props, context) {
+    const baseTooltipHash = randomHash(magicNumbers.THIRTY_TWO_PIXELS);
+
+    const store = useStore();
+
     const state = reactive({
       value: '',
       type: 'password',
@@ -80,6 +95,12 @@ export default {
       props.validation.touched && !props.validation.valid ? 'invalid' : '',
       state.status
     ]);
+
+    const isMobileView = computed(() => store.getters.GET_IS_MOBILE_VIEW);
+
+    const computedTooltipLabel = computed(() =>
+      state.type === 'password' ? labels.SHOW_PASSWORD : labels.HIDE_PASSWORD
+    );
 
     const inputListeners = computed(() => {
       return {
@@ -174,8 +195,11 @@ export default {
     };
 
     return {
+      baseTooltipHash,
       state,
       classes,
+      isMobileView,
+      computedTooltipLabel,
       inputListeners,
       onClickIcon,
       labels

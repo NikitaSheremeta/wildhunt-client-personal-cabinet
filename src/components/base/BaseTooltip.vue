@@ -63,7 +63,7 @@ export default {
         }
 
         if (props.placement === 'left' || props.placement === 'right') {
-          tooltip.value.style.top = `${coordinates.top + magicNumbers.SIX_PIXELS}px`;
+          tooltip.value.style.top = `${coordinates.top - element.value.clientHeight / magicNumbers.TWO_TIMES + 1}px`;
         }
 
         if (props.placement === 'left') {
@@ -118,7 +118,7 @@ export default {
   opacity: 0;
   background-color: $black;
   border-radius: $tooltip-border-radius;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 3px rgba(19, 22, 24, 0.12), 0 1px 2px rgba(19, 22, 24, 0.24);
   font-size: $font-size-xs;
   pointer-events: none;
 

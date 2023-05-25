@@ -94,9 +94,6 @@ export default {
         box-shadow: inset 0 0 0 2px $gray-800;
 
         .base-icon {
-          width: 100%;
-          height: 100%;
-          flex-shrink: 0;
           transition: 0.2s;
           visibility: hidden;
           opacity: 0;

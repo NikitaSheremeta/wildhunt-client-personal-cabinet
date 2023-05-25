@@ -45,6 +45,10 @@ export default {
       type: Boolean,
       default: false
     },
+    preventBackButton: {
+      type: Boolean,
+      default: false
+    },
     tooltip: {
       type: Boolean,
       default: false
@@ -63,7 +67,9 @@ export default {
     const computedTitle = computed(() => (props.title ? props.title : route.meta['title']));
 
     const onClickButton = () => {
-      backButton();
+      if (!props.preventBackButton) {
+        backButton();
+      }
 
       context.emit('close');
     };
