@@ -1,6 +1,13 @@
 <template>
   <label :class="['base-checkbox', classes]">
-    <input class="field" type="checkbox" :checked="modelValue" :disabled="disabled" @change="onChange" />
+    <input
+      class="field"
+      type="checkbox"
+      name="checkbox"
+      :checked="modelValue"
+      :disabled="disabled"
+      @change="onChange"
+    />
 
     <span class="wrapper">
       <span class="check-icon">
@@ -35,25 +42,28 @@ export default {
       default: 'primary'
     },
     label: {
-      type: [String, null],
-      default: null
+      type: String,
+      default: ''
     },
     disabled: {
       type: Boolean,
       required: false
     }
   },
-  emits: ['update:modelValue'],
+  emits: ['update:model-value'],
   setup(props, context) {
     const classes = computed(() => [props.disabled ? 'disabled' : '', props.color ? props.color : '']);
 
     const onChange = (event) => {
-      const value = event.target.value;
+      const value = event.target.checked;
 
-      context.emit('update:modelValue', value);
+      context.emit('update:model-value', value);
     };
 
-    return { classes, onChange };
+    return {
+      classes,
+      onChange
+    };
   }
 };
 </script>
@@ -61,7 +71,6 @@ export default {
 <style lang="scss" scoped>
 .base-checkbox {
   user-select: none;
-  line-height: $line-height-secondary;
   font-size: $font-size-xs;
 
   .field {
@@ -75,6 +84,7 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-top: 2px;
         margin-right: 16px;
         padding: 4px;
         width: 12px;
@@ -84,19 +94,27 @@ export default {
         box-shadow: inset 0 0 0 2px $gray-800;
 
         .base-icon {
-          width: 100%;
-          height: 100%;
-          flex-shrink: 0;
           transition: 0.2s;
           visibility: hidden;
           opacity: 0;
         }
       }
 
-      &:hover {
-        .base-icon {
-          visibility: visible;
-          opacity: 1;
+      @include media-breakpoint-up(md) {
+        &:hover {
+          .base-icon {
+            visibility: visible;
+            opacity: 1;
+          }
+        }
+      }
+
+      @include media-breakpoint-down(sm) {
+        &:active {
+          .base-icon {
+            visibility: visible;
+            opacity: 1;
+          }
         }
       }
     }

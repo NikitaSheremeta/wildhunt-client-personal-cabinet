@@ -1,9 +1,43 @@
 import { regularExpressions } from '@/utils/regular-expressions';
 
-export const required = (validationMessage) => (value) => value.trim() ? '' : validationMessage;
+export function required(validationMessage) {
+  return function (value) {
+    let localValue = null;
 
-export const minLength = (number, validationMessage) => (value) => value.length >= number ? '' : validationMessage;
+    if (typeof value === 'string') {
+      localValue = value.trim();
+    }
 
-export const maxLength = (number, validationMessage) => (value) => value.length <= number ? '' : validationMessage;
+    return localValue ? '' : validationMessage;
+  };
+}
 
-export const email = (validationMessage) => (value) => value.match(regularExpressions.email) ? '' : validationMessage;
+export function minLength(number, validationMessage) {
+  return function (value) {
+    return value.length >= number ? '' : validationMessage;
+  };
+}
+
+export function maxLength(number, validationMessage) {
+  return function (value) {
+    return value.length <= number ? '' : validationMessage;
+  };
+}
+
+export function email(validationMessage) {
+  return function (value) {
+    return value.match(regularExpressions.email) ? '' : validationMessage;
+  };
+}
+
+export function sameAs(comparedValue, validationMessages) {
+  return function (value) {
+    return comparedValue === value ? '' : validationMessages;
+  };
+}
+
+export function allowedCharacters(validationMessages) {
+  return function (value) {
+    return regularExpressions.allowedCharacters.test(value) ? '' : validationMessages;
+  };
+}

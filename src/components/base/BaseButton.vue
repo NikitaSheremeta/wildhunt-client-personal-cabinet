@@ -1,8 +1,14 @@
 <template>
-  <button :class="['base-button', classes]" :disabled="disabled" v-on="listeners">
-    <BaseIcon v-if="loading" spin icon="preloader" width="20" height="20" />
+  <button :class="['base-button', classes]" :disabled="disabled" @click="onClick">
+    <BaseIcon v-if="loading" spin icon="preloader" />
+
+    <BaseIcon v-if="iconLeft" :color="color" :icon="iconLeft" :width="computedIconSize" :height="computedIconSize" />
+
+    <BaseIcon v-if="icon" :icon="icon" :color="color" :width="computedIconSize" :height="computedIconSize" />
 
     <span v-if="label" v-text="label" />
+
+    <BaseIcon v-if="iconRight" :color="color" :icon="iconRight" :width="computedIconSize" :height="computedIconSize" />
   </button>
 </template>
 
@@ -17,15 +23,19 @@ export default {
     BaseIcon
   },
   props: {
-    label: {
-      type: [String, null],
-      default: null
+    small: {
+      type: Boolean,
+      default: false
     },
-    to: {
-      type: [String, null],
-      default: null
+    outline: {
+      type: Boolean,
+      default: false
     },
     fullWidth: {
+      type: Boolean,
+      default: false
+    },
+    iconButton: {
       type: Boolean,
       default: false
     },
@@ -33,9 +43,37 @@ export default {
       type: String,
       default: 'primary'
     },
+    color: {
+      type: String,
+      default: 'primary'
+    },
+    to: {
+      type: String,
+      default: ''
+    },
+    label: {
+      type: String,
+      default: ''
+    },
     disabled: {
       type: Boolean,
       default: false
+    },
+    iconSize: {
+      type: String,
+      default: ''
+    },
+    icon: {
+      type: String,
+      default: ''
+    },
+    iconLeft: {
+      type: String,
+      default: ''
+    },
+    iconRight: {
+      type: String,
+      default: ''
     },
     loading: {
       type: Boolean,
@@ -46,66 +84,52 @@ export default {
     const router = useRouter();
 
     const classes = computed(() => [
-      props.theme ? props.theme : '',
+      props.small ? 'small' : '',
+      props.outline ? 'outline' : '',
       props.fullWidth ? 'full-width' : '',
+      props.iconButton ? 'icon-button' : '',
+      props.theme ? props.theme : '',
       props.disabled ? 'disabled' : '',
+      props.iconLeft ? 'icon-left' : '',
+      props.iconRight ? 'icon-right' : '',
       props.loading ? 'loading' : ''
     ]);
 
-    const listeners = computed(() => {
-      return {
-        click: () => {
-          if (props.to !== null) {
-            router.push(props.to);
-          }
-        }
-      };
+    const computedIconSize = computed(() => {
+      if (!props.iconSize) {
+        return props.small ? '16' : '18';
+      }
+
+      return props.iconSize;
     });
 
-    return { classes, listeners };
+    const onClick = () => {
+      if (props.to) {
+        router.push(props.to);
+      }
+    };
+
+    return {
+      classes,
+      computedIconSize,
+      onClick
+    };
   }
 };
 </script>
 
 <style lang="scss" scoped>
-$theme-palette: (
-  primary: (
-    background-color: $primary,
-    hover-background: darken($primary, 6%),
-    active-background: lighten($primary, 6%)
-  ),
-  dark: (
-    background-color: $black,
-    hover-background: darken($black, 6%),
-    active-background: lighten($black, 6%)
-  ),
-  success: (
-    background-color: $success,
-    hover-background: darken($success, 6%),
-    active-background: lighten($success, 6%)
-  ),
-  danger: (
-    background-color: $danger,
-    hover-background: darken($danger, 6%),
-    active-background: lighten($danger, 6%)
-  ),
-  disabled: (
-    background-color: $disabled-background,
-    font-color: $disabled-color
-  )
-);
-
 .base-button {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 24px 48px;
-  height: 32px;
+  padding: 0 48px;
+  height: 48px;
   border: 0;
   border-radius: 12px;
-  background-color: map-get($theme-palette, primary, background-color);
+  background-color: map-get($button-palette, primary, background-color);
   line-height: $line-height-base;
   color: $font-color-base;
   font-family: $font-family-base;
@@ -117,48 +141,16 @@ $theme-palette: (
   user-select: none;
   transition: 0.2s;
 
-  &:hover,
-  &:focus {
-    background-color: map-get($theme-palette, primary, hover-background);
-  }
-
-  &:active {
-    background-color: map-get($theme-palette, primary, active-background);
-  }
-
-  &.dark {
-    background-color: map-get($theme-palette, dark, background-color);
-
-    &:hover {
-      background-color: map-get($theme-palette, dark, hover-background);
+  @include media-breakpoint-up(md) {
+    &:hover,
+    &:focus {
+      background-color: map-get($button-palette, primary, hover-background);
     }
+  }
 
+  @include media-breakpoint-down(sm) {
     &:active {
-      background-color: map-get($theme-palette, dark, active-background);
-    }
-  }
-
-  &.success {
-    background-color: map-get($theme-palette, success, background-color);
-
-    &:hover {
-      background-color: map-get($theme-palette, success, hover-background);
-    }
-
-    &:active {
-      background-color: map-get($theme-palette, success, active-background);
-    }
-  }
-
-  &.danger {
-    background-color: map-get($theme-palette, danger, background-color);
-
-    &:hover {
-      background-color: map-get($theme-palette, danger, hover-background);
-    }
-
-    &:active {
-      background-color: map-get($theme-palette, danger, active-background);
+      background-color: map-get($button-palette, primary, hover-background);
     }
   }
 
@@ -166,13 +158,133 @@ $theme-palette: (
     width: 100%;
   }
 
+  &.icon-button {
+    padding: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+
+    &.small {
+      width: 40px;
+      height: 40px;
+    }
+
+    .base-icon {
+      transition: 0.2s;
+    }
+
+    @include media-breakpoint-up(md) {
+      &:hover {
+        .base-icon {
+          fill: $white;
+        }
+      }
+    }
+
+    @include media-breakpoint-down(sm) {
+      &:active {
+        .base-icon {
+          fill: $white;
+        }
+      }
+    }
+  }
+
+  &:active {
+    background-color: map-get($button-palette, primary, active-background);
+  }
+
+  &.dark {
+    background-color: map-get($button-palette, dark, background-color);
+
+    @include media-breakpoint-up(md) {
+      &:hover {
+        background-color: map-get($button-palette, dark, hover-background);
+      }
+    }
+
+    @include media-breakpoint-down(sm) {
+      &:active {
+        background-color: map-get($button-palette, dark, hover-background);
+      }
+    }
+
+    &.outline {
+      border: 1px solid map-get($button-palette, dark, border-color);
+      background-color: transparent;
+      color: $font-color-secondary;
+
+      @include media-breakpoint-up(md) {
+        &:hover {
+          background-color: map-get($button-palette, dark, background-color);
+        }
+      }
+
+      @include media-breakpoint-down(sm) {
+        &:active {
+          background-color: map-get($button-palette, dark, background-color);
+        }
+      }
+    }
+  }
+
+  &.success {
+    background-color: map-get($button-palette, success, background-color);
+
+    @include media-breakpoint-up(md) {
+      &:hover {
+        background-color: map-get($button-palette, success, hover-background);
+      }
+    }
+
+    @include media-breakpoint-down(sm) {
+      &:active {
+        background-color: map-get($button-palette, success, hover-background);
+      }
+    }
+  }
+
+  &.danger {
+    background-color: map-get($button-palette, danger, background-color);
+
+    @include media-breakpoint-up(md) {
+      &:hover {
+        background-color: map-get($button-palette, danger, hover-background);
+      }
+    }
+
+    @include media-breakpoint-down(sm) {
+      &:active {
+        background-color: map-get($button-palette, danger, hover-background);
+      }
+    }
+  }
+
+  &.transparent {
+    background-color: map-get($button-palette, transparent, background-color);
+  }
+
   &.disabled {
     cursor: default;
-    background-color: map-get($theme-palette, disabled, background-color);
-    color: map-get($theme-palette, disabled, font-color);
+    background-color: map-get($button-palette, disabled, background-color);
+    color: map-get($button-palette, disabled, font-color);
 
-    &:hover {
-      background-color: map-get($theme-palette, disabled, background-color);
+    @include media-breakpoint-up(md) {
+      &:hover {
+        background-color: map-get($button-palette, disabled, background-color);
+      }
+    }
+  }
+
+  &.icon-left {
+    .base-icon {
+      margin-right: 12px;
+    }
+  }
+
+  &.icon-right {
+    .base-icon {
+      margin-left: 12px;
     }
   }
 

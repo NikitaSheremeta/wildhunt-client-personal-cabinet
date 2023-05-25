@@ -1,130 +1,210 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <transition name="fade-slide-up">
-        <form v-if="!flags.isHideForm" class="form" @submit.prevent="onSubmitForm">
-          <h2 class="form__title" v-text="labels.RESET_PASSWORD_VIEW.TITLE" />
+  <transition name="fade-slide-up">
+    <ResetPasswordForm
+      v-if="flags.shouldDisplayResetPasswordForm"
+      ref="resetPasswordForm"
+      v-model="state.resetPasswordForm"
+      :loading="flags.loading"
+      :disabled="flags.disabled"
+      @submit.prevent="onSubmitResetPasswordForm"
+    />
+  </transition>
 
-          <p class="form__description" v-text="labels.RESET_PASSWORD_VIEW.DESCRIPTION" />
+  <transition name="fade-slide-up">
+    <BaseCaptcha
+      v-if="flags.shouldDisplayCaptcha"
+      :disabled="flags.disabled"
+      @success="onSuccessCaptcha"
+      @close="onCloseCaptcha"
+    />
+  </transition>
 
-          <BaseInput
-            v-model="data.email"
-            class="form__field"
-            type="text"
-            :placeholder="labels.RESET_PASSWORD_VIEW.EMAIL"
-            :disabled="flags.isDisabled"
-            :rules="rules.email"
-          />
+  <transition name="fade-slide-up">
+    <BaseConfirmation v-if="flags.shouldDisplayConfirmation" :disabled="flags.disabled" @close="onCloseConfirmation" />
+  </transition>
 
-          <div class="form__actions">
-            <BaseButton
-              full-width
-              type="submit"
-              :label="labels.RESET_PASSWORD_VIEW.SUBMIT"
-              :disabled="flags.isDisabled"
-              :loading="flags.isLoading"
-            />
-          </div>
-
-          <BaseLink
-            class="form__account-recover"
-            href="support"
-            color="secondary"
-            icon-left="question"
-            :label="labels.RESET_PASSWORD_VIEW.ACCOUNT_RECOVER"
-            :disabled="flags.isDisabled"
-          />
-        </form>
-      </transition>
-    </div>
-  </div>
+  <transition name="fade-slide-up">
+    <NewPasswordForm
+      v-if="flags.shouldDisplayNewPasswordForm"
+      ref="newPasswordForm"
+      v-model="state.newPasswordForm"
+      :loading="flags.loading"
+      :disabled="flags.disabled"
+      @submit.prevent="onSubmitNewPasswordForm"
+      @close="onCloseNewPasswordForm"
+    />
+  </transition>
 </template>
 
 <script>
-import { reactive } from 'vue';
-import { useStore } from 'vuex';
-import BaseInput from '@/components/base/BaseInput';
-import BaseButton from '@/components/base/BaseButton';
-import BaseLink from '@/components/base/BaseLink';
-import { labels } from '@/utils/labels';
-import { email, required } from '@/helpers/validators';
+import { onMounted, reactive, ref } from 'vue';
+import { useFormValidation } from '@/hooks/useFormValidation';
+// import { useStore } from 'vuex';
+import ResetPasswordForm from '@/views/resetPassword/resetPasswordForm/ResetPasswordForm';
+import BaseCaptcha from '@/components/base/BaseCaptcha';
+import BaseConfirmation from '@/components/base/BaseConfirmation';
+import NewPasswordForm from '@/views/resetPassword/newPasswordForm/NewPasswordForm';
 import { debounce } from '@/helpers/debounce';
-import { validationMessages } from '@/utils/validation-messages';
+import { magicNumbers } from '@/utils/magic-numbers';
 
 export default {
+  name: 'ResetPassword',
   components: {
-    BaseInput,
-    BaseButton,
-    BaseLink
+    ResetPasswordForm,
+    BaseCaptcha,
+    BaseConfirmation,
+    NewPasswordForm
   },
   setup() {
-    const store = useStore();
+    const resetPasswordForm = ref(null);
+    const newPasswordForm = ref(null);
 
-    const data = reactive({ email: '' });
+    const resetPasswordFormValidation = useFormValidation(resetPasswordForm);
+    const newPasswordFormValidation = useFormValidation(newPasswordForm);
 
-    const flags = reactive({
-      isLoading: false,
-      isDisabled: false,
-      isHideForm: false
+    // const store = useStore();
+
+    const state = reactive({
+      resetPasswordForm: {},
+      newPasswordForm: {}
     });
 
-    const rules = {
-      email: {
-        required: required(validationMessages.EMAIL.REQUIRED),
-        email: email(validationMessages.EMAIL.INCORRECT)
+    const flags = reactive({
+      shouldDisplayResetPasswordForm: true,
+      shouldDisplayCaptcha: false,
+      shouldDisplayConfirmation: false,
+      shouldDisplayNewPasswordForm: false,
+      shouldDisplayErrorNotice: false,
+      shouldDisplaySuccessNotice: false,
+      loading: false,
+      disabled: false
+    });
+
+    // const dispatchForgotPassword = async () => {
+    //   await store
+    //     .dispatch('FORGOT_PASSWORD', state.resetPasswordForm)
+    //     .then((result) =>
+    //       debounce(() => {
+    //         flags.shouldDisplayResetPasswordForm = false;
+    //
+    //         if (Object.prototype.hasOwnProperty.call(result, 'error')) {
+    //           debounce(() => console.log(result))();
+    //         }
+    //       }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
+    //     )
+    //     .catch((error) =>
+    //       debounce(() => {
+    //         console.log(error);
+    //       })()
+    //     )
+    //     .finally(() =>
+    //       debounce(() => {
+    //         flags.loading = false;
+    //       }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
+    //     );
+    // };
+
+    const onSubmitResetPasswordForm = () => {
+      resetPasswordFormValidation.checkValidity();
+
+      if (resetPasswordFormValidation.valid) {
+        flags.loading = true;
+        flags.disabled = true;
+
+        debounce(() => {
+          flags.shouldDisplayResetPasswordForm = false;
+        })();
+
+        debounce(() => {
+          flags.loading = false;
+          flags.disabled = false;
+
+          flags.shouldDisplayCaptcha = true;
+        }, magicNumbers.FOUR_HUNDRED_MILLISECONDS)();
       }
     };
 
-    const onSubmitForm = async () => {
-      flags.isLoading = true;
-      flags.isDisabled = true;
+    const onSuccessCaptcha = () => {
+      // dispatchForgotPassword();
 
-      await store
-        .dispatch('FORGOT_PASSWORD', data)
-        .then((result) => {
-          // flags.isHideForm = true;
+      debounce(() => {
+        flags.shouldDisplayCaptcha = false;
+      })();
 
-          if (Object.prototype.hasOwnProperty.call(result, 'error')) {
-            debounce(() => console.log(result))();
-          }
-        })
-        .catch((error) => debounce(() => console.log(error))())
-        .finally(() => (flags.isLoading = false));
+      debounce(() => {
+        flags.shouldDisplayNewPasswordForm = true;
+      }, magicNumbers.FOUR_HUNDRED_MILLISECONDS)();
     };
 
+    const onCloseCaptcha = () => {
+      flags.loading = false;
+      flags.disabled = false;
+      flags.shouldDisplayCaptcha = false;
+
+      debounce(() => {
+        flags.shouldDisplayResetPasswordForm = true;
+      })();
+    };
+
+    const onCloseConfirmation = () => {
+      flags.loading = false;
+      flags.disabled = false;
+      flags.shouldDisplayConfirmation = false;
+
+      debounce(() => {
+        flags.shouldDisplayResetPasswordForm = true;
+      })();
+    };
+
+    const onSubmitNewPasswordForm = () => {
+      newPasswordFormValidation.checkValidity();
+
+      if (newPasswordFormValidation.valid) {
+        flags.loading = true;
+        flags.disabled = true;
+
+        debounce(() => {
+          flags.shouldDisplayNewPasswordForm = false;
+        })();
+      }
+    };
+
+    const onCloseNewPasswordForm = () => {
+      localStorage.removeItem('newPassword');
+
+      flags.loading = false;
+      flags.disabled = false;
+      flags.shouldDisplayNewPasswordForm = false;
+
+      debounce(() => {
+        flags.shouldDisplayResetPasswordForm = true;
+      })();
+    };
+
+    onMounted(() => {
+      const storageNewPassword = localStorage.getItem('newPassword');
+
+      if (storageNewPassword) {
+        flags.shouldDisplayResetPasswordForm = false;
+
+        debounce(() => {
+          flags.shouldDisplayNewPasswordForm = true;
+        })();
+      }
+    });
+
     return {
-      data,
+      resetPasswordForm,
+      newPasswordForm,
+      state,
       flags,
-      rules,
-      labels,
-      onSubmitForm
+      onSubmitResetPasswordForm,
+      onSuccessCaptcha,
+      onCloseCaptcha,
+      onCloseConfirmation,
+      onSubmitNewPasswordForm,
+      onCloseNewPasswordForm
     };
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.form {
-  width: 320px;
-
-  &__title {
-    margin: 0;
-    font-weight: $font-weight-base;
-  }
-
-  &__description {
-    margin-top: 8px;
-    margin-bottom: 24px;
-    color: $font-color-secondary;
-  }
-
-  &__actions {
-    margin-top: 24px;
-  }
-
-  &__account-recover {
-    margin-top: 16px;
-    font-size: $font-size-xs;
-  }
-}
-</style>

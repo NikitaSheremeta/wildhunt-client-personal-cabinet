@@ -1,0 +1,53 @@
+.article {
+  width: 100%;
+
+  .title {
+    display: inline;
+
+    .title {
+      padding-left: 24px;
+    }
+  }
+
+  section {
+    margin-top: 32px;
+
+    &:nth-child(1) {
+      margin-top: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6  {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-weight: $font-weight-regular;
+    }
+
+    > p {
+      color: $font-color-secondary;
+    }
+
+    article {
+      padding: 16px 32px;
+      background-color: $gray-800;
+      border-radius: $article-border-radius;
+      color: $font-color-article;
+
+      h1, h2, h3, h4, h5, h6  {
+        margin: 0;
+      }
+
+      ul, ol {
+        padding-left: 20px;
+      }
+
+      ul.numbered {
+        padding-left: 0;
+      }
+
+      span.sub-text {
+        display: block;
+        color: $gray-500;
+      }
+    }
+  }
+}

@@ -5,7 +5,7 @@ module.exports = {
   },
   extends: ['plugin:vue/vue3-recommended', 'eslint:recommended', '@vue/prettier'],
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: '@babel/eslint-parser'
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -89,6 +89,7 @@ module.exports = {
     ],
     semi: ['error', 'always'],
     'space-before-blocks': ['error', 'always'],
+    'multiline-ternary': ['error', 'always-multiline'],
     'prefer-const': ['error'],
     complexity: [
       'error',
@@ -100,6 +101,7 @@ module.exports = {
     'no-else-return': ['error'],
     'no-empty-function': ['error'],
     'no-implicit-coercion': ['error'],
-    'no-implicit-globals': ['error']
+    'no-implicit-globals': ['error'],
+    'vue/multi-word-component-names': 'off'
   }
 };

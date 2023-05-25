@@ -1,67 +1,70 @@
 <template>
   <form class="form">
-    <h2 class="form__title" v-text="labels.SIGN_UP_VIEW.TITLE" />
+    <BaseTitle :title="labels.SIGN_UP_VIEW.TITLE" />
 
     <BaseInput
-      v-model="data.username"
+      v-model="state.username"
       class="form__field"
-      type="text"
+      name="username"
       :placeholder="labels.SIGN_UP_VIEW.USER_NAME"
-      :disabled="isDisabled"
-      :rules="rules.username"
+      :disabled="disabled"
+      trim
+      :validation="fieldsValidation['username']"
       @input="onInput"
     />
 
     <BaseInput
-      v-model="data.email"
+      v-model="state.email"
       class="form__field"
       type="email"
+      name="email"
       :placeholder="labels.SIGN_UP_VIEW.EMAIL"
-      :disabled="isDisabled"
-      :rules="rules.email"
-      :debounce-validation="false"
+      :disabled="disabled"
+      trim
+      :validation="fieldsValidation['email']"
+      disable-success-icon
       @input="onInput"
     />
 
     <BasePassword
-      v-model="data.password"
+      v-model="state.password"
       class="form__field"
       create
       :placeholder="labels.SIGN_UP_VIEW.PASSWORD"
-      :disabled="isDisabled"
-      :rules="rules.password"
+      :disabled="disabled"
+      :validation="fieldsValidation['password']"
       @input="onInput"
+    />
+
+    <BasePassword
+      v-model="state.passwordConfirmation"
+      class="form__field"
+      :placeholder="labels.SIGN_UP_VIEW.CONFIRMATION_PASSWORD"
+      :disabled="disabled"
+      :validation="fieldsValidation['passwordConfirmation']"
     />
 
     <div class="form__actions">
       <BaseButton
+        type="submit"
         full-width
         :label="labels.SIGN_UP_VIEW.SIGN_UP"
-        :loading="isLoading"
-        :disabled="!state.eula || isDisabled"
+        :disabled="!flags.eula || disabled"
+        :loading="loading"
       />
     </div>
 
     <div class="form__eula">
-      <BaseCheckbox v-model="state.eula" color="secondary" :label="labels.SIGN_UP_VIEW.EULA" :disabled="isDisabled">
-        <BaseLink
-          underline
-          href="terms"
-          target="_blank"
-          color="secondary"
-          :label="labels.SIGN_UP_VIEW.TERMS"
-          :disabled="isDisabled"
-        />
+      <BaseCheckbox v-model="flags.eula" color="secondary" :label="labels.SIGN_UP_VIEW.EULA" :disabled="disabled">
+        <BaseLink href="terms" color="secondary" :label="labels.SIGN_UP_VIEW.TERMS" :disabled="disabled" />
 
         <br />и
 
         <BaseLink
-          underline
           href="privacy-policy"
-          target="_blank"
           color="secondary"
           :label="labels.SIGN_UP_VIEW.PRIVACY_POLICY"
-          :disabled="isDisabled"
+          :disabled="disabled"
         />
       </BaseCheckbox>
     </div>
@@ -69,19 +72,23 @@
 </template>
 
 <script>
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
+import { useFieldsValidation } from '@/hooks/useFieldsValidation';
+import BaseTitle from '@/components/base/BaseTitle';
 import BaseInput from '@/components/base/BaseInput';
 import BasePassword from '@/components/base/BasePassword';
 import BaseButton from '@/components/base/BaseButton';
 import BaseCheckbox from '@/components/base/BaseCheckbox';
 import BaseLink from '@/components/base/BaseLink';
+import { allowedCharacters, email, maxLength, minLength, required, sameAs } from '@/helpers/validators';
 import { labels } from '@/utils/labels';
-import { email, maxLength, minLength, required } from '@/helpers/validators';
 import { validationMessages } from '@/utils/validation-messages';
 import { magicNumbers } from '@/utils/magic-numbers';
 
 export default {
+  name: 'SignupForm',
   components: {
+    BaseTitle,
     BaseInput,
     BasePassword,
     BaseButton,
@@ -89,50 +96,71 @@ export default {
     BaseLink
   },
   props: {
-    isLoading: {
+    loading: {
       type: Boolean,
       default: false
     },
-    isDisabled: {
+    disabled: {
       type: Boolean,
       default: false
     }
   },
-  emits: ['update:modelValue'],
+  emits: ['update:model-value'],
   setup(props, context) {
-    const data = reactive({
+    const state = reactive({
       username: '',
       email: '',
-      password: ''
+      password: '',
+      passwordConfirmation: ''
     });
 
-    const state = reactive({ eula: true });
+    const flags = reactive({
+      eula: true
+    });
 
-    const rules = {
-      username: {
-        required: required(validationMessages.LOGIN.REQUIRED),
-        minLength: minLength(magicNumbers.LOGIN.MIN_LENGTH, validationMessages.LOGIN.MIN_LENGTH),
-        maxLength: maxLength(magicNumbers.LOGIN.MAX_LENGTH, validationMessages.LOGIN.MAX_LENGTH)
-      },
-      email: {
-        required: required(validationMessages.EMAIL.REQUIRED),
-        email: email(validationMessages.EMAIL.INCORRECT)
-      },
-      password: {
-        required: required(validationMessages.PASSWORD.REQUIRED_LOGIN_PAGE),
-        minLength: minLength(magicNumbers.PASSWORD.MIN_LENGTH, validationMessages.PASSWORD.MIN_LENGTH),
-        maxLength: maxLength(magicNumbers.PASSWORD.MAX_LENGTH, validationMessages.PASSWORD.MAX_LENGTH)
-      },
-      repeatPassword: {
-        required: required(validationMessages.CONFIRM_PASSWORD.REQUIRED)
-      }
+    const rules = computed(() => {
+      return {
+        username: {
+          required: required(validationMessages.BASE.REQUIRED),
+          minLength: minLength(magicNumbers.LOGIN.MIN_LENGTH, validationMessages.LOGIN.MIN_LENGTH),
+          maxLength: maxLength(magicNumbers.LOGIN.MAX_LENGTH, validationMessages.LOGIN.MAX_LENGTH),
+          allowedCharacters: allowedCharacters(validationMessages.BASE.ALLOWED_CHARACTERS)
+        },
+        email: {
+          required: required(validationMessages.BASE.REQUIRED),
+          email: email(validationMessages.EMAIL.INCORRECT)
+        },
+        password: {
+          required: required(validationMessages.BASE.REQUIRED),
+          minLength: minLength(magicNumbers.PASSWORD.MIN_LENGTH, validationMessages.PASSWORD.MIN_LENGTH),
+          maxLength: maxLength(magicNumbers.PASSWORD.MAX_LENGTH, validationMessages.PASSWORD.MAX_LENGTH),
+          allowedCharacters: allowedCharacters(validationMessages.BASE.ALLOWED_CHARACTERS)
+        },
+        passwordConfirmation: {
+          required: required(validationMessages.BASE.REQUIRED),
+          sameAs: sameAs(state.password, validationMessages.CONFIRM_PASSWORD.SAME_AS),
+          allowedCharacters: allowedCharacters(validationMessages.BASE.ALLOWED_CHARACTERS)
+        }
+      };
+    });
+
+    const fieldsValidation = useFieldsValidation(rules, state);
+
+    const onInput = () => {
+      context.emit('update:model-value', {
+        username: state.username,
+        email: state.email,
+        password: state.password
+      });
     };
 
-    const onInput = async () => {
-      context.emit('update:modelValue', data);
+    return {
+      state,
+      flags,
+      fieldsValidation,
+      onInput,
+      labels
     };
-
-    return { data, state, rules, labels, onInput };
   }
 };
 </script>
@@ -141,21 +169,28 @@ export default {
 .form {
   width: 320px;
 
-  &__title {
-    margin-top: 0;
-    font-weight: $font-weight-base;
+  &__field {
+    margin-top: 16px;
+
+    &:nth-child(2) {
+      margin-top: 24px;
+    }
+
+    &:nth-child(5) {
+      margin-top: 8px;
+    }
   }
 
-  &__field {
-    margin-bottom: 16px;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
+  &__actions {
+    margin-top: 24px;
   }
 
   &__eula {
     margin-top: 16px;
+  }
+
+  @include media-breakpoint-down(xxs) {
+    width: 100%;
   }
 }
 </style>

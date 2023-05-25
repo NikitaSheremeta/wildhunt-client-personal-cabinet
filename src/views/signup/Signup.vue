@@ -1,87 +1,72 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <transition name="fade-slide-up">
-        <SignupForm
-          v-if="state.shouldDisplaySignupForm"
-          v-model="data.formData"
-          :is-loading="flags.isLoading"
-          :is-disabled="flags.isDisabled"
-          @submit.prevent="onSubmitSignupForm"
-        />
-      </transition>
+  <transition name="fade-slide-up">
+    <SignupForm
+      v-if="flags.shouldDisplaySignupForm"
+      ref="signupForm"
+      v-model="state.signupFormData"
+      :loading="flags.loading"
+      :disabled="flags.disabled"
+      @submit.prevent="onSubmitSignupForm"
+    />
+  </transition>
 
-      <transition name="fade-slide-up">
-        <BaseNotice
-          v-if="state.shouldDisplayNotice"
-          success
-          :icon="labels.SIGN_UP_VIEW.SUCCESSFULLY_CREATED.ICON"
-          :title="labels.SIGN_UP_VIEW.SUCCESSFULLY_CREATED.TITLE"
-          :description="labels.SIGN_UP_VIEW.SUCCESSFULLY_CREATED.DESCRIPTION"
-        >
-          <template #extension>
-            <BaseButton
-              to="download-launcher"
-              theme="success"
-              :label="labels.SIGN_UP_VIEW.SUCCESSFULLY_CREATED.SUBMIT"
-            />
-          </template>
-        </BaseNotice>
-      </transition>
-    </div>
-  </div>
+  <transition name="fade-slide-up">
+    <BaseCaptcha
+      v-if="flags.shouldDisplayCaptcha"
+      :disabled="flags.disabled"
+      @success="onSuccessCaptcha"
+      @close="onCloseCaptcha"
+    />
+  </transition>
+
+  <transition name="fade-slide-up">
+    <BaseConfirmation v-if="flags.shouldDisplayConfirmation" :disabled="flags.disabled" @close="onCloseConfirmation" />
+  </transition>
 </template>
 
-<script type="module">
-import { reactive } from 'vue';
+<script>
+import { reactive, ref } from 'vue';
+import { useFormValidation } from '@/hooks/useFormValidation';
 import { useStore } from 'vuex';
 import SignupForm from '@/views/signup/signupForm/SignupForm';
-import BaseButton from '@/components/base/BaseButton';
-import BaseNotice from '@/components/base/BaseNotice';
+import BaseCaptcha from '@/components/base/BaseCaptcha';
+import BaseConfirmation from '@/components/base/BaseConfirmation';
 import { debounce } from '@/helpers/debounce';
 import { validationMessages } from '@/utils/validation-messages';
 import { magicNumbers } from '@/utils/magic-numbers';
 import { labels } from '@/utils/labels';
 
 export default {
+  name: 'Signup',
   components: {
     SignupForm,
-    BaseButton,
-    BaseNotice
+    BaseCaptcha,
+    BaseConfirmation
   },
   setup() {
+    const signupForm = ref(null);
+
+    const formValidation = useFormValidation(signupForm);
+
     const store = useStore();
 
-    const data = reactive({
-      signupFormData: {},
-      confirmFormData: {}
-    });
-
     const state = reactive({
-      shouldDisplaySignupForm: true,
-      shouldDisplayCodeForm: false,
-      shouldDisplayNotice: false
+      signupFormData: {}
     });
 
     const flags = reactive({
-      isLoading: false,
-      isDisabled: false
+      shouldDisplaySignupForm: true,
+      shouldDisplayCaptcha: false,
+      shouldDisplayConfirmation: false,
+      loading: false,
+      disabled: false
     });
 
-    const onSubmitSignupForm = async () => {
-      flags.isLoading = true;
-      flags.isDisabled = true;
-
+    const dispatchSignup = async () => {
       await store
-        .dispatch('SIGNUP', data.signupFormData)
+        .dispatch('SIGNUP', state.signupFormData)
         .then((result) =>
           debounce(() => {
-            state.shouldDisplaySignupForm = false;
-
-            debounce(() => {
-              state.shouldDisplayNotice = true;
-            })();
-
             if (Object.prototype.hasOwnProperty.call(result, 'error')) {
               debounce(() => console.log(result))();
             }
@@ -94,18 +79,73 @@ export default {
         )
         .finally(() =>
           debounce(() => {
-            flags.isLoading = false;
+            flags.loading = false;
           }, magicNumbers.ONE_THOUSAND_TWO_HUNDRED_MILLISECONDS)()
         );
     };
 
+    const onSubmitSignupForm = async () => {
+      formValidation.checkValidity();
+
+      if (formValidation.valid) {
+        flags.loading = true;
+        flags.disabled = true;
+
+        debounce(() => {
+          flags.shouldDisplaySignupForm = false;
+        })();
+
+        debounce(() => {
+          flags.loading = false;
+          flags.disabled = false;
+
+          flags.shouldDisplayCaptcha = true;
+        }, magicNumbers.FOUR_HUNDRED_MILLISECONDS)();
+      }
+    };
+
+    const onSuccessCaptcha = () => {
+      dispatchSignup();
+
+      debounce(() => {
+        flags.shouldDisplayCaptcha = false;
+      })();
+
+      debounce(() => {
+        flags.shouldDisplayConfirmation = true;
+      }, magicNumbers.FOUR_HUNDRED_MILLISECONDS)();
+    };
+
+    const onCloseCaptcha = () => {
+      flags.loading = false;
+      flags.disabled = false;
+      flags.shouldDisplayCaptcha = false;
+
+      debounce(() => {
+        flags.shouldDisplaySignupForm = true;
+      })();
+    };
+
+    const onCloseConfirmation = () => {
+      flags.loading = false;
+      flags.disabled = false;
+      flags.shouldDisplayConfirmation = false;
+
+      debounce(() => {
+        flags.shouldDisplaySignupForm = true;
+      })();
+    };
+
     return {
-      data,
+      signupForm,
       state,
       flags,
+      onSubmitSignupForm,
+      onSuccessCaptcha,
+      onCloseCaptcha,
+      onCloseConfirmation,
       labels,
-      validationMessages,
-      onSubmitSignupForm
+      validationMessages
     };
   }
 };

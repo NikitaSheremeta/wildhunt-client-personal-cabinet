@@ -24,7 +24,7 @@ $api.interceptors.response.use(
           withCredentials: true
         });
 
-        localStorage.setItem('token', response.data.accessToken);
+        localStorage.setItem('token', response.data['accessToken']);
 
         return $api.request(originalRequest);
       } catch (err) {

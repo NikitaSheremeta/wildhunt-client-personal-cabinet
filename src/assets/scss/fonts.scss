@@ -9,7 +9,7 @@
   url('../fonts/JournalSans/JournalSans.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
-  font-display: auto;
+  font-display: swap;
 }
 
 @font-face {
@@ -23,7 +23,7 @@
   url('../fonts/JournalSans/JournalSans-Bold.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
-  font-display: auto;
+  font-display: swap;
 }
 
 @font-face {
@@ -37,5 +37,5 @@
   url('../fonts/JournalSans/JournalSans-Italic.ttf') format('truetype');
   font-weight: normal;
   font-style: italic;
-  font-display: auto;
+  font-display: swap;
 }

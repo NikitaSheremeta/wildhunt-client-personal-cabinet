@@ -17,7 +17,8 @@ body {
 
 .content {
   flex: 1 0 auto;
-  margin-top: 16px;
+  padding: 16px 0;
+  transition: 0.2s;
 }
 
 .footer {
@@ -25,6 +26,7 @@ body {
 }
 
 .container {
+  position: relative;
   margin-left: auto;
   margin-right: auto;
   width: 100%;
@@ -42,7 +44,7 @@ body {
   justify-content: center;
 }
 
-@include media-breakpoint-down(xxs) {
+@include media-breakpoint-down(sm) {
   .container {
     &-fluid {
       padding: 0;
@@ -58,17 +60,36 @@ span {
   display: inline-block;
 }
 
-.fade-slide-up-enter-active,
-.fade-slide-up-leave-active {
-  transition: 0.2s ease-out;
+ul, ol {
+  margin: 0;
 }
 
-.fade-slide-up-enter-from {
-  opacity: 0;
-  transform: translateY(64px);
+ul > li {
+  margin-top: 12px;
+
+  &:first-child {
+    margin-top: 0;
+  }
 }
 
-.fade-slide-up-leave-to {
-  opacity: 0;
-  transform: translateY(-64px);
+ol > li {
+  margin-top: 12px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+ul.numbered {
+  list-style: none;
+
+  li {
+    display: flex;
+    gap: 4px;
+  }
+}
+
+.sticky {
+  position: sticky;
+  top: 12px;
 }

@@ -1,50 +1,58 @@
 <template>
   <div :class="['base-password', classes]">
     <BaseInput
-      ref="input"
+      v-model="state.value"
       :type="state.type"
+      name="password"
       :placeholder="placeholder"
       :disabled="disabled"
-      :rules="rules"
-      :debounce-validation="create"
-      :validation-notice="!create"
-      @input="onInput"
-      @blur="onBlur"
+      trim
+      :disable-notice="create"
+      :validation="validation"
+      :disable-success-icon="disableSuccessIcon"
+      v-on="inputListeners"
     >
-      <template v-if="create" #icon>
+      <template #icon>
         <BaseIcon
-          width="22"
-          height="22"
+          :id="baseTooltipHash"
           color="secondary"
           :icon="state.type === 'password' ? 'eye' : 'eye-slash'"
-          @click="onClick"
+          @click="onClickIcon"
         />
+
+        <BaseTooltip v-if="!isMobileView" :target="baseTooltipHash" :label="computedTooltipLabel" placement="right" />
       </template>
 
       <template v-if="create" #extension>
         <div class="meter">
-          <span class="meter__item"></span>
-          <span class="meter__item"></span>
-          <span class="meter__item"></span>
+          <span class="meter__item" />
+          <span class="meter__item" />
+          <span class="meter__item" />
         </div>
 
-        <span v-if="password.notice" class="notice" v-text="password.notice" />
+        <span v-if="state.notice" class="notice" v-text="state.notice" />
       </template>
     </BaseInput>
   </div>
 </template>
 
 <script>
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, watch } from 'vue';
+import { useStore } from 'vuex';
 import BaseInput from '@/components/base/BaseInput';
 import BaseIcon from '@/components/base/BaseIcon';
-import { usePassword } from '@/hooks/usePassword';
+import BaseTooltip from '@/components/base/BaseTooltip';
+import { randomHash } from '@/helpers/random-hash';
+import { magicNumbers } from '@/utils/magic-numbers';
+import { regularExpressions } from '@/utils/regular-expressions';
+import { labels } from '@/utils/labels';
 
 export default {
   name: 'BasePassword',
   components: {
     BaseInput,
-    BaseIcon
+    BaseIcon,
+    BaseTooltip
   },
   props: {
     create: {
@@ -52,58 +60,150 @@ export default {
       default: false
     },
     placeholder: {
-      type: [String, null],
-      default: null
+      type: String,
+      default: ''
     },
     disabled: {
       type: Boolean,
       default: false
     },
-    rules: {
-      type: Object,
-      default: () => ({})
+    validation: {
+      type: [Object, null],
+      default: null
+    },
+    disableSuccessIcon: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: ['update:modelValue'],
+  emits: ['update:model-value'],
   setup(props, context) {
-    const state = reactive({ type: 'password' });
+    const baseTooltipHash = randomHash(magicNumbers.THIRTY_TWO_PIXELS);
 
-    const input = ref(null);
+    const store = useStore();
 
-    const password = usePassword({ value: '' });
+    const state = reactive({
+      value: '',
+      type: 'password',
+      status: '',
+      notice: labels.PASSWORD_STRENGTH_NOTICE.DEFAULT
+    });
 
-    const classes = computed(() => [props.disabled ? 'disabled' : '', password.status]);
+    const classes = computed(() => [
+      props.disabled ? 'disabled' : '',
+      props.validation.touched ? 'touched' : '',
+      props.validation.touched && !props.validation.valid ? 'invalid' : '',
+      state.status
+    ]);
 
-    const onInput = (event) => {
-      const value = event.target.value;
+    const isMobileView = computed(() => store.getters.GET_IS_MOBILE_VIEW);
 
-      context.emit('update:modelValue', value);
+    const computedTooltipLabel = computed(() =>
+      state.type === 'password' ? labels.SHOW_PASSWORD : labels.HIDE_PASSWORD
+    );
 
-      if (input.value.input.valid) {
-        password.value = value;
-      }
+    const inputListeners = computed(() => {
+      return {
+        input: (event) => {
+          context.emit('update:model-value', event.target.value);
+        },
+        blur: () => {
+          props.validation.blur();
 
-      passwordHookHandle();
-    };
+          handleValidation();
+        }
+      };
+    });
 
-    const onClick = () => {
+    watch(
+      () => state.value,
+      () => reassign()
+    );
+
+    const onClickIcon = () => {
       if (!props.disabled) {
         state.type = state.type === 'password' ? 'text' : 'password';
       }
     };
 
-    const onBlur = () => {
-      passwordHookHandle();
-    };
-
-    const passwordHookHandle = () => {
-      if (!input.value.input.valid) {
-        password.status = 'invalid';
-        password.notice = input.value.input.error;
+    const handleValidation = () => {
+      if (!props.validation.valid) {
+        state.status = 'invalid';
+        state.notice = props.validation.notice;
       }
     };
 
-    return { state, input, password, classes, onInput, onBlur, onClick };
+    const getStrengthScore = () => {
+      let score = 0;
+
+      if (state.value === '') {
+        return score;
+      }
+
+      const letters = {};
+
+      for (let i = 0; i < state.value.length; i++) {
+        letters[state.value[i]] = (letters[state.value[i]] || 0) + 1;
+
+        // eslint-disable-next-line no-magic-numbers
+        score += 5.0 / letters[state.value[i]];
+      }
+
+      const variations = {
+        digits: regularExpressions.digits.test(state.value),
+        lower: regularExpressions.lower.test(state.value),
+        upper: regularExpressions.upper.test(state.value),
+        special: regularExpressions.special.test(state.value)
+      };
+
+      let variationsCount = 0;
+
+      for (const check in variations) {
+        variationsCount += variations[check] === true ? 1 : 0;
+      }
+
+      // eslint-disable-next-line no-magic-numbers
+      score += (variationsCount - 1) * 10;
+
+      return score;
+    };
+
+    const reassign = () => {
+      handleValidation();
+
+      if (props.validation.valid && state.value.length >= magicNumbers.PASSWORD.MIN_LENGTH) {
+        const strengthScore = getStrengthScore();
+
+        // eslint-disable-next-line no-magic-numbers
+        if (strengthScore <= 25 && state.value.length >= magicNumbers.PASSWORD.MIN_LENGTH) {
+          state.status = 'danger';
+          state.notice = labels.PASSWORD_STRENGTH_NOTICE.DANGER;
+        }
+
+        // eslint-disable-next-line no-magic-numbers
+        if (strengthScore > 20 && strengthScore <= 50 && state.value.length !== 0) {
+          state.status = 'warning';
+          state.notice = labels.PASSWORD_STRENGTH_NOTICE.WARNING;
+        }
+
+        // eslint-disable-next-line no-magic-numbers
+        if (strengthScore > 50 && state.value.length !== 0) {
+          state.status = 'success';
+          state.notice = labels.PASSWORD_STRENGTH_NOTICE.SUCCESS;
+        }
+      }
+    };
+
+    return {
+      baseTooltipHash,
+      state,
+      classes,
+      isMobileView,
+      computedTooltipLabel,
+      inputListeners,
+      onClickIcon,
+      labels
+    };
   }
 };
 </script>
@@ -131,14 +231,17 @@ export default {
 
   .notice {
     margin-top: 8px;
+    width: 100%;
     color: $font-color-secondary;
     font-size: $font-size-xs;
     user-select: none;
   }
 
   &.invalid {
-    .notice {
-      color: $danger;
+    &.touched {
+      .notice {
+        color: $danger;
+      }
     }
   }
 
@@ -177,12 +280,20 @@ export default {
   }
 
   &.disabled {
+    .icon {
+      .base-icon {
+        fill: map-get($field-palette, disabled, color);
+        stroke: map-get($field-palette, disabled, color);
+        cursor: default;
+      }
+    }
+
     .notice {
-      color: $disabled-color;
+      color: $disabled-color !important;
     }
 
     .meter__item {
-      background-color: $disabled-background;
+      background-color: $disabled-background !important;
     }
   }
 }

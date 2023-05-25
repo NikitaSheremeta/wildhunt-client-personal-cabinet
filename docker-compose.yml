@@ -1,0 +1,18 @@
+version: "3.9"
+services:
+  node:
+    image: node/client-personal-cabinet
+    container_name: node
+    build:
+      context: ./
+      dockerfile: .docker/node/Dockerfile
+  nginx:
+    image: nginx/client-personal-cabinet
+    container_name: nginx
+    build:
+      context: .docker/nginx
+    ports:
+      - "82:80"
+    depends_on:
+      - node
+    restart: always
