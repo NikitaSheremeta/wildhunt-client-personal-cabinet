@@ -2,6 +2,7 @@
   <div :class="['base-title']">
     <BaseButton
       v-if="backButton"
+      id="base-title-button"
       class="button"
       small
       icon-button
@@ -12,20 +13,28 @@
       @click="onClickButton"
     />
 
-    <h2 class="title" v-text="computedTitle" />
+    <h2 id="base-title-title" class="title" v-text="computedTitle" />
+
+    <BaseTooltip v-if="backButton && !isMobileView" target="base-title-button" :label="labels.GO_BACK" />
+
+    <BaseTooltip v-if="tooltip && !isMobileView" target="base-title-title" :label="computedTitle" />
   </div>
 </template>
 
 <script>
 import { computed } from 'vue';
+import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { useBackButton } from '@/hooks/useBackButton';
 import BaseButton from '@/components/base/BaseButton';
+import BaseTooltip from '@/components/base/BaseTooltip';
+import { labels } from '@/utils/labels';
 
 export default {
   name: 'BaseTitle',
   components: {
-    BaseButton
+    BaseButton,
+    BaseTooltip
   },
   props: {
     title: {
@@ -35,13 +44,21 @@ export default {
     backButton: {
       type: Boolean,
       default: false
+    },
+    tooltip: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['close'],
   setup(props, context) {
+    const store = useStore();
+
     const route = useRoute();
 
     const backButton = useBackButton();
+
+    const isMobileView = computed(() => store.getters.GET_IS_MOBILE_VIEW);
 
     const computedTitle = computed(() => (props.title ? props.title : route.meta['title']));
 
@@ -52,8 +69,10 @@ export default {
     };
 
     return {
+      isMobileView,
       computedTitle,
-      onClickButton
+      onClickButton,
+      labels
     };
   }
 };

@@ -1,16 +1,23 @@
 <template>
-  <div :class="['side-menu-button', classes]" @click="onClick">
+  <div id="side-menu-button" :class="['side-menu-button', classes]" @click="onClick">
     <span class="item"></span>
     <span class="item"></span>
+
+    <BaseTooltip v-if="!isMobileView" target="side-menu-button" :label="computedTooltipLabel" />
   </div>
 </template>
 
 <script>
 import { computed, nextTick, onMounted, reactive, watch } from 'vue';
 import { useStore } from 'vuex';
+import BaseTooltip from '@/components/base/BaseTooltip';
+import { labels } from '@/utils/labels';
 
 export default {
   name: 'SideMenuButton',
+  components: {
+    BaseTooltip
+  },
   setup() {
     const store = useStore();
 
@@ -18,9 +25,13 @@ export default {
       open: false
     });
 
-    const isSideMenuActive = computed(() => store.getters.GET_IS_SIDE_MENU_ACTIVE);
-
     const classes = computed(() => [flags.open ? 'active' : '']);
+
+    const isMobileView = computed(() => store.getters.GET_IS_MOBILE_VIEW);
+
+    const computedTooltipLabel = computed(() => (flags.open ? labels.CLOSE_SIDE_MENU : labels.OPEN_SIDE_MENU));
+
+    const isSideMenuActive = computed(() => store.getters.GET_IS_SIDE_MENU_ACTIVE);
 
     const onClick = async () => {
       const contentElement = document.querySelector('#content');
@@ -55,6 +66,8 @@ export default {
 
     return {
       classes,
+      isMobileView,
+      computedTooltipLabel,
       onClick
     };
   }

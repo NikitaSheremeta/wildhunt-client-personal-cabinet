@@ -9,7 +9,7 @@
         </div>
 
         <div :class="['wrapper', !!route.meta['baseTitle'] ? 'space-between' : 'flex-end']">
-          <BaseTitle v-if="!!route.meta['baseTitle']" class="title" back-button />
+          <BaseTitle v-if="!!route.meta['baseTitle'] && !isMobileView" class="title" back-button tooltip />
 
           <BaseNavigation class="navigation" inline :list="state.navigation" />
         </div>
@@ -46,6 +46,8 @@ export default {
 
     const backButton = useBackButton();
 
+    const isMobileView = computed(() => store.getters.GET_IS_MOBILE_VIEW);
+
     const shouldShowBackButton = computed(() => Boolean(store.getters.GET_HISTORY.length));
 
     const state = reactive({
@@ -63,6 +65,7 @@ export default {
 
     return {
       route,
+      isMobileView,
       backButton,
       shouldShowBackButton,
       state
@@ -136,7 +139,6 @@ export default {
     position: fixed;
     background: linear-gradient(180deg, $gray-900 5%, rgba(255, 255, 255, 0) 100%);
 
-    .title,
     .navigation {
       display: none;
     }

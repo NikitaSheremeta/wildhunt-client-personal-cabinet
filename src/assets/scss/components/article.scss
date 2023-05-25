@@ -49,11 +49,5 @@
         color: $gray-500;
       }
     }
-
-    @include media-breakpoint-down(sm) {
-      &:nth-child(2) {
-        margin-top: 12px;
-      }
-    }
   }
 }

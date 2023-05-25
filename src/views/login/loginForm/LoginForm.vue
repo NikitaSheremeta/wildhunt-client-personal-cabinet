@@ -5,6 +5,7 @@
     <BaseInput
       v-model="state.login"
       class="form__field"
+      name="login"
       :placeholder="labels.LOGIN_VIEW.USER_NAME"
       :disabled="disabled"
       trim

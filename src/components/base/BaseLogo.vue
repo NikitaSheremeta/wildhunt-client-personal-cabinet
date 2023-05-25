@@ -47,8 +47,10 @@ export default {
   }
 
   @include media-breakpoint-down(sm) {
-    width: 96px;
-    height: 48px;
+    .image {
+      width: 96px;
+      height: 48px;
+    }
 
     &:active {
       opacity: 0.56;
