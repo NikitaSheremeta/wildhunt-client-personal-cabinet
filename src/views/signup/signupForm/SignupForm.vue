@@ -56,12 +56,11 @@
 
     <div class="form__eula">
       <BaseCheckbox v-model="flags.eula" color="secondary" :label="labels.SIGN_UP_VIEW.EULA" :disabled="disabled">
-        <BaseLink underline href="terms" color="secondary" :label="labels.SIGN_UP_VIEW.TERMS" :disabled="disabled" />
+        <BaseLink href="terms" color="secondary" :label="labels.SIGN_UP_VIEW.TERMS" :disabled="disabled" />
 
         <br />и
 
         <BaseLink
-          underline
           href="privacy-policy"
           color="secondary"
           :label="labels.SIGN_UP_VIEW.PRIVACY_POLICY"
